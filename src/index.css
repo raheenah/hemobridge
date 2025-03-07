@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@theme {
+
+  --color-background: #58004B;
+  --color-text-dark-gray: #676162;
+  --color-input-text: #A9A4A5;
+
+
+
+  --font-space: "Space-Grotesk", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
