@@ -7,6 +7,9 @@ import Signin from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword"
 import LinkSent from "./pages/LinkSent"
 import ResetPassword from "./pages/ResetPassword";
+import PasswordResetSuccess from "./pages/PasswordResetSuccess";
+import TermsAndConditions from "./pages/TnC";
+import SignUp from "./pages/SignUp";
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
           <Route path='forgot-password' element={<ForgotPassword />} />
           <Route path='reset-link-sent' element={<LinkSent />} />
           <Route path='reset-password' element={<ResetPassword />} />
+          <Route path='reset-password-success' element={<PasswordResetSuccess />} />
+          <Route path='terms-and-conditions' element={<TermsAndConditions />} />
+          <Route path='sign-up' element={<SignUp />} />
         </Route>
       </Routes>
     </Router>
