@@ -7,7 +7,7 @@ function WelcomePage() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className='flex lg:grid lg:grid-cols-2  min-h-screen lg:min-h-fit  items-center justify-center'>
+    <div className='flex lg:grid text-sm lg:grid-cols-2  min-h-screen lg:min-h-fit  items-center justify-center'>
       <img
         src={Landing}
         className='w-[50%] lg:w-full h-full object-cover hidden lg:flex'

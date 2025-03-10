@@ -10,8 +10,8 @@ function SignUp() {
 
   return (
     <div className=' flex items-center font-inter w-full'>
-      <div className='  md:w-[85%]  mx-auto flex px-16 md:px-0  md:px-4 flex-col text-center gap-[25px] items-center '>
-        <h1 className=' font-[700] font-space text-[32px]'>
+      <div className='  md:w-[85%]  mx-auto flex px-16   md:px-0 flex-col text-center gap-5 items-center '>
+        <h1 className=' font-[700] font-space text-2xl'>
           Create New Account{" "}
         </h1>
         <div className='flex w-[80%] mx-auto  flex-col gap-6 '>
@@ -23,7 +23,7 @@ function SignUp() {
                   ? " text-background border-b-background"
                   : "border-b-pink text-input-text"
               }  
-              w-full  border-b  border-b-2 py-3 px-4 `}
+              w-full    border-b-2 py-3 px-4 `}
             >
               Donor
             </button>
@@ -280,7 +280,7 @@ function SignUp() {
           )}
         </div>
 
-        <div className='flex gap-3 items-center'>
+        <div className='flex gap-1 items-center'>
           <input type='checkbox'></input>
           <p className='font-bold text-sm'>
             I agree to the{" "}

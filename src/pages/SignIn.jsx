@@ -8,11 +8,11 @@ function Signin() {
 
 
   return (
-    <div className=' flex items-center font-inter w-full'>
+    <div className=' flex items-center text-sm font-inter w-full'>
       <div className='  md:w-[55%]  mx-auto flex px-16  md:px-4 flex-col text-center gap-[25px] items-center '>
-        <h1 className=' font-[700] font-space text-[32px]'>Sign In</h1>
+        <h1 className=' font-[700] font-space '>Sign In</h1>
         <div className='flex flex-col w-full gap-[25px]'>
-          <div className=' p-4 relative border border-1 text-text-dark-gray'>
+          <div className=' p-4 relative  border-1 text-text-dark-gray'>
             <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
               Email Address
               <span className='text-red-500'>*</span>
@@ -39,7 +39,7 @@ function Signin() {
             </button>
           </div>
         </div>
-        <NavLink>
+        <NavLink to={"/forgot-password"}>
           {" "}
           <p className='text-text-dark-gray hover:underline'>
             Forgot password?
@@ -50,7 +50,10 @@ function Signin() {
         </button>
         <p className='text-text-dark-gray flex gap-4 flex-col items-center'>
           Don't have an account?
-          <NavLink className={"hover:underline font-bold text-background"}>
+          <NavLink
+            to={"/sign-up"}
+            className={"hover:underline font-bold text-background"}
+          >
             Register here
           </NavLink>
         </p>
