@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Logo from "../../assets/vector.svg";
+import Logo from "../../assets/Vector.svg";
 import { Outlet } from "react-router-dom";
 
 function UserApp() {
