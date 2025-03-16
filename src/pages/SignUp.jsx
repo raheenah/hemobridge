@@ -1,19 +1,17 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate } from "react-router-dom";
 
 
 function SignUp() {
   const [accountType, setAccountType] = useState("donor");
 
-    
+    const navigate = useNavigate()
 
 
   return (
     <div className=' flex items-center font-inter w-full'>
       <div className='  md:w-[85%]  mx-auto flex px-16   md:px-0 flex-col text-center gap-5 items-center '>
-        <h1 className=' font-[700] font-space text-2xl'>
-          Create New Account{" "}
-        </h1>
+        <h1 className=' font-[700] font-space text-2xl'>Create New Account </h1>
         <div className='flex w-[80%] mx-auto  flex-col gap-6 '>
           <div className='grid grid-cols-2 text-sm font-base w-full '>
             <button
@@ -292,7 +290,10 @@ function SignUp() {
             </NavLink>
           </p>
         </div>
-        <button className='bg-background  w-full font-bold text-xl text-white py-3'>
+        <button
+          onClick={() => navigate("/")}
+          className='bg-background  w-full font-bold text-xl text-white py-3'
+        >
           Create Account{" "}
         </button>
         <p className='text-text-dark-gray flex gap-4 flex-col items-center'>

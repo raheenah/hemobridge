@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate } from "react-router-dom";
 
 
 function Signin() {
-
+const navigate = useNavigate();
     
 
 
-  return (
-    <div className=' flex items-center text-sm font-inter w-full'>
+  return (    <div className=' flex items-center text-sm font-inter w-full'>
       <div className='  md:w-[55%]  mx-auto flex px-16  md:px-4 flex-col text-center gap-[25px] items-center '>
         <h1 className=' font-[700] font-space '>Sign In</h1>
         <div className='flex flex-col w-full gap-[25px]'>
@@ -45,7 +44,9 @@ function Signin() {
             Forgot password?
           </p>
         </NavLink>
-        <button className='bg-background  w-full font-bold text-xl text-white py-3'>
+        <button
+          onClick={() => navigate("/user")}
+          className='bg-background  w-full font-bold text-xl text-white py-3'>
           Sign In
         </button>
         <p className='text-text-dark-gray flex gap-4 flex-col items-center'>

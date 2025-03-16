@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate} from "react-router-dom";
 
 
 function ForgotPassword() {
-
+  const navigate = useNavigate();
     
 
 
@@ -26,12 +26,18 @@ function ForgotPassword() {
           </div>
         </div>
 
-        <button className='bg-background px-4  w-full font-bold text-lg text-white py-3'>
+        <button
+          onClick={() => navigate("/reset-link-sent")}
+          className='bg-background px-4  w-full font-bold text-lg text-white py-3'
+        >
           Send Password Reset Link{" "}
         </button>
         <p className='text-text-dark-gray flex gap-4 flex-col items-center'>
           Don't have an account?
-          <NavLink to={"/sign-up"} className={"hover:underline font-bold text-background"}>
+          <NavLink
+            to={"/sign-up"}
+            className={"hover:underline font-bold text-background"}
+          >
             Register here
           </NavLink>
         </p>

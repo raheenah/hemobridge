@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate } from "react-router-dom";
 
 
 function TermsAndConditions() {
+  const navigate = useNavigate()
+  
+
+
   return (
     <div className=' flex items-center text-text-dark-gray text-sm font-inter py-10 w-full'>
       <div className='  md:w-[80%]   mx-auto flex px-16  md:px-4 flex-col  gap-6 items-center '>
@@ -93,7 +97,10 @@ function TermsAndConditions() {
           </div>
         </div>
 
-        <button className='bg-background p-4  w-[40%] mx-auto  font-bold text-base text-white py-3'>
+        <button
+          onClick={() => navigate(-1)}
+          className='bg-background p-4  w-[40%] mx-auto  font-bold text-base text-white py-3'
+        >
           I Understand{" "}
         </button>
       </div>
