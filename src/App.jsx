@@ -12,6 +12,7 @@ import TermsAndConditions from "./pages/TnC";
 import SignUp from "./pages/SignUp";
 import UserApp from "./pages/Donor/UserApp";
 import EducationalContent from "./pages/Donor/EduContent";
+import Donate from "./pages/Donor/Donate";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         </Route>
         <Route path='/user' element={<UserApp />}>
           <Route path='educational-content' element={<EducationalContent />} />
+          <Route path='donate' element={<Donate />} />
         </Route>
       </Routes>
     </Router>

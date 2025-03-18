@@ -1,0 +1,164 @@
+{
+  "facilities": [
+    {
+      "id": 1,
+      "name": "Lagos General Hospital",
+      "address": "12 Broad Street, Lagos",
+      "bloodType": ["A+", "B-", "O+"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 2,
+      "name": "Abuja National Hospital",
+      "address": "Garki, Abuja",
+      "bloodType": ["AB+", "O-", "B+"],
+      "urgency": "Medium",
+      "hours": "8 AM - 8 PM"
+    },
+    {
+      "id": 3,
+      "name": "Kano State Clinic",
+      "address": "Zaria Road, Kano",
+      "bloodType": ["A-", "O+", "B-"],
+      "urgency": "Low",
+      "hours": "9 AM - 5 PM"
+    },
+    {
+      "id": 4,
+      "name": "Ibadan Central Hospital",
+      "address": "Ring Road, Ibadan",
+      "bloodType": ["AB-", "A+", "O+"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 5,
+      "name": "Benin City Medical Center",
+      "address": "Airport Road, Benin",
+      "bloodType": ["O-", "B+", "A+"],
+      "urgency": "Medium",
+      "hours": "10 AM - 6 PM"
+    },
+    {
+      "id": 6,
+      "name": "Jos University Teaching Hospital",
+      "address": "Lamingo, Jos",
+      "bloodType": ["A-", "B-", "O+"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 7,
+      "name": "Port Harcourt Specialist Hospital",
+      "address": "Trans Amadi, Port Harcourt",
+      "bloodType": ["AB+", "O+", "A-"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 8,
+      "name": "Kaduna State Hospital",
+      "address": "Independence Way, Kaduna",
+      "bloodType": ["B+", "A-", "O-"],
+      "urgency": "Medium",
+      "hours": "8 AM - 8 PM"
+    },
+    {
+      "id": 9,
+      "name": "Enugu Teaching Hospital",
+      "address": "Park Lane, Enugu",
+      "bloodType": ["O+", "AB-", "A+"],
+      "urgency": "Low",
+      "hours": "7 AM - 5 PM"
+    },
+    {
+      "id": 10,
+      "name": "Ekiti State University Hospital",
+      "address": "Ado-Ekiti, Ekiti",
+      "bloodType": ["B-", "A+", "O-"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 11,
+      "name": "Osun State General Hospital",
+      "address": "Osogbo, Osun",
+      "bloodType": ["A+", "O-", "B+"],
+      "urgency": "Medium",
+      "hours": "9 AM - 6 PM"
+    },
+    {
+      "id": 12,
+      "name": "Ondo State Medical Center",
+      "address": "Akure, Ondo",
+      "bloodType": ["AB-", "A-", "O+"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 13,
+      "name": "Uyo Specialist Hospital",
+      "address": "Oron Road, Uyo",
+      "bloodType": ["B+", "A+", "O-"],
+      "urgency": "Low",
+      "hours": "10 AM - 4 PM"
+    },
+    {
+      "id": 14,
+      "name": "Abeokuta Central Clinic",
+      "address": "Ibara, Abeokuta",
+      "bloodType": ["A-", "O+", "B-"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 15,
+      "name": "Calabar State Hospital",
+      "address": "Marian Road, Calabar",
+      "bloodType": ["AB+", "O-", "A+"],
+      "urgency": "Medium",
+      "hours": "8 AM - 6 PM"
+    },
+    {
+      "id": 16,
+      "name": "Yola University Teaching Hospital",
+      "address": "Jimeta, Yola",
+      "bloodType": ["O+", "B-", "A-"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 17,
+      "name": "Minna State Hospital",
+      "address": "Tunga, Minna",
+      "bloodType": ["A+", "O-", "B+"],
+      "urgency": "Low",
+      "hours": "9 AM - 5 PM"
+    },
+    {
+      "id": 18,
+      "name": "Makurdi Federal Hospital",
+      "address": "Wurukum, Makurdi",
+      "bloodType": ["B+", "A-", "O+"],
+      "urgency": "High",
+      "hours": "24/7"
+    },
+    {
+      "id": 19,
+      "name": "Sokoto State Medical Center",
+      "address": "Sokoto City, Sokoto",
+      "bloodType": ["AB-", "O+", "A+"],
+      "urgency": "Medium",
+      "hours": "8 AM - 8 PM"
+    },
+    {
+      "id": 20,
+      "name": "Zamfara Specialist Hospital",
+      "address": "Gusau, Zamfara",
+      "bloodType": ["B-", "A+", "O-"],
+      "urgency": "High",
+      "hours": "24/7"
+    }
+  ]
+}
