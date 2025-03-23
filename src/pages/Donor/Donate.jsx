@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 
 function Donate() {
-  const rowsPerPage = 10;
+  const rowsPerPage = 14;
   const [facilities, setFacilities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -89,7 +89,7 @@ function Donate() {
         </div>
       </div>
       <h2 className='font-bold text-xl'>All Facilities</h2>
-      <div className='max-h-[60dvh] w-full overflow-hidden overflow-y-scroll '>
+      <div className='max-h-[60dvh] w-full overflow-hidden overflow-y-auto '>
         <table className=' w-full  '>
           <thead className='bg-light-pink text-left  '>
             <tr className=''>

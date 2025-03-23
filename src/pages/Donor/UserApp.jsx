@@ -37,7 +37,7 @@ function UserApp() {
           </div>
         </section>
 
-        <section className='h-full w-full   flex'>
+        <section className='h- w-full   flex'>
           <div className='w-[25%] flex flex-col gap-6 pb-6 px-4 border-background-grey  '>
             <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
             <div className='flex flex-col gap-2'>
@@ -141,7 +141,7 @@ function UserApp() {
               </button>
             </div>
           </div>
-          <div className='w-full h-full p-4 bg-background-grey'>
+          <div className='w-full h- p-4 bg-background-grey'>
             <Outlet />
           </div>{" "}
         </section>

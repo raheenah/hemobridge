@@ -47,8 +47,8 @@ function Account() {
   };
 
   return (
-    <div className=' flex   bg-white flex-col text-sm gap-4 py-3  px-6  h-full w-full'>
-      <h1 className='text-lg font-bold '>Profile Information</h1>
+    <div className=' flex  h-full bg-white flex-col text-xs gap-4 py-3  px-6   w-full'>
+      <h1 className='text-xs font-bold '>Profile Information</h1>
 
       <div className='flex justify-between gap-4'>
         <div className='flex flex-col gap-2'>
@@ -78,7 +78,7 @@ function Account() {
             onClick={() => {
               setEditProfile(!editProfile);
             }}
-            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
           >
             Edit Profile
           </button>
@@ -94,7 +94,7 @@ function Account() {
             onClick={() => {
               setEditProfilePic(!editProfilePic);
             }}
-            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
           >
             Upload
           </button>
@@ -102,7 +102,7 @@ function Account() {
             // onClick={() => {
             //   setDetails(!details), setSubmitted(!submitted);
             // }}
-            className='border-background border hover:text-pink hover:border-pink   self-start  w-full max-w-32 box-border font-bold text-sm text-background py-2 px-4'
+            className='border-background border hover:text-pink hover:border-pink   self-start  w-full max-w-32 box-border font-bold text-xs text-background py-2 px-4'
           >
             Delete
           </button>
@@ -111,8 +111,8 @@ function Account() {
 
       <div className='grid grid-cols-2 py-4 border-t border-text-gray'>
         <div className='  flex flex-col gap-4  border-r border-text-gray'>
-          <h1 className='text-lg font-bold '>Change Password </h1>
-          <div className='max-w-[70%] flex flex-col gap-2'>
+          <h1 className='text-xs font-bold '>Change Password </h1>
+          <div className='max-w-[70%] flex flex-col gap-4'>
             <div className=' p-4 relative flex items-center  border-1 text-text-dark-gray'>
               <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
                 Old Password<span className='text-red-500'>*</span>
@@ -192,14 +192,14 @@ function Account() {
             // onClick={() => {
             //   setDetails(!details), setSubmitted(!submitted);
             // }}
-            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
           >
             Update
           </button>
         </div>
 
         <div className='pl-6 flex flex-col gap-4'>
-          <h1 className='text-lg font-bold '>Notification Preferences </h1>
+          <h1 className='text-xs font-bold '>Notification Preferences </h1>
           <div className='grid grid-cols-[auto_auto] gap-8'>
             <div className='flex flex-col gap-1'>
               <p>Notification Channels</p>
@@ -215,7 +215,7 @@ function Account() {
             onClick={() => {
               setEditNotifications(!editNotifications);
             }}
-            className='bg-background hover:bg-pink   self-start   w-full max-w-32   font-bold text-sm text-white py-2'
+            className='bg-background hover:bg-pink   self-start   w-full max-w-32   font-bold text-xs text-white py-2'
           >
             Edit Preferences
           </button>
@@ -233,7 +233,7 @@ function Account() {
             onClick={(e) => e.stopPropagation()}
             className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
           >
-            <div className='flex flex-col text-sm gap-4'>
+            <div className='flex flex-col text-xs gap-4'>
               <div className='flex justify-between'>
                 {" "}
                 <h2 className='font-bold text-base text-text-dark-gray'>
@@ -412,7 +412,7 @@ function Account() {
                       setSuccess(!success),
                       setMessage("profile information");
                   }}
-                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
                 >
                   Schedule
                 </button>
@@ -490,7 +490,7 @@ function Account() {
                   setSuccess(!success),
                   setMessage("profile picture");
               }}
-              className='bg-background hover:bg-pink !important mx-auto w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+              className='bg-background hover:bg-pink !important mx-auto w-full max-w-32  font-bold text-xs text-white py-2 px-4'
             >
               Upload
             </button>
@@ -509,7 +509,7 @@ function Account() {
             onClick={(e) => e.stopPropagation()}
             className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
           >
-            <div className='flex flex-col text-sm gap-4'>
+            <div className='flex flex-col text-xs gap-4'>
               <div className='flex justify-between'>
                 {" "}
                 <h2 className='font-bold text-base text-text-dark-gray'>
@@ -607,7 +607,7 @@ function Account() {
                       setSuccess(!success),
                       setMessage("notification preferences");
                   }}
-                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
                 >
                   Save
                 </button>
@@ -628,7 +628,7 @@ function Account() {
             onClick={(e) => e.stopPropagation()}
             className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
           >
-            <div className='flex flex-col text-center text-sm gap-4'>
+            <div className='flex flex-col text-center text-xs gap-4'>
               <div className='flex flex-col gap-2 '>
                 {" "}
                 <h2 className='font-bold text-base text-center text-text-dark-gray'>
@@ -642,7 +642,7 @@ Success                </h2>
                 onClick={() => {
                   setSuccess(!success), setMessage(null);
                 }}
-                className='bg-background hover:bg-pink !important mx-auto  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+                className='bg-background hover:bg-pink !important mx-auto  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
               >
                 Close
               </button>

@@ -58,15 +58,15 @@ function Dashboard() {
   };
 
   return (
-    <div className=' flex text-xs flex-col   gap-4 py-2  px-4  h-full w-full'>
-      <div className='bg-white py-3  px-6 flex flex-col gap-4'>
+    <div className=' flex text-sm flex-col   gap-4 py-2  px-4   w-full'>
+      <div className='bg-white py-3  px-6 flex flex-col gap-2'>
         <div className='flex items-center justify-between'>
-          <h2 className='text-lg font-bold'>Overview</h2>
+          <h2 className='text-base font-bold'>Overview</h2>
           <button
             onClick={() => {
               navigate("/user/donate");
             }}
-            className='bg-background hover:bg-pink !important   w-full max-w-40  font-bold text-sm text-white py-2 px-4'
+            className='bg-background hover:bg-pink    w-full max-w-40  font-bold  text-white py-1 px-2'
           >
             Book a Donation
           </button>
@@ -104,9 +104,7 @@ function Dashboard() {
 
           <div className='border-1 px-3.5 py-2.5 gap-2 flex flex-col justify-between'>
             <div className=' flex justify-between items-center'>
-              <h3 className='font-bold text-base'>
-                Total Facilities Registered
-              </h3>
+              <h3 className='font-bold text-base'>Total Facilities Registered</h3>
               <button
                 onClick={() => {
                   navigate("/user/donate");
@@ -116,7 +114,7 @@ function Dashboard() {
               </button>
             </div>
             <div className='flex flex-col gap-1 '>
-              <p className='text-xl font-bold'>350+ Facilities </p>
+              <p className='text-base font-bold'>350+ Facilities </p>
               <p className='text-text-dark-gray'>
                 Hospitals & Blood Banks available for donation{" "}
               </p>
@@ -130,7 +128,7 @@ function Dashboard() {
             </h3>
 
             <div>
-              <p className='text-xl font-bold'>O- has the highest demand! </p>
+              <p className='text-base font-bold'>O- has the highest demand! </p>
               <p>Hospitals need 25+ units in the next 24 hours!! </p>
             </div>
           </div>
@@ -193,7 +191,7 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className='flex flex-col   max-h-[30dvh] overflow-hidden overflow-y-scroll pb-3  px-6  bg-white '>
+          <div className='flex flex-col    overflow-hidden overflow-y-auto pb-3  px-6  bg-white '>
             <div className='sticky bg-white py-3 top-0'>
               <div className='flex justify-between items-center'>
                 <h2 className='font-bold text-base'>
@@ -211,18 +209,18 @@ function Dashboard() {
             <table className=' w-full  '>
               <thead className='bg-light-pink text-left  '>
                 <tr className=''>
-                  <th className='py-1 pl-1'>Facility Name</th>
+                  <th className='py-0.5 pl-1'>Facility Name</th>
                   <th>Address</th>
                 </tr>
               </thead>
 
               <tbody>
-                {facilities.map((facility) => (
+                {facilities.slice(0, 10).map((facility) => (
                   <tr
                     className=' border-b-1  border-background-grey'
                     key={facility.id}
                   >
-                    <td className='py-2 pl-1 font-bold'>{facility.name}</td>
+                    <td className='py-0.5 pl-1 font-bold'>{facility.name}</td>
                     <td>{facility.address}</td>
                   </tr>
                 ))}
@@ -231,12 +229,10 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className='flex flex-col  max-h-[64.6dvh]  overflow-hidden overflow-y-scroll pb-3  px-6  bg-white '>
+        <div className='flex flex-col    overflow-hidden overflow-y-auto   px-6  bg-white '>
           <div className='sticky bg-white py-3 top-0'>
             <div className='flex justify-between items-center'>
-              <h2 className='font-bold text-base'>
-                Live Blood Inventory Overview
-              </h2>
+              <h2 className='font-bold text-lg'>Emergency requests </h2>
               <button
                 onClick={() => {
                   navigate("/user/donate");
@@ -297,41 +293,37 @@ function Dashboard() {
               </li>
             ))}
           </ul>
-          <div className='sticky  bg-white py-3  bottom-0'>
-            <div className='flex justify-end  items-center gap-2 mt-auto ml-auto'>
-              <button
-                className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                <i className='fa-solid fa-angle-left'></i>
-              </button>
+          <div className='flex pb-3 justify-end  items-center gap-2 mt-auto ml-auto'>
+            <button
+              className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <i className='fa-solid fa-angle-left'></i>
+            </button>
 
-              {getPaginationNumbers().map((page, index) => (
-                <button
-                  key={index}
-                  className={`px-2 py-1 hover:bg-light-pink  ${
-                    currentPage === page ? "bg-light-pink" : ""
-                  }`}
-                  onClick={() =>
-                    typeof page === "number" && setCurrentPage(page)
-                  }
-                  disabled={page === "..."}
-                >
-                  {page}
-                </button>
-              ))}
-
+            {getPaginationNumbers().map((page, index) => (
               <button
-                className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
+                key={index}
+                className={`px-2 py-1 hover:bg-light-pink  ${
+                  currentPage === page ? "bg-light-pink" : ""
+                }`}
+                onClick={() => typeof page === "number" && setCurrentPage(page)}
+                disabled={page === "..."}
               >
-                <i className='fa-solid fa-angle-right'></i>
+                {page}
               </button>
-            </div>
+            ))}
+
+            <button
+              className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
+              <i className='fa-solid fa-angle-right'></i>
+            </button>
           </div>
         </div>
       </div>
@@ -345,16 +337,16 @@ function Dashboard() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[40%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-4'
+            className=' w-[40%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-2'
           >
             <div className='flex justify-between items-center'>
-              <h1 className='font-extrabold text-lg'> Emergency Request </h1>
+              <h1 className='font-extrabold text-base'> Emergency Request </h1>
               <button onClick={() => setDonate(!donate)}>
                 {" "}
                 <i className='fa-regular fa-circle-xmark'></i>
               </button>
             </div>{" "}
-            <div className='flex flex-col text-sm gap-2'>
+            <div className='flex flex-col text-base gap-2'>
               <div className='flex flex-col gap-2'>
                 <h2 className='font-bold text-base text-text-dark-gray'>
                   Contact Information
@@ -399,15 +391,15 @@ function Dashboard() {
               </div>
               <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
             </div>
-            <div className='flex flex-col text-sm gap-4'>
+            <div className='flex flex-col text-base gap-2'>
               <div className='flex flex-col gap-2'>
                 <h2 className='font-bold text-base text-text-dark-gray'>
                   Scheduling Details{" "}
                 </h2>
                 <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
               </div>
-              <form className=' flex flex-col gap-4'>
-                <div className='grid  gap-4 grid-cols-2'>
+              <form className=' flex flex-col gap-2'>
+                <div className='grid  gap-2 grid-cols-2'>
                   <div className=' p-4 relative border-1 text-text-dark-gray'>
                     <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
                       Date<span className='text-red-500'>*</span>
@@ -435,7 +427,7 @@ function Dashboard() {
                   onClick={() => {
                     setDonate(!donate), setSubmitted(!submitted);
                   }}
-                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
+                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-base text-white py-3 px-6'
                 >
                   Schedule
                 </button>
@@ -456,12 +448,12 @@ function Dashboard() {
             className=' w-[50%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-2'
           >
             <div className='flex flex-col gap-2'>
-              <h1 className='font-extrabold text-lg'>
+              <h1 className='font-extrabold text-base'>
                 Schedule Request Submitted
               </h1>
               <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
             </div>
-            <div className='text-sm flex flex-col gap-2'>
+            <div className='text-base flex flex-col gap-2'>
               <div>
                 <p>
                   Donation schedule request successfully submitted to LifeBank
@@ -504,7 +496,7 @@ function Dashboard() {
               onClick={() => {
                 setSubmitted(!submitted);
               }}
-              className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
+              className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-base text-white py-3 px-6'
             >
               Close
             </button>
