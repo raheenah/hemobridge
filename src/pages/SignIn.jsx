@@ -1,10 +1,10 @@
 import { useState , useContext } from "react";
 import { NavLink , useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
-import { useAuth } from "../context";
+// import { useAuth } from "../context";
 
 function Signin() {
-  const { login } = useContext(useAuth);
+  // const { login } = useContext(useAuth);
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);

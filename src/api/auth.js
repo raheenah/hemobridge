@@ -1,13 +1,14 @@
 import axios from "axios";
 
 // const BASE_URL =
-//   import.meta.env.MODE === "development";
+//   import.meta.env.MODE === "development"
 //     ? "http://localhost:8000"
 //     : "https://hemobridge-project.onrender.com";
 
-const BASE_URL =
-  import.meta.env.MODE =
-     "https://hemobridge-project.onrender.com";
+// const BASE_URL =
+//   import.meta.env.MODE =
+//      "https://hemobridge-project.onrender.com";
+const BASE_URL = "https://hemobridge-project.onrender.com";
 
 
      //signin
