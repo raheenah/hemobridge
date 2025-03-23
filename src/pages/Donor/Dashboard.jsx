@@ -1,418 +1,441 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "../../assets/avatar.svg";
-import { useDropzone } from "react-dropzone";
+import { PieChart, Pie, Cell } from "recharts";
 
 function Dashboard() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
-  const [editProfile, setEditProfile] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [editProfilePic, setEditProfilePic] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [message, setMessage] = useState("");
-    const [editNotifications, setEditNotifications] = useState(false);
+  const navigate = useNavigate();
+  const rowsPerPage = 6;
 
-  const togglePassword = (e) => {
-    e.preventDefault();
-    setShowPassword((prev) => !prev);
-  };
+  const data = [
+    { name: "Hospitals", value: 40, color: "#680058" },
+    { name: "Emergency Care", value: 25, color: "#8b0075" },
+    { name: "Infants & Children", value: 15, color: "#d003b0" },
+    { name: "Cancer", value: 10, color: "#ff71e9" },
+    { name: "Surgical Procedures", value: 10, color: "#ffb3f3" },
+  ];
+  const [facilities, setFacilities] = useState([]);
+  const [emergencyRequests, setEmergencyRequests] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [donate, setDonate] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
 
-  const toggleNewPassword = (e) => {
-    e.preventDefault();
-    setShowNewPassword((prev) => !prev);
-  };
+  useEffect(() => {
+    fetch("http://localhost:8000/facilities")
+      .then((res) => res.json())
+      .then((data) => setFacilities(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
-  const toggleConfirmNewPassword = (e) => {
-    e.preventDefault();
-    setShowConfirmNewPassword((prev) => !prev);
-  };
+  useEffect(() => {
+    fetch("http://localhost:8000/emergencyRequests")
+      .then((res) => res.json())
+      .then((data) => setEmergencyRequests(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
- 
+  const totalPages = Math.ceil(emergencyRequests.length / rowsPerPage);
+  const indexOfLastFacility = currentPage * rowsPerPage;
+  const indexOfFirstFacility = indexOfLastFacility - rowsPerPage;
+  const currentRequests = emergencyRequests.slice(
+    indexOfFirstFacility,
+    indexOfLastFacility
+  );
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
-
-  const handleFileSelect = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
+  const getPaginationNumbers = () => {
+    if (totalPages <= 5) {
+      return [...Array(totalPages)].map((_, index) => index + 1);
+    } else {
+      if (currentPage <= 3) {
+        return [1, 2, 3, "...", totalPages];
+      } else if (currentPage >= totalPages - 2) {
+        return [1, "...", totalPages - 2, totalPages - 1, totalPages];
+      } else {
+        return [1, "...", currentPage, "...", totalPages];
+      }
     }
   };
 
   return (
-    <div className=' flex   bg-white flex-col text-sm gap-4 py-3  px-6  h-full w-full'>
-      <h1 className='text-lg font-bold '>Profile Information</h1>
-
-      <div className='flex justify-between gap-4'>
-        <div className='flex flex-col gap-2'>
-          <div className='grid grid-cols-[auto_auto] gap-8'>
-            <div className='flex flex-col gap-1'>
-              <p>Full Name</p>
-              <p>User ID</p>
-              <p>Email Address</p>
-              <p>Phone Number</p>
-              <p>Date of Birth</p>
-              <p>Blood Type</p>
-              <p>Gender</p>
-              <p>Contact Address</p>
-            </div>
-            <div className='flex flex-col gap-1'>
-              <p>Juwon Ajiboye</p>
-              <p>B1042761</p>
-              <p>B1042761@gmail.com</p>
-              <p>08123456789</p>
-              <p>27-01-1999</p>
-              <p>O+</p>
-              <p>Male</p>{" "}
-              <p>221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos</p>
-            </div>
-          </div>
+    <div className=' flex text-xs flex-col   gap-4 py-2  px-4  h-full w-full'>
+      <div className='bg-white py-3  px-6 flex flex-col gap-4'>
+        <div className='flex items-center justify-between'>
+          <h2 className='text-lg font-bold'>Overview</h2>
           <button
             onClick={() => {
-              setEditProfile(!editProfile);
+              navigate("/user/donate");
             }}
-            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+            className='bg-background hover:bg-pink !important   w-full max-w-40  font-bold text-sm text-white py-2 px-4'
           >
-            Edit Profile
+            Book a Donation
           </button>
-        </div>
+        </div>{" "}
+        <div className='grid grid-cols-3 gap-2'>
+          <div className='border-1 px-3.5 py-2.5 gap-2 flex flex-col justify-between'>
+            <div className=' flex justify-between items-center'>
+              <h3 className='font-bold text-base'>Recent Activity</h3>
+              <button>
+                <i className='fa-solid fa-arrow-up-right-from-square'></i>
+              </button>
+            </div>
 
+            <div className='flex flex-col gap-1'>
+              <p>
+                <span className='text-text-dark-gray font-bold'>
+                  Latest Donation:
+                </span>{" "}
+                Jan 5, 2025 - City Hospital
+              </p>
+              <p>
+                <span className='text-text-dark-gray font-bold'>
+                  Lifetime Donation:
+                </span>{" "}
+                Total of 16 donations
+              </p>
+              <p>
+                <span className='text-text-dark-gray font-bold'>
+                  Next Eligible on:
+                </span>{" "}
+                Feb 20,2025
+              </p>
+            </div>
+          </div>
+
+          <div className='border-1 px-3.5 py-2.5 gap-2 flex flex-col justify-between'>
+            <div className=' flex justify-between items-center'>
+              <h3 className='font-bold text-base'>
+                Total Facilities Registered
+              </h3>
+              <button
+                onClick={() => {
+                  navigate("/user/donate");
+                }}
+              >
+                <i className='fa-solid fa-arrow-up-right-from-square'></i>
+              </button>
+            </div>
+            <div className='flex flex-col gap-1 '>
+              <p className='text-xl font-bold'>350+ Facilities </p>
+              <p className='text-text-dark-gray'>
+                Hospitals & Blood Banks available for donation{" "}
+              </p>
+            </div>
+          </div>
+
+          <div className='bg-black text-white px-3.5 py-2.5 gap-2 flex flex-col'>
+            {/* <div className=' flex justify-between items-center'> */}
+            <h3 className='font-bold text-base'>
+              Blood Type with the Highest Demand
+            </h3>
+
+            <div>
+              <p className='text-xl font-bold'>O- has the highest demand! </p>
+              <p>Hospitals need 25+ units in the next 24 hours!! </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='grid grid-cols-2 gap-4'>
         <div className='flex flex-col gap-4'>
-          <img
-            src={Avatar}
-            alt='avatar'
-            className='w-52 h-52 p-2 border border-text-dark-gray'
-          />
-          <button
-            onClick={() => {
-              setEditProfilePic(!editProfilePic);
-            }}
-            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
-          >
-            Upload
-          </button>
-          <button
-            // onClick={() => {
-            //   setDetails(!details), setSubmitted(!submitted);
-            // }}
-            className='border-background border hover:text-pink hover:border-pink   self-start  w-full max-w-32 box-border font-bold text-sm text-background py-2 px-4'
-          >
-            Delete
-          </button>
+          <div className='flex flex-col gap-2  py-3  px-6  bg-white '>
+            <h2 className='font-bold text-base'>Blood Donation Usage</h2>
+            <div className='flex items-center gap-2'>
+              <PieChart width={140} height={140} className='w-full'>
+                <Pie
+                  data={data}
+                  dataKey='value'
+                  nameKey='name'
+                  cx='50%'
+                  cy='50%'
+                  innerRadius={50}
+                  outerRadius={65}
+                  startAngle={90}
+                  endAngle={450}
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.color}
+                      stroke={"white"}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+              <ul className='flex flex-col gap-1 border-r-1 px-4  border-text-gray'>
+                {data.map((item) => (
+                  <li className='flex flex-col'>
+                    <div className='flex items-center gap-2'>
+                      {" "}
+                      <div
+                        className='w-3 h-3 rounded-full'
+                        style={{ backgroundColor: item.color }}
+                      ></div>
+                      <p className='font-bold'>{item.value}%</p>
+                    </div>
+                    <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
+
+                    <p className='text-text-dark-gray'>{item.name}</p>
+                  </li>
+                ))}
+              </ul>
+              <div className='flex flex-col w-[30%] gap-1  px-4 '>
+                <h2 className='text-background text-xl'>Did You Know??</h2>
+                <p className='text-text-dark-gray'>
+                  When you donate, you help keep{" "}
+                  <span className='text-background font-bold'>
+                    up to 10 patients
+                  </span>{" "}
+                  alive each year...
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className='flex flex-col   max-h-[30dvh] overflow-hidden overflow-y-scroll pb-3  px-6  bg-white '>
+            <div className='sticky bg-white py-3 top-0'>
+              <div className='flex justify-between items-center'>
+                <h2 className='font-bold text-base'>
+                  Live Blood Inventory Overview
+                </h2>
+                <button
+                  onClick={() => {
+                    navigate("/user/donate");
+                  }}
+                >
+                  <i className='fa-solid fa-arrow-up-right-from-square'></i>
+                </button>
+              </div>
+            </div>
+            <table className=' w-full  '>
+              <thead className='bg-light-pink text-left  '>
+                <tr className=''>
+                  <th className='py-1 pl-1'>Facility Name</th>
+                  <th>Address</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {facilities.map((facility) => (
+                  <tr
+                    className=' border-b-1  border-background-grey'
+                    key={facility.id}
+                  >
+                    <td className='py-2 pl-1 font-bold'>{facility.name}</td>
+                    <td>{facility.address}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <div className='grid grid-cols-2 py-4 border-t border-text-gray'>
-        <div className='  flex flex-col gap-4  border-r border-text-gray'>
-          <h1 className='text-lg font-bold '>Change Password </h1>
-          <div className='max-w-[70%] flex flex-col gap-2'>
-            <div className=' p-4 relative flex items-center  border-1 text-text-dark-gray'>
-              <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                Old Password<span className='text-red-500'>*</span>
-              </label>
-              <input
-                placeholder='*******'
-                type={showPassword ? "text" : "password"}
-                name='password'
-                // value={formData.password}
-                // onChange={handleChange}
-                className='placeholder-input-text w-full focus:outline-none'
-                required
-              />
+        <div className='flex flex-col  max-h-[64.6dvh]  overflow-hidden overflow-y-scroll pb-3  px-6  bg-white '>
+          <div className='sticky bg-white py-3 top-0'>
+            <div className='flex justify-between items-center'>
+              <h2 className='font-bold text-base'>
+                Live Blood Inventory Overview
+              </h2>
               <button
-                onClick={togglePassword}
-                className='absolute right-0 h-full   p-2 text-text-dark-gray'
+                onClick={() => {
+                  navigate("/user/donate");
+                }}
               >
-                {showPassword ? (
-                  <i className='fa-solid fa-eye-slash'></i>
-                ) : (
-                  <i className='fa-solid fa-eye'></i>
-                )}
-              </button>
-            </div>
-
-            <div className=' p-4 relative flex items-center border border-1 text-text-dark-gray'>
-              <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                New Password<span className='text-red-500'>*</span>
-              </label>
-              <input
-                placeholder='*******'
-                type={showNewPassword ? "text" : "password"}
-                name='new-password'
-                // value={formData.password}
-                // onChange={handleChange}
-                className='placeholder-input-text w-full focus:outline-none'
-                required
-              />
-              <button
-                onClick={toggleNewPassword}
-                className='absolute right-0 h-full   p-2 text-text-dark-gray'
-              >
-                {showNewPassword ? (
-                  <i className='fa-solid fa-eye-slash'></i> // Hide icon
-                ) : (
-                  <i className='fa-solid fa-eye'></i> // Show icon
-                )}
-              </button>
-            </div>
-
-            <div className=' p-4 relative flex items-center border border-1 text-text-dark-gray'>
-              <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                Confirm New Password<span className='text-red-500'>*</span>
-              </label>
-              <input
-                placeholder='*******'
-                type={showConfirmNewPassword ? "text" : "password"}
-                name='confirm-new-password'
-                // value={formData.password}
-                // onChange={handleChange}
-                className='placeholder-input-text w-full focus:outline-none'
-                required
-              />
-              <button
-                onClick={toggleConfirmNewPassword}
-                className='absolute right-0 h-full   p-2 text-text-dark-gray'
-              >
-                {showConfirmNewPassword ? (
-                  <i className='fa-solid fa-eye-slash'></i>
-                ) : (
-                  <i className='fa-solid fa-eye'></i>
-                )}
+                <i className='fa-solid fa-arrow-up-right-from-square'></i>
               </button>
             </div>
           </div>
-          <button
-            // onClick={() => {
-            //   setDetails(!details), setSubmitted(!submitted);
-            // }}
-            className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
-          >
-            Update
-          </button>
-        </div>
+          <ul className='flex flex-col gap-2'>
+            {currentRequests.map((request) => (
+              <li
+                className=' border-1 px-2 py-1 flex items-start justify-between border-text-gray'
+                key={request.id}
+              >
+                <div className='flex flex-col'>
+                  <p className='flex items-center gap-2'>
+                    <span className='text-text-dark-gray font-bold'>
+                      Blood Type:
+                    </span>{" "}
+                    {request.blood_type}
+                  </p>
+                  <p className='flex items-start gap-2'>
+                    <span className='text-text-dark-gray font-bold'>
+                      Location:
+                    </span>{" "}
+                    {request.facility_name}, {request.address}
+                  </p>
+                  <p className='flex items-center gap-2'>
+                    <span className='text-text-dark-gray font-bold'>
+                      Urgency:
+                    </span>{" "}
+                    <div className='flex items-center my-auto  gap-1'>
+                      <i
+                        className={` fa-solid fa-circle text-green
+                    ${
+                      request.urgency_level === "Critical"
+                        ? "text-red"
+                        : request.urgency_level === "Low"
+                        ? "text-yellow"
+                        : "text-green"
+                    }`}
+                      ></i>
 
-        <div className='pl-6 flex flex-col gap-4'>
-          <h1 className='text-lg font-bold '>Notification Preferences </h1>
-          <div className='grid grid-cols-[auto_auto] gap-8'>
-            <div className='flex flex-col gap-1'>
-              <p>Notification Channels</p>
-              <p>Notification Types</p>
-            </div>
-            <div className='flex flex-col gap-1'>
-              <p>Email</p>
+                      {request.urgency_level}
+                    </div>
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setDonate(true);
+                    setSelectedRequest(request);
+                  }}
+                  className='bg-background hover:bg-pink !important   w-fit  font-bold  text-white py-1 px-2'
+                >
+                  Donate{" "}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className='sticky  bg-white py-3  bottom-0'>
+            <div className='flex justify-end  items-center gap-2 mt-auto ml-auto'>
+              <button
+                className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <i className='fa-solid fa-angle-left'></i>
+              </button>
 
-              <p>Urgent Blood Requests, Appointment Confirmations</p>
+              {getPaginationNumbers().map((page, index) => (
+                <button
+                  key={index}
+                  className={`px-2 py-1 hover:bg-light-pink  ${
+                    currentPage === page ? "bg-light-pink" : ""
+                  }`}
+                  onClick={() =>
+                    typeof page === "number" && setCurrentPage(page)
+                  }
+                  disabled={page === "..."}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button
+                className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                <i className='fa-solid fa-angle-right'></i>
+              </button>
             </div>
           </div>
-          <button
-            onClick={() => {
-              setEditNotifications(!editNotifications);
-            }}
-            className='bg-background hover:bg-pink   self-start   w-full max-w-32   font-bold text-sm text-white py-2'
-          >
-            Edit Preferences
-          </button>
         </div>
       </div>
 
-      {editProfile && (
+      {donate && (
         <div
           onClick={(e) => {
-            setEditProfile(!editProfile), e.stopPropagation();
+            setDonate(!donate), e.stopPropagation();
           }}
           className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+            className=' w-[40%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-4'
           >
-            <div className='flex flex-col text-sm gap-4'>
-              <div className='flex justify-between'>
+            <div className='flex justify-between items-center'>
+              <h1 className='font-extrabold text-lg'> Emergency Request </h1>
+              <button onClick={() => setDonate(!donate)}>
                 {" "}
+                <i className='fa-regular fa-circle-xmark'></i>
+              </button>
+            </div>{" "}
+            <div className='flex flex-col text-sm gap-2'>
+              <div className='flex flex-col gap-2'>
                 <h2 className='font-bold text-base text-text-dark-gray'>
-                  Edit Profile Information{" "}
+                  Contact Information
                 </h2>
-                <button onClick={() => setEditProfile(!editProfile)}>
-                  {" "}
-                  <i className='fa-regular fa-circle-xmark'></i>
-                </button>
+                <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
               </div>
-              <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
+              <div>
+                <p className='flex items-center gap-2'>
+                  <span className='text-text-dark-gray'>Facility:</span>{" "}
+                  {selectedRequest.facility_name}
+                </p>
+                <p className='flex items-center gap-2'>
+                  <span className='text-text-dark-gray'>Address:</span>{" "}
+                  {selectedRequest.address}
+                </p>
+                <p className='flex items-center gap-2'>
+                  <span className='text-text-dark-gray'>Contact Number:</span>{" "}
+                  {selectedRequest.contact_number}
+                </p>
 
-              <form className=' flex flex-col gap-4'>
-                <div className='flex flex-col w-full  gap-3'>
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Full Name <span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='Jane Doe'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='text'
-                      name='name'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
-                      required
-                    />
+                <p className='flex items-center gap-2'>
+                  <span className='text-text-dark-gray'>Urgency Level:</span>{" "}
+                  <div className='flex items-center my-auto  gap-1'>
+                    <i
+                      className={` fa-solid fa-circle text-green
+                    ${
+                      selectedRequest.urgency_level === "Critical"
+                        ? "text-red"
+                        : selectedRequest.urgency_level === "Low"
+                        ? "text-yellow"
+                        : "text-green"
+                    }`}
+                    ></i>
+
+                    {selectedRequest.urgency_level}
                   </div>{" "}
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                </p>
+                <p className='flex items-center gap-2'>
+                  <span className='text-text-dark-gray'>Blood Type:</span>{" "}
+                  {selectedRequest.blood_type}
+                </p>
+              </div>
+              <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
+            </div>
+            <div className='flex flex-col text-sm gap-4'>
+              <div className='flex flex-col gap-2'>
+                <h2 className='font-bold text-base text-text-dark-gray'>
+                  Scheduling Details{" "}
+                </h2>
+                <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
+              </div>
+              <form className=' flex flex-col gap-4'>
+                <div className='grid  gap-4 grid-cols-2'>
+                  <div className=' p-4 relative border-1 text-text-dark-gray'>
                     <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Email Address
-                      <span className='text-red-500'>*</span>
+                      Date<span className='text-red-500'>*</span>
                     </label>
                     <input
-                      placeholder='someone@example.com'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='email'
-                      name='email'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Phone Number <span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='08123456789'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='number'
-                      name='number'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Date of Birth <span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      //   placeholder='someone@example.com'
+                      placeholder='No., Street, Town, Zip Code, State.'
                       className='placeholder-input-text w-full focus:outline-none'
                       type='date'
-                      name='dob'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
                       required
                     />
                   </div>
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                  <div className=' p-4 relative border-1 text-text-dark-gray'>
                     <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Address <span className='text-red-500'>*</span>
+                      Time<span className='text-red-500'>*</span>
                     </label>
                     <input
-                      placeholder='221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos'
+                      placeholder='No., Street, Town, Zip Code, State.'
                       className='placeholder-input-text w-full focus:outline-none'
-                      type='text'
-                      name='text'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
+                      type='time'
                       required
                     />
-                  </div>
-                  <div className='w-full px-4  relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
-                      Blood Type <span className='text-red-500'>*</span>
-                    </label>{" "}
-                    <select className=' focus:outline-none py-4   w-full   text-input-text '>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        disabled
-                        // selected
-                      >
-                        Choose...
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A+'
-                      >
-                        A+{" "}
-                      </option>{" "}
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A-'
-                      >
-                        A-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        B+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        B-{" "}
-                      </option>{" "}
-                      <option value='B+'>O+ </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        O-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        AB+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        AB-{" "}
-                      </option>
-                    </select>
-                  </div>
-                  <div className='w-full px-4  py-0 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
-                      Gender <span className='text-red-500'>*</span>
-                    </label>{" "}
-                    <select
-                      className=' focus:outline-none py-4   w-full   text-input-text '
-                      required
-                    >
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        disabled
-                        selected
-                      >
-                        Choose...
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='Male'
-                      >
-                        Male{" "}
-                      </option>{" "}
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='Female'
-                      >
-                        Female{" "}
-                      </option>
-                    </select>
                   </div>
                 </div>
                 <button
                   onClick={() => {
-                    setEditProfile(!editProfile),
-                      setSuccess(!success),
-                      setMessage("profile information");
+                    setDonate(!donate), setSubmitted(!submitted);
                   }}
-                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
                 >
                   Schedule
                 </button>
@@ -421,232 +444,70 @@ function Dashboard() {
           </div>
         </div>
       )}
-
-      {editProfilePic && (
+      {submitted && (
         <div
           onClick={(e) => {
-            setEditProfilePic(!editProfilePic), e.stopPropagation();
+            setSubmitted(!submitted), e.stopPropagation();
           }}
           className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+            className=' w-[50%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-2'
           >
-            <div className='flex justify-between'>
-              {" "}
-              <h2 className='font-bold text-base text-text-dark-gray'>
-                Change Profile Picture{" "}
-              </h2>
-              <button onClick={() => setEditProfilePic(!editProfilePic)}>
-                {" "}
-                <i className='fa-regular fa-circle-xmark'></i>
-              </button>
+            <div className='flex flex-col gap-2'>
+              <h1 className='font-extrabold text-lg'>
+                Schedule Request Submitted
+              </h1>
+              <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
             </div>
-            <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
-
-            <div
-              className='border-2 border-dashed text-text-dark-gray flex flex-col gap-4 p-6 rounded-lg text-center cursor-pointer'
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleDrop}
-            >
-              <input
-                type='file'
-                id='fileInput'
-                onChange={handleFileSelect}
-                className='hidden'
-              />
-              <i className='fa-solid fa-file text-7xl'></i>
-              <div className='flex flex-col gap-2'>
-                {" "}
-                <p>Drag file here</p>
-                <p>or</p>
+            <div className='text-sm flex flex-col gap-2'>
+              <div>
+                <p>
+                  Donation schedule request successfully submitted to LifeBank
+                  Hospital for{" "}
+                  <span className='font-bold'>14th February, 2025</span> by{" "}
+                  <span className='font-bold'>10:00AM.</span>
+                </p>
+                <p>
+                  You can monitor your Request Progress on the Notifications
+                  page.
+                </p>
+                <p>
+                  You will get a notification when your request is approved.
+                </p>
               </div>
-              {selectedFile ? (
-                <div className='flex justify-between items-center w-fit mx-auto gap-2'>
-                  <p className=''>{selectedFile.name}</p>
-                  <button
-                    onClick={(e) => {
-                      setSelectedFile(null), e.stopPropagation();
-                    }}
-                    className='text-red'
-                  >
-                    <i className='fa-solid fa-trash'></i>{" "}
-                  </button>
-                </div>
-              ) : (
-                "Drag & drop a file or click to browse"
-              )}
-              <button
-                className=' text-background '
-                onClick={() => document.getElementById("fileInput").click()}
-              >
-                Browse
-              </button>
+              <p>Please note the following information:</p>
+              <div className='flex flex-col'>
+                <p>Who can donate?</p>
+                <ul className='list-disc pl-6'>
+                  <li>Must be 18 - 65 years old.</li>
+                  <li>
+                    No history of infectious diseases (e.g., HIV, Hepatitis).
+                  </li>
+                  <li>
+                    Donors must not have donated blood in the last 8 weeks
+                  </li>
+                </ul>
+              </div>{" "}
+              <div className='flex flex-col'>
+                <p>How to Prepare</p>
+                <ul className='list-disc pl-6'>
+                  <li>Eat a healthy meal before donating.</li>
+                  <li>Drink plenty of water (500ml - 1L). </li>
+                  <li>Avoid alcohol & caffeine 24 hours before donation. </li>
+                  <li>Get a good night’s sleep before your appointment.</li>
+                </ul>
+              </div>
             </div>
             <button
               onClick={() => {
-                setEditProfilePic(!editProfilePic),
-                  setSuccess(!success),
-                  setMessage("profile picture");
+                setSubmitted(!submitted);
               }}
-              className='bg-background hover:bg-pink !important mx-auto w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+              className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
             >
-              Upload
+              Close
             </button>
-          </div>
-        </div>
-      )}
-
-      {editNotifications && (
-        <div
-          onClick={(e) => {
-            setEditNotifications(!editNotifications), e.stopPropagation();
-          }}
-          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
-          >
-            <div className='flex flex-col text-sm gap-4'>
-              <div className='flex justify-between'>
-                {" "}
-                <h2 className='font-bold text-base text-text-dark-gray'>
-                  Edit Notofication Preferences
-                </h2>
-                <button
-                  onClick={() => setEditNotifications(!editNotifications)}
-                >
-                  {" "}
-                  <i className='fa-regular fa-circle-xmark'></i>
-                </button>
-              </div>
-              <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
-
-              <form className=' flex flex-col gap-4'>
-                <div className='flex flex-col w-full  gap-3'>
-                  <div className='flex flex-col gap-2'>
-                    <div className='flex flex-col gap-1'>
-                      {" "}
-                      <h3 className='font-bold'>Notification Channels</h3>
-                      <p>(Choose how you receive notifications)</p>
-                    </div>
-                    <ul className='flex flex-col gap-2'>
-                      <li className='flex items-center gap-2'>
-                        <input
-                          type='checkbox'
-                          id='email-channel'
-                          name='email-channel'
-                          value='email-channel'
-                        />
-                        <p>Email</p>
-                      </li>
-                      <li className='flex items-center gap-2'>
-                        <input
-                          type='checkbox'
-                          id='push-channel'
-                          name='push-channel'
-                          value='push-channel'
-                        />
-                        <p>Push</p>
-                      </li>
-                    </ul>
-                  </div>{" "}
-                  <div className='flex flex-col gap-2'>
-                    <div className='flex flex-col gap-1'>
-                      {" "}
-                      <h3 className='font-bold'>Notification Types</h3>
-                      <p>
-                        (Choose what type of notifications you want to receive)
-                      </p>
-                    </div>
-                    <ul className='flex flex-col gap-2'>
-                      <li className='flex items-center gap-2'>
-                        <input
-                          type='checkbox'
-                          id='urgent-request'
-                          name='urgent-request'
-                          value='urgent-request'
-                        />
-                        <p>Urgent Request Requests</p>
-                      </li>
-                      <li className='flex items-center gap-2'>
-                        <input
-                          type='checkbox'
-                          id='donation-reminders'
-                          name='donation-reminders'
-                          value='donation-reminders'
-                        />
-                        <p>Donation Reminders</p>
-                      </li>{" "}
-                      <li className='flex items-center gap-2'>
-                        <input
-                          type='checkbox'
-                          id='appointment-confirmations'
-                          name='appointment-confirmations'
-                          value='appointment-confirmations'
-                        />
-                        <p>Appointment Confirmations</p>
-                      </li>{" "}
-                      <li className='flex items-center gap-2'>
-                        <input
-                          type='checkbox'
-                          id='inventory-updates'
-                          name='inventory-updates'
-                          value='inventory-updates'
-                        />
-                        <p>Inventory Updates</p>
-                      </li>{" "}
-                    </ul>
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    setEditNotifications(!editNotifications),
-                      setSuccess(!success),
-                      setMessage("notification preferences");
-                  }}
-                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
-                >
-                  Save
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {success && (
-        <div
-          onClick={(e) => {
-            setSuccess(!success), e.stopPropagation();
-          }}
-          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
-          >
-            <div className='flex flex-col text-center text-sm gap-4'>
-              <div className='flex flex-col gap-2 '>
-                {" "}
-                <h2 className='font-bold text-base text-center text-text-dark-gray'>
-Success                </h2>
-               
-              <div className='w-[70%] h-0.5 top-0 mx-auto bg-background-grey'></div>
-              </div>
-
-              <p>Your {message} has been updated successfully</p>
-              <button
-                onClick={() => {
-                  setSuccess(!success), setMessage(null);
-                }}
-                className='bg-background hover:bg-pink !important mx-auto  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
-              >
-                Close
-              </button>
-            </div>
           </div>
         </div>
       )}

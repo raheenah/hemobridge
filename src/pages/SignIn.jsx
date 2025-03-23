@@ -21,7 +21,7 @@ console.log("Form Data:", formData);
        setMessage(response.message);
       if (response.success) {
   //  login(response.user);
-     navigate("/user");
+     navigate("/user/dashboard");
  }
          } catch (error) {
  setMessage(error.message);
