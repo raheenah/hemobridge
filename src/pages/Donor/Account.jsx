@@ -1,12 +1,18 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import Avatar from "../../assets/avatar.svg";
+import { useDropzone } from "react-dropzone";
 
 function Account() {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [editProfilePic, setEditProfilePic] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [message, setMessage] = useState("");
+    const [editNotifications, setEditNotifications] = useState(false);
 
   const togglePassword = (e) => {
     e.preventDefault();
@@ -21,6 +27,23 @@ function Account() {
   const toggleConfirmNewPassword = (e) => {
     e.preventDefault();
     setShowConfirmNewPassword((prev) => !prev);
+  };
+
+ 
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
   };
 
   return (
@@ -68,9 +91,9 @@ function Account() {
             className='w-52 h-52 p-2 border border-text-dark-gray'
           />
           <button
-            // onClick={() => {
-            //   setDetails(!details), setSubmitted(!submitted);
-            // }}
+            onClick={() => {
+              setEditProfilePic(!editProfilePic);
+            }}
             className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
           >
             Upload
@@ -189,9 +212,9 @@ function Account() {
             </div>
           </div>
           <button
-            // onClick={() => {
-            //   setDetails(!details), setSubmitted(!submitted);
-            // }}
+            onClick={() => {
+              setEditNotifications(!editNotifications);
+            }}
             className='bg-background hover:bg-pink   self-start   w-full max-w-32   font-bold text-sm text-white py-2'
           >
             Edit Preferences
@@ -208,21 +231,154 @@ function Account() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[50%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-4'
+            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
           >
-            <div className='flex flex-col text-sm gap-2'>
-              <h2 className='font-bold text-base text-text-dark-gray'>
-                Donation Booking Details
-              </h2>
+            <div className='flex flex-col text-sm gap-4'>
+              <div className='flex justify-between'>
+                {" "}
+                <h2 className='font-bold text-base text-text-dark-gray'>
+                  Edit Profile Information{" "}
+                </h2>
+                <button onClick={() => setEditProfile(!editProfile)}>
+                  {" "}
+                  <i className='fa-regular fa-circle-xmark'></i>
+                </button>
+              </div>
+              <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
+
               <form className=' flex flex-col gap-4'>
-                <div className='flex flex-col max-w-[70%]  gap-4'>
-                  
-
-                  
-
-                  <div className='w-full px-4  py-0 relative border-1 text-text-dark-gray'>
+                <div className='flex flex-col w-full  gap-3'>
+                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                      Full Name <span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      placeholder='Jane Doe'
+                      className='placeholder-input-text w-full focus:outline-none'
+                      type='text'
+                      name='name'
+                      //   value={formData.email}
+                      //   onChange={handleChange}
+                      required
+                    />
+                  </div>{" "}
+                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                      Email Address
+                      <span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      placeholder='someone@example.com'
+                      className='placeholder-input-text w-full focus:outline-none'
+                      type='email'
+                      name='email'
+                      //   value={formData.email}
+                      //   onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                      Phone Number <span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      placeholder='08123456789'
+                      className='placeholder-input-text w-full focus:outline-none'
+                      type='number'
+                      name='number'
+                      //   value={formData.email}
+                      //   onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                      Date of Birth <span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      //   placeholder='someone@example.com'
+                      className='placeholder-input-text w-full focus:outline-none'
+                      type='date'
+                      name='dob'
+                      //   value={formData.email}
+                      //   onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                      Address <span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      placeholder='221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos'
+                      className='placeholder-input-text w-full focus:outline-none'
+                      type='text'
+                      name='text'
+                      //   value={formData.email}
+                      //   onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className='w-full px-4  relative border-1 text-text-dark-gray'>
                     <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
                       Blood Type <span className='text-red-500'>*</span>
+                    </label>{" "}
+                    <select className=' focus:outline-none py-4   w-full   text-input-text '>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        disabled
+                        // selected
+                      >
+                        Choose...
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='A+'
+                      >
+                        A+{" "}
+                      </option>{" "}
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='A-'
+                      >
+                        A-{" "}
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B+'
+                      >
+                        B+{" "}
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B-'
+                      >
+                        B-{" "}
+                      </option>{" "}
+                      <option value='B+'>O+ </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B-'
+                      >
+                        O-{" "}
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B+'
+                      >
+                        AB+{" "}
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B-'
+                      >
+                        AB-{" "}
+                      </option>
+                    </select>
+                  </div>
+                  <div className='w-full px-4  py-0 relative border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                      Gender <span className='text-red-500'>*</span>
                     </label>{" "}
                     <select
                       className=' focus:outline-none py-4   w-full   text-input-text '
@@ -239,26 +395,257 @@ function Account() {
                         className='text-input-text   focus:outline-none'
                         value='Male'
                       >
-Male                      </option>{" "}
+                        Male{" "}
+                      </option>{" "}
                       <option
                         className='text-input-text   focus:outline-none'
                         value='Female'
                       >
-Female                      </option>
-                    
-                     
+                        Female{" "}
+                      </option>
                     </select>
                   </div>
                 </div>
                 <button
-                  //   onClick={() => {
-                  //     setDetails(!details), setSubmitted(!submitted);
-                  //   }}
-                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
+                  onClick={() => {
+                    setEditProfile(!editProfile),
+                      setSuccess(!success),
+                      setMessage("profile information");
+                  }}
+                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
                 >
                   Schedule
                 </button>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editProfilePic && (
+        <div
+          onClick={(e) => {
+            setEditProfilePic(!editProfilePic), e.stopPropagation();
+          }}
+          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+          >
+            <div className='flex justify-between'>
+              {" "}
+              <h2 className='font-bold text-base text-text-dark-gray'>
+                Change Profile Picture{" "}
+              </h2>
+              <button onClick={() => setEditProfilePic(!editProfilePic)}>
+                {" "}
+                <i className='fa-regular fa-circle-xmark'></i>
+              </button>
+            </div>
+            <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
+
+            <div
+              className='border-2 border-dashed text-text-dark-gray flex flex-col gap-4 p-6 rounded-lg text-center cursor-pointer'
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+            >
+              <input
+                type='file'
+                id='fileInput'
+                onChange={handleFileSelect}
+                className='hidden'
+              />
+              <i className='fa-solid fa-file text-7xl'></i>
+              <div className='flex flex-col gap-2'>
+                {" "}
+                <p>Drag file here</p>
+                <p>or</p>
+              </div>
+              {selectedFile ? (
+                <div className='flex justify-between items-center w-fit mx-auto gap-2'>
+                  <p className=''>{selectedFile.name}</p>
+                  <button
+                    onClick={(e) => {
+                      setSelectedFile(null), e.stopPropagation();
+                    }}
+                    className='text-red'
+                  >
+                    <i className='fa-solid fa-trash'></i>{" "}
+                  </button>
+                </div>
+              ) : (
+                "Drag & drop a file or click to browse"
+              )}
+              <button
+                className=' text-background '
+                onClick={() => document.getElementById("fileInput").click()}
+              >
+                Browse
+              </button>
+            </div>
+            <button
+              onClick={() => {
+                setEditProfilePic(!editProfilePic),
+                  setSuccess(!success),
+                  setMessage("profile picture");
+              }}
+              className='bg-background hover:bg-pink !important mx-auto w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+            >
+              Upload
+            </button>
+          </div>
+        </div>
+      )}
+
+      {editNotifications && (
+        <div
+          onClick={(e) => {
+            setEditNotifications(!editNotifications), e.stopPropagation();
+          }}
+          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+          >
+            <div className='flex flex-col text-sm gap-4'>
+              <div className='flex justify-between'>
+                {" "}
+                <h2 className='font-bold text-base text-text-dark-gray'>
+                  Edit Notofication Preferences
+                </h2>
+                <button
+                  onClick={() => setEditNotifications(!editNotifications)}
+                >
+                  {" "}
+                  <i className='fa-regular fa-circle-xmark'></i>
+                </button>
+              </div>
+              <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
+
+              <form className=' flex flex-col gap-4'>
+                <div className='flex flex-col w-full  gap-3'>
+                  <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-1'>
+                      {" "}
+                      <h3 className='font-bold'>Notification Channels</h3>
+                      <p>(Choose how you receive notifications)</p>
+                    </div>
+                    <ul className='flex flex-col gap-2'>
+                      <li className='flex items-center gap-2'>
+                        <input
+                          type='checkbox'
+                          id='email-channel'
+                          name='email-channel'
+                          value='email-channel'
+                        />
+                        <p>Email</p>
+                      </li>
+                      <li className='flex items-center gap-2'>
+                        <input
+                          type='checkbox'
+                          id='push-channel'
+                          name='push-channel'
+                          value='push-channel'
+                        />
+                        <p>Push</p>
+                      </li>
+                    </ul>
+                  </div>{" "}
+                  <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-1'>
+                      {" "}
+                      <h3 className='font-bold'>Notification Types</h3>
+                      <p>
+                        (Choose what type of notifications you want to receive)
+                      </p>
+                    </div>
+                    <ul className='flex flex-col gap-2'>
+                      <li className='flex items-center gap-2'>
+                        <input
+                          type='checkbox'
+                          id='urgent-request'
+                          name='urgent-request'
+                          value='urgent-request'
+                        />
+                        <p>Urgent Request Requests</p>
+                      </li>
+                      <li className='flex items-center gap-2'>
+                        <input
+                          type='checkbox'
+                          id='donation-reminders'
+                          name='donation-reminders'
+                          value='donation-reminders'
+                        />
+                        <p>Donation Reminders</p>
+                      </li>{" "}
+                      <li className='flex items-center gap-2'>
+                        <input
+                          type='checkbox'
+                          id='appointment-confirmations'
+                          name='appointment-confirmations'
+                          value='appointment-confirmations'
+                        />
+                        <p>Appointment Confirmations</p>
+                      </li>{" "}
+                      <li className='flex items-center gap-2'>
+                        <input
+                          type='checkbox'
+                          id='inventory-updates'
+                          name='inventory-updates'
+                          value='inventory-updates'
+                        />
+                        <p>Inventory Updates</p>
+                      </li>{" "}
+                    </ul>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setEditNotifications(!editNotifications),
+                      setSuccess(!success),
+                      setMessage("notification preferences");
+                  }}
+                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+                >
+                  Save
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {success && (
+        <div
+          onClick={(e) => {
+            setSuccess(!success), e.stopPropagation();
+          }}
+          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+          >
+            <div className='flex flex-col text-center text-sm gap-4'>
+              <div className='flex flex-col gap-2 '>
+                {" "}
+                <h2 className='font-bold text-base text-center text-text-dark-gray'>
+Success                </h2>
+               
+              <div className='w-[70%] h-0.5 top-0 mx-auto bg-background-grey'></div>
+              </div>
+
+              <p>Your {message} has been updated successfully</p>
+              <button
+                onClick={() => {
+                  setSuccess(!success), setMessage(null);
+                }}
+                className='bg-background hover:bg-pink !important mx-auto  w-full max-w-32  font-bold text-sm text-white py-2 px-4'
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

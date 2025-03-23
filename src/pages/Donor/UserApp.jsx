@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Logo from "../../assets/Vector.svg";
-import { NavLink, Outlet , useLocation } from "react-router-dom";
+import { NavLink, Outlet , useLocation, useNavigate } from "react-router-dom";
 
 function UserApp() {
   const location = useLocation();
-  
+  const navigate = useNavigate()
 
   return (
     <div className='flex  min-h-screen h-screen '>
@@ -130,7 +130,9 @@ function UserApp() {
             <div className='flex flex-col gap-2 mt-auto '>
               <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
 
-              <button className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'>
+              <button
+                onClick={()=>navigate("/")}
+                className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'>
                 <i className='fa-solid fa-arrow-right-from-bracket'></i>{" "}
                 <p>Log out</p>
               </button>
