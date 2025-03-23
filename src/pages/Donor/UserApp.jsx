@@ -99,6 +99,7 @@ function UserApp() {
 
             <div className='flex flex-col gap-2'>
               <NavLink
+                to={"/user/account"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${

@@ -6,10 +6,94 @@
       "address": "12 Broad Street, Lagos",
       "bloodType": ["A+", "B-", "O+"],
       "urgency": "High",
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "hours": "24/7"
     },
     {
       "id": 2,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Abuja National Hospital",
       "address": "Garki, Abuja",
       "bloodType": ["AB+", "O-", "B+"],
@@ -18,6 +102,48 @@
     },
     {
       "id": 3,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Kano State Clinic",
       "address": "Zaria Road, Kano",
       "bloodType": ["A-", "O+", "B-"],
@@ -26,6 +152,48 @@
     },
     {
       "id": 4,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Ibadan Central Hospital",
       "address": "Ring Road, Ibadan",
       "bloodType": ["AB-", "A+", "O+"],
@@ -34,6 +202,48 @@
     },
     {
       "id": 5,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Benin City Medical Center",
       "address": "Airport Road, Benin",
       "bloodType": ["O-", "B+", "A+"],
@@ -42,6 +252,48 @@
     },
     {
       "id": 6,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Jos University Teaching Hospital",
       "address": "Lamingo, Jos",
       "bloodType": ["A-", "B-", "O+"],
@@ -50,6 +302,48 @@
     },
     {
       "id": 7,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Port Harcourt Specialist Hospital",
       "address": "Trans Amadi, Port Harcourt",
       "bloodType": ["AB+", "O+", "A-"],
@@ -58,6 +352,48 @@
     },
     {
       "id": 8,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Kaduna State Hospital",
       "address": "Independence Way, Kaduna",
       "bloodType": ["B+", "A-", "O-"],
@@ -66,6 +402,48 @@
     },
     {
       "id": 9,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Enugu Teaching Hospital",
       "address": "Park Lane, Enugu",
       "bloodType": ["O+", "AB-", "A+"],
@@ -76,12 +454,97 @@
       "id": 10,
       "name": "Ekiti State University Hospital",
       "address": "Ado-Ekiti, Ekiti",
-      "bloodType": ["B-", "A+", "O-"],
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
+      "bloodType": ["O+", "AB-", "A+"],
+
       "urgency": "High",
       "hours": "24/7"
     },
     {
       "id": 11,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Osun State General Hospital",
       "address": "Osogbo, Osun",
       "bloodType": ["A+", "O-", "B+"],
@@ -90,6 +553,48 @@
     },
     {
       "id": 12,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Ondo State Medical Center",
       "address": "Akure, Ondo",
       "bloodType": ["AB-", "A-", "O+"],
@@ -98,6 +603,48 @@
     },
     {
       "id": 13,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Uyo Specialist Hospital",
       "address": "Oron Road, Uyo",
       "bloodType": ["B+", "A+", "O-"],
@@ -106,6 +653,48 @@
     },
     {
       "id": 14,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Abeokuta Central Clinic",
       "address": "Ibara, Abeokuta",
       "bloodType": ["A-", "O+", "B-"],
@@ -114,6 +703,48 @@
     },
     {
       "id": 15,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Calabar State Hospital",
       "address": "Marian Road, Calabar",
       "bloodType": ["AB+", "O-", "A+"],
@@ -122,6 +753,48 @@
     },
     {
       "id": 16,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Yola University Teaching Hospital",
       "address": "Jimeta, Yola",
       "bloodType": ["O+", "B-", "A-"],
@@ -130,6 +803,48 @@
     },
     {
       "id": 17,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Minna State Hospital",
       "address": "Tunga, Minna",
       "bloodType": ["A+", "O-", "B+"],
@@ -138,6 +853,48 @@
     },
     {
       "id": 18,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Makurdi Federal Hospital",
       "address": "Wurukum, Makurdi",
       "bloodType": ["B+", "A-", "O+"],
@@ -146,6 +903,48 @@
     },
     {
       "id": 19,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Sokoto State Medical Center",
       "address": "Sokoto City, Sokoto",
       "bloodType": ["AB-", "O+", "A+"],
@@ -154,6 +953,48 @@
     },
     {
       "id": 20,
+      "stock": [
+        {
+          "type": "A+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "A-",
+          "stock": 1,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O+",
+          "stock": 4,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "O-",
+          "stock": 0,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB+",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "AB-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B+",
+          "stock": 20,
+          "expiry": "2022-12-31"
+        },
+        {
+          "type": "B-",
+          "stock": 10,
+          "expiry": "2022-12-31"
+        }
+      ],
       "name": "Zamfara Specialist Hospital",
       "address": "Gusau, Zamfara",
       "bloodType": ["B-", "A+", "O-"],

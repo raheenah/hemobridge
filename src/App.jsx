@@ -13,29 +13,41 @@ import SignUp from "./pages/SignUp";
 import UserApp from "./pages/Donor/UserApp";
 import EducationalContent from "./pages/Donor/EduContent";
 import Donate from "./pages/Donor/Donate";
+import { AuthProvider } from "./context";
+import Account from "./pages/Donor/Account";
+
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path='/' element={<WelcomePage />}>
-          <Route index element={<Signin />} />
-          <Route path='forgot-password' element={<ForgotPassword />} />
-          <Route path='reset-link-sent' element={<LinkSent />} />
-          <Route path='reset-password' element={<ResetPassword />} />
-          <Route
-            path='reset-password-success'
-            element={<PasswordResetSuccess />}
-          />
-          <Route path='terms-and-conditions' element={<TermsAndConditions />} />
-          <Route path='sign-up' element={<SignUp />} />
-        </Route>
-        <Route path='/user' element={<UserApp />}>
-          <Route path='educational-content' element={<EducationalContent />} />
-          <Route path='donate' element={<Donate />} />
-        </Route>
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path='/' element={<WelcomePage />}>
+            <Route index element={<Signin />} />
+            <Route path='forgot-password' element={<ForgotPassword />} />
+            <Route path='reset-link-sent' element={<LinkSent />} />
+            <Route path='reset-password' element={<ResetPassword />} />
+            <Route
+              path='reset-password-success'
+              element={<PasswordResetSuccess />}
+            />
+            <Route
+              path='terms-and-conditions'
+              element={<TermsAndConditions />}
+            />
+            <Route path='sign-up' element={<SignUp />} />
+          </Route>
+          <Route path='/user' element={<UserApp />}>
+            <Route
+              path='educational-content'
+              element={<EducationalContent />}
+            />
+            <Route path='donate' element={<Donate />} />
+            <Route path="account" element={<Account/>}/>
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
