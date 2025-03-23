@@ -15,6 +15,9 @@ import EducationalContent from "./pages/Donor/EduContent";
 import Donate from "./pages/Donor/Donate";
 import { AuthProvider } from "./context";
 import Account from "./pages/Donor/Account";
+import Help from "./pages/Donor/Help";
+import Dashboard from "./pages/Donor/Dashboard";
+import Notifications from "./pages/Donor/Notifications";
 
 
 function App() {
@@ -43,7 +46,10 @@ function App() {
               element={<EducationalContent />}
             />
             <Route path='donate' element={<Donate />} />
-            <Route path="account" element={<Account/>}/>
+            <Route path='account' element={<Account />} />
+            <Route path='help' element={<Help />} />
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='notifications' element={<Notifications/>} />
           </Route>
         </Routes>
       </Router>

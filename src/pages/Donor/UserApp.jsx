@@ -42,6 +42,7 @@ function UserApp() {
             <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
             <div className='flex flex-col gap-2'>
               <NavLink
+                to={"/user/dashboard"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
@@ -68,6 +69,7 @@ function UserApp() {
                 <i className='fa-solid fa-droplet'></i> <p>Donate</p>
               </NavLink>
               <NavLink
+                to={"/user/notifications"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
@@ -113,6 +115,7 @@ function UserApp() {
                 <p>My Account</p>
               </NavLink>
               <NavLink
+                to={"/user/help"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
@@ -122,8 +125,7 @@ function UserApp() {
                 }
                 `}
               >
-                <i className='fa-regular fa-circle-question'></i>{" "}
-                <p>Help & Support</p>
+                <i className='fa-solid fa-headset'></i> <p>Help & Support</p>
               </NavLink>
             </div>
 
@@ -131,8 +133,9 @@ function UserApp() {
               <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
 
               <button
-                onClick={()=>navigate("/")}
-                className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'>
+                onClick={() => navigate("/")}
+                className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'
+              >
                 <i className='fa-solid fa-arrow-right-from-bracket'></i>{" "}
                 <p>Log out</p>
               </button>
