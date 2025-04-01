@@ -14,7 +14,9 @@ function TermsAndConditions() {
           <h1 className=' font-[700] flex-grow  font-space w-full text-center'>
             Terms & Conditions{" "}
           </h1>
-          <button className='w-fit hover:text-background'>
+          <button
+            onClick={() => navigate(-1)}
+            className='w-fit hover:text-background'>
             <i className='fa-regular fa-circle-xmark'></i>
           </button>
         </div>
@@ -99,7 +101,7 @@ function TermsAndConditions() {
 
         <button
           onClick={() => navigate(-1)}
-          className='bg-background p-4  w-[40%] mx-auto  font-bold text-base text-white py-3'
+          className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%]  font-bold text-base text-white py-2 px-4'
         >
           I Understand{" "}
         </button>

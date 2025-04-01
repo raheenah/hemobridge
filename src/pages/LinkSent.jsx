@@ -18,9 +18,9 @@ function LinkSent() {
 
         <button
           onClick={() => navigate("/forgot-password")}
-          className='bg-background p-4  w-full font-bold text-xl text-white py-3'
+          className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%]  font-bold text-base text-white py-2 px-4'
         >
-          Send Password Reset Link{" "}
+          Reset Password{" "}
         </button>
       </div>
     </div>

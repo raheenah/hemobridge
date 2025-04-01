@@ -1,11 +1,13 @@
 import { useState , useEffect } from "react";
 import Logo from "../../assets/Vector.svg";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet , useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
 
-function UserApp() {
+
+
+function FacilityApp() {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,9 +23,10 @@ function UserApp() {
         document.body.style.overflow = "auto";
       };
     }, [isOpen]);
-
+  
+  
   return (
-    <div className='flex   min-h-screen h-screen '>
+    <div className='flex  min-h-screen h-screen '>
       <div className='w-full flex flex-col '>
         <section className='w-full  pr-8 my-2  flex  gap- '>
           <div className='flex   w-full  items-center justify-between  '>
@@ -62,62 +65,62 @@ function UserApp() {
         </section>
 
         <section className='h- w-full   flex'>
-          <div className='w-[25%] hidden md:flex flex-col gap-4 pb-6 px-4 border-background-grey  '>
+          <div className='w-[25%] hidden md:flex flex-col gap-6 pb-6 px-4 border-background-grey  '>
             <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
             <div className='flex flex-col gap-2'>
               <NavLink
-                to={"/user/dashboard"}
+                to={"/facility/dashboard"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/dashboard"
+                  location.pathname === "/facility/dashboard"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
               >
-                <i className='fa-solid fa-table-columns'></i>
-                <p>Dashboard</p>
+                <i className='fa-solid fa-table-columns'></i> <p>Dashboard</p>
               </NavLink>
               <NavLink
-                to={"/user/donate"}
+                to={"/facility/emergency-requests"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/donate"
+                  location.pathname === "/facility/emergency-requests"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
               >
-                <i className='fa-solid fa-droplet'></i> <p>Donate</p>
+                <i className='fa-solid fa-hospital'></i>{" "}
+                <p>Emergency Requests</p>
               </NavLink>
               <NavLink
-                to={"/user/notifications"}
+                to={"/facility/inventory"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/notifications"
+                  location.pathname === "/facility/inventory"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
               >
-                <i className='fa-regular fa-bell'></i>
-                <p>Notifications</p>
+                <i className='fa-solid fa-dolly'></i>
+                <p>Inventory</p>
               </NavLink>
               <NavLink
-                to={"/user/educational-content"}
+                to={"/facility/notifications"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/educational-content"
+                  location.pathname === "/facility/notifications"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
               >
-                <i className='fa-solid fa-book'></i> <p>Educational Content</p>
+                <i className='fa-solid fa-book'></i> <p>Notifications</p>
               </NavLink>
             </div>
 
@@ -125,11 +128,11 @@ function UserApp() {
 
             <div className='flex flex-col gap-2'>
               <NavLink
-                to={"/user/account"}
+                to={"/facility/account"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/account"
+                  location.pathname === "/facility/account"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -139,11 +142,11 @@ function UserApp() {
                 <p>My Account</p>
               </NavLink>
               <NavLink
-                to={"/user/help"}
+                to={"/facility/help"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/help"
+                  location.pathname === "/facility/help"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -181,71 +184,71 @@ function UserApp() {
                 <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
                 <div className='flex flex-col gap-2'>
                   <NavLink
-                    to={"/user/dashboard"}
+                    to={"/facility/dashboard"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/dashboard"
+                  location.pathname === "/facility/dashboard"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
                   >
-                    <i className='fa-solid fa-table-columns'></i>
+                    <i className='fa-solid fa-table-columns'></i>{" "}
                     <p>Dashboard</p>
                   </NavLink>
                   <NavLink
-                    to={"/user/donate"}
+                    to={"/facility/emergency-requests"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/donate"
+                  location.pathname === "/facility/emergency-requests"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
                   >
-                    <i className='fa-solid fa-droplet'></i> <p>Donate</p>
+                    <i className='fa-solid fa-hospital'></i>{" "}
+                    <p>Emergency Requests</p>
                   </NavLink>
                   <NavLink
-                    to={"/user/notifications"}
+                    to={"/facility/inventory"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/notifications"
+                  location.pathname === "/facility/inventory"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
                   >
-                    <i className='fa-regular fa-bell'></i>
-                    <p>Notifications</p>
+                    <i className='fa-solid fa-dolly'></i>
+                    <p>Inventory</p>
                   </NavLink>
                   <NavLink
-                    to={"/user/educational-content"}
+                    to={"/facility/notifications"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/educational-content"
+                  location.pathname === "/facility/notifications"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
                   >
-                    <i className='fa-solid fa-book'></i>{" "}
-                    <p>Educational Content</p>
+                    <i className='fa-solid fa-book'></i> <p>Notifications</p>
                   </NavLink>
                 </div>
 
@@ -253,14 +256,14 @@ function UserApp() {
 
                 <div className='flex flex-col gap-2'>
                   <NavLink
-                    to={"/user/account"}
+                    to={"/facility/account"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/account"
+                  location.pathname === "/facility/account"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -270,14 +273,14 @@ function UserApp() {
                     <p>My Account</p>
                   </NavLink>
                   <NavLink
-                    to={"/user/help"}
+                    to={"/facility/help"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/user/help"
+                  location.pathname === "/facility/help"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -293,10 +296,9 @@ function UserApp() {
 
                   <button
                     onClick={() => {
-                      navigate("/");
-
+                      navigate("/");  
                       setIsOpen(false);
-                      logout();
+                     logout();
                     }}
                     className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'
                   >
@@ -307,7 +309,7 @@ function UserApp() {
               </div>
             </div>
           )}
-          <div className='w-full h-screen overflow-y-auto p-4 bg-background-grey'>
+          <div className='w-full md:h-screen overflow-y-auto p-4 bg-background-grey'>
             <Outlet />
           </div>{" "}
         </section>
@@ -316,4 +318,4 @@ function UserApp() {
   );
 }
 
-export default UserApp;
+export default FacilityApp;

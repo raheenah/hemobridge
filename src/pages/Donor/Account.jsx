@@ -2,8 +2,10 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import Avatar from "../../assets/avatar.svg";
 import { useDropzone } from "react-dropzone";
+import { useAuth } from "../../context";
 
 function Account() {
+  const { user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
@@ -46,34 +48,70 @@ function Account() {
     }
   };
 
-  return (
-    <div className=' flex  h-full bg-white flex-col text-xs gap-4 py-3  px-6   w-full'>
-      <h1 className='text-xs font-bold '>Profile Information</h1>
+   useEffect(() => {
+     if (editNotifications || editProfile || editProfilePic || success) {
+       document.body.style.overflow = "hidden";
+     } else {
+       document.body.style.overflow = "auto";
+     }
 
-      <div className='flex justify-between gap-4'>
-        <div className='flex flex-col gap-2'>
-          <div className='grid grid-cols-[auto_auto] gap-8'>
-            <div className='flex flex-col gap-1'>
-              <p>Full Name</p>
-              <p>User ID</p>
-              <p>Email Address</p>
-              <p>Phone Number</p>
-              <p>Date of Birth</p>
-              <p>Blood Type</p>
-              <p>Gender</p>
-              <p>Contact Address</p>
+     return () => {
+       document.body.style.overflow = "auto";
+     };
+   }, [editNotifications, editProfile, editProfilePic, success]);
+
+
+  return (
+    <div className=' flex h-full   md:bg-white flex-col text-xs md:gap-4 md:py-3  md:px-6   w-full'>
+      <h1 className='text-xs font-bold hidden md:block '>
+        Profile Information
+      </h1>
+
+      <div className='flex flex-col md:flex-row justify-between gap-4'>
+        <div className='flex flex-col bg-white py-3  px-6 md:py-0  md:px-0 gap-4 md:gap-2'>
+          <h1 className='text-xs font-bold '>Profile Information</h1>
+          {user?.role === "donor" ? (
+            <div className='grid grid-cols-[auto_auto] gap-8'>
+              <div className='flex flex-col gap-3 md:gap-1'>
+                <p>Full Name</p>
+                <p>User ID</p>
+                <p>Email Address</p>
+                <p>Phone Number</p>
+                <p>Date of Birth</p>
+                <p>Blood Type</p>
+                <p>Gender</p>
+                <p>Contact Address</p>
+              </div>
+              <div className='flex flex-col gap-3 md:gap-1'>
+                <p>Juwon Ajiboye</p>
+                <p>B1042761</p>
+                <p>B1042761@gmail.com</p>
+                <p>08123456789</p>
+                <p>27-01-1999</p>
+                <p>O+</p>
+                <p>Male</p>
+                <p>221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos</p>
+              </div>
             </div>
-            <div className='flex flex-col gap-1'>
-              <p>Juwon Ajiboye</p>
-              <p>B1042761</p>
-              <p>B1042761@gmail.com</p>
-              <p>08123456789</p>
-              <p>27-01-1999</p>
-              <p>O+</p>
-              <p>Male</p>{" "}
-              <p>221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos</p>
+          ) : (
+            <div className='grid grid-cols-[auto_auto] gap-8'>
+              <div className='flex flex-col gap-1'>
+                <p>Full Name</p>
+                <p>User ID</p>
+                <p>Email Address</p>
+                <p>Phone Number</p>
+                <p>Contact Address</p>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p>{user?.name}</p>
+                <p>{user?._id}</p>
+                <p>{user?.email}</p>
+                <p>08123456789</p>
+                <p>221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos</p>
+              </div>
             </div>
-          </div>
+          )}
+
           <button
             onClick={() => {
               setEditProfile(!editProfile);
@@ -84,7 +122,7 @@ function Account() {
           </button>
         </div>
 
-        <div className='flex flex-col gap-4'>
+        <div className='md:flex flex-col gap-4 hidden'>
           <img
             src={Avatar}
             alt='avatar'
@@ -107,12 +145,22 @@ function Account() {
             Delete
           </button>
         </div>
+        <div className='flex justify-between text-xs font-bold items-center bg-white py-3  px-6 md:py-0  md:px-0 gap-4 md:gap-2'>
+          <h1 className=''>Change Profile Picture</h1>
+          <button
+            onClick={() => {
+              setEditProfilePic(!editProfilePic);
+            }}
+          >
+            <i className='fa-solid fa-arrow-right'></i>{" "}
+          </button>
+        </div>
       </div>
 
-      <div className='grid grid-cols-2 py-4 border-t border-text-gray'>
-        <div className='  flex flex-col gap-4  border-r border-text-gray'>
+      <div className='flex flex-col gap-4 md:gap-0 md:grid grid-cols-2 py-4 md:border-t border-text-gray'>
+        <div className='  flex flex-col gap-6 md:gap-4 bg-white py-3  px-6 md:py-0  md:px-0  md:border-r border-text-gray'>
           <h1 className='text-xs font-bold '>Change Password </h1>
-          <div className='max-w-[70%] flex flex-col gap-4'>
+          <div className='md:max-w-[70%] flex flex-col gap-4'>
             <div className=' p-4 relative flex items-center  border-1 text-text-dark-gray'>
               <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
                 Old Password<span className='text-red-500'>*</span>
@@ -198,7 +246,7 @@ function Account() {
           </button>
         </div>
 
-        <div className='pl-6 flex flex-col gap-4'>
+        <div className='pl-6 flex flex-col bg-white py-3  px-6 md:py-0  md:px-0 gap-4'>
           <h1 className='text-xs font-bold '>Notification Preferences </h1>
           <div className='grid grid-cols-[auto_auto] gap-8'>
             <div className='flex flex-col gap-1'>
@@ -227,196 +275,228 @@ function Account() {
           onClick={(e) => {
             setEditProfile(!editProfile), e.stopPropagation();
           }}
-          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+          className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+            className=' w-[85%] md:w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
           >
             <div className='flex flex-col text-xs gap-4'>
-              <div className='flex justify-between'>
-                {" "}
-                <h2 className='font-bold text-base text-text-dark-gray'>
-                  Edit Profile Information{" "}
-                </h2>
-                <button onClick={() => setEditProfile(!editProfile)}>
+              <div className='flex flex-col gap-1'>
+                <div className='flex justify-between'>
                   {" "}
-                  <i className='fa-regular fa-circle-xmark'></i>
-                </button>
-              </div>
-              <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
-
-              <form className=' flex flex-col gap-4'>
-                <div className='flex flex-col w-full  gap-3'>
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Full Name <span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='Jane Doe'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='text'
-                      name='name'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
-                      required
-                    />
-                  </div>{" "}
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Email Address
-                      <span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='someone@example.com'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='email'
-                      name='email'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Phone Number <span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='08123456789'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='number'
-                      name='number'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Date of Birth <span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      //   placeholder='someone@example.com'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='date'
-                      name='dob'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative  border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Address <span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='text'
-                      name='text'
-                      //   value={formData.email}
-                      //   onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className='w-full px-4  relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
-                      Blood Type <span className='text-red-500'>*</span>
-                    </label>{" "}
-                    <select className=' focus:outline-none py-4   w-full   text-input-text '>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        disabled
-                        // selected
-                      >
-                        Choose...
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A+'
-                      >
-                        A+{" "}
-                      </option>{" "}
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A-'
-                      >
-                        A-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        B+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        B-{" "}
-                      </option>{" "}
-                      <option value='B+'>O+ </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        O-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        AB+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        AB-{" "}
-                      </option>
-                    </select>
-                  </div>
-                  <div className='w-full px-4  py-0 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
-                      Gender <span className='text-red-500'>*</span>
-                    </label>{" "}
-                    <select
-                      className=' focus:outline-none py-4   w-full   text-input-text '
-                      required
-                    >
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        disabled
-                        selected
-                      >
-                        Choose...
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='Male'
-                      >
-                        Male{" "}
-                      </option>{" "}
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='Female'
-                      >
-                        Female{" "}
-                      </option>
-                    </select>
-                  </div>
+                  <h2 className='font-bold text-base text-text-dark-gray'>
+                    Edit Profile Information{" "}
+                  </h2>
+                  <button onClick={() => setEditProfile(!editProfile)}>
+                    {" "}
+                    <i className='fa-regular fa-circle-xmark'></i>
+                  </button>
                 </div>
-                <button
-                  onClick={() => {
-                    setEditProfile(!editProfile),
-                      setSuccess(!success),
-                      setMessage("profile information");
-                  }}
-                  className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
-                >
-                  Schedule
-                </button>
-              </form>
+                <div className='w-[70%] h-0.5   bg-background-grey'></div>
+              </div>
+              {user?.role === "donor" ? (
+                <form className=' flex flex-col gap-4'>
+                  <div className='flex flex-col w-full  gap-3'>
+                    <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Full Name <span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='Jane Doe'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='text'
+                        name='name'
+                        //   value={formData.email}
+                        //   onChange={handleChange}
+                        required
+                      />
+                    </div>{" "}
+                    <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Email Address
+                        <span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='someone@example.com'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='email'
+                        name='email'
+                        //   value={formData.email}
+                        //   onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Phone Number <span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='08123456789'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='number'
+                        name='number'
+                        //   value={formData.email}
+                        //   onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Address <span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='text'
+                        name='text'
+                        //   value={formData.email}
+                        //   onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className='w-full px-4  relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                        Blood Type <span className='text-red-500'>*</span>
+                      </label>{" "}
+                      <select className=' focus:outline-none py-4   w-full   text-input-text '>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          disabled
+                          // selected
+                        >
+                          Choose...
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='A+'
+                        >
+                          A+{" "}
+                        </option>{" "}
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='A-'
+                        >
+                          A-{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B+'
+                        >
+                          B+{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          B-{" "}
+                        </option>{" "}
+                        <option value='B+'>O+ </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          O-{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B+'
+                        >
+                          AB+{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          AB-{" "}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setEditProfile(!editProfile),
+                        setSuccess(!success),
+                        setMessage("profile information");
+                    }}
+                    className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
+                  >
+                    Update
+                  </button>
+                </form>
+              ) : (
+                <form className=' flex flex-col gap-4'>
+                  <div className='flex flex-col w-full  gap-3'>
+                    <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Full Name <span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='Jane Doe'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='text'
+                        name='name'
+                        //   value={formData.email}
+                        //   onChange={handleChange}
+                        required
+                      />
+                    </div>{" "}
+                    <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Email Address
+                        <span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='someone@example.com'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='email'
+                        name='email'
+                        //   value={formData.email}
+                        //   onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Phone Number <span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='08123456789'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='number'
+                        name='number'
+                        //   value={formData.email}
+                        //   onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className=' p-4 relative  border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Address <span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='text'
+                        name='text'
+                        //   value={formData.email}
+                        //   onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setEditProfile(!editProfile),
+                        setSuccess(!success),
+                        setMessage("profile information");
+                    }}
+                    className='bg-background hover:bg-pink !important self-end  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
+                  >
+                    Update
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
@@ -427,24 +507,25 @@ function Account() {
           onClick={(e) => {
             setEditProfilePic(!editProfilePic), e.stopPropagation();
           }}
-          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+          className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+            className=' w-[85%] md:w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
           >
-            <div className='flex justify-between'>
-              {" "}
-              <h2 className='font-bold text-base text-text-dark-gray'>
-                Change Profile Picture{" "}
-              </h2>
-              <button onClick={() => setEditProfilePic(!editProfilePic)}>
+            <div className='flex flex-col gap-1'>
+              <div className='flex justify-between'>
                 {" "}
-                <i className='fa-regular fa-circle-xmark'></i>
-              </button>
+                <h2 className='font-bold text-base text-text-dark-gray'>
+                  Change Profile Picture{" "}
+                </h2>
+                <button onClick={() => setEditProfilePic(!editProfilePic)}>
+                  {" "}
+                  <i className='fa-regular fa-circle-xmark'></i>
+                </button>
+              </div>
+              <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
             </div>
-            <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
-
             <div
               className='border-2 border-dashed text-text-dark-gray flex flex-col gap-4 p-6 rounded-lg text-center cursor-pointer'
               onDragOver={(e) => e.preventDefault()}
@@ -503,27 +584,28 @@ function Account() {
           onClick={(e) => {
             setEditNotifications(!editNotifications), e.stopPropagation();
           }}
-          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+          className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+            className='w-[85%] md:w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
           >
             <div className='flex flex-col text-xs gap-4'>
-              <div className='flex justify-between'>
-                {" "}
-                <h2 className='font-bold text-base text-text-dark-gray'>
-                  Edit Notofication Preferences
-                </h2>
-                <button
-                  onClick={() => setEditNotifications(!editNotifications)}
-                >
+              <div className='flex flex-col gap-1'>
+                <div className='flex justify-between'>
                   {" "}
-                  <i className='fa-regular fa-circle-xmark'></i>
-                </button>
+                  <h2 className='font-bold text-base text-text-dark-gray'>
+                    Edit Notofication Preferences
+                  </h2>
+                  <button
+                    onClick={() => setEditNotifications(!editNotifications)}
+                  >
+                    {" "}
+                    <i className='fa-regular fa-circle-xmark'></i>
+                  </button>
+                </div>
+                <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
               </div>
-              <div className='w-[70%] h-0.5 top-0  bg-background-grey'></div>
-
               <form className=' flex flex-col gap-4'>
                 <div className='flex flex-col w-full  gap-3'>
                   <div className='flex flex-col gap-2'>
@@ -622,19 +704,19 @@ function Account() {
           onClick={(e) => {
             setSuccess(!success), e.stopPropagation();
           }}
-          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+          className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+            className=' w-[85%] md:w-[30%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
           >
             <div className='flex flex-col text-center text-xs gap-4'>
               <div className='flex flex-col gap-2 '>
                 {" "}
                 <h2 className='font-bold text-base text-center text-text-dark-gray'>
-Success                </h2>
-               
-              <div className='w-[70%] h-0.5 top-0 mx-auto bg-background-grey'></div>
+                  Success{" "}
+                </h2>
+                <div className='w-[70%] h-0.5 top-0 mx-auto bg-background-grey'></div>
               </div>
 
               <p>Your {message} has been updated successfully</p>

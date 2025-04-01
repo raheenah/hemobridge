@@ -28,9 +28,9 @@ function ForgotPassword() {
 
         <button
           onClick={() => navigate("/reset-link-sent")}
-          className='bg-background px-4  w-full font-bold text-lg text-white py-3'
+          className='bg-background hover:bg-pink mx-auto w-full max-w-[80%]  font-bold text-base text-white py-2 px-4'
         >
-          Send Password Reset Link{" "}
+         Reset {" "}
         </button>
         <p className='text-text-dark-gray flex gap-4 flex-col items-center'>
           Don't have an account?

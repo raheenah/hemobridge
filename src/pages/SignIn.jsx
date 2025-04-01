@@ -1,46 +1,55 @@
-import { useState , useContext } from "react";
-import { NavLink , useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
-// import { useAuth } from "../context";
+import { useAuth } from "../context";
 
 function Signin() {
-  // const { login } = useContext(useAuth);
+  const { login } = useAuth();
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-const [message, setMessage] = useState("");
-const [formData, setFormData] = useState({
-  email: "",
-  password: ""
- });
+  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const handleSubmit = async (e) => {
     e.preventDefault();
-console.log("Form Data:", formData);
+    console.log("Form Data:", formData);
     try {
-      const response = await loginUser( formData );
-       setMessage(response.message);
+      const response = await loginUser(formData);
+      setMessage(response.message);
+      console.log("Login Response:", response.user);
       if (response.success) {
-  //  login(response.user);
-     navigate("/user/dashboard");
- }
-         } catch (error) {
- setMessage(error.message);
- console.error("Registration Error:", error);
-        } 
+        console.log("successful user:", response);
+         login(response.user);
+        // navigate("/user/dashboard");
+         if (response.user.role === "donor") {
+           navigate("/user/dashboard");
+         } else {
+           navigate("/facility/dashboard");
+         }
+      }
+    } catch (error) {
+      setMessage(error.message);
+      console.error("Registration Error:", error);
+    }
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-    
- const togglePassword = (e) => {
-   e.preventDefault();
-   setShowPassword((prev) => !prev);
- };
+
+  const togglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   return (
     <div className=' flex flex-col gap-4 items-center text-sm font-inter w-full'>
-      <form className='  md:w-[55%]  mx-auto flex px-16  md:px-4 flex-col text-center gap-[25px] items-center '>
+      <form
+        onSubmit={handleSubmit}
+        className='  md:w-[55%]  mx-auto flex px-16  md:px-4 flex-col text-center gap-[25px] items-center '
+      >
         <h1 className=' font-[700] text-2xl font-space '>Sign In</h1>
         <div className='flex flex-col w-full gap-[25px]'>
           <div className=' p-4 relative  border-1 text-text-dark-gray'>
@@ -52,13 +61,13 @@ console.log("Form Data:", formData);
               placeholder='someone@example.com'
               className='placeholder-input-text w-full focus:outline-none'
               type='email'
-              name="email"
+              name='email'
               value={formData.email}
               onChange={handleChange}
               required
             />
           </div>
-          <div className=' p-4 relative flex items-center border border-1 text-text-dark-gray'>
+          <div className=' p-4 relative flex items-center  border-1 text-text-dark-gray'>
             <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
               Password<span className='text-red-500'>*</span>
             </label>
@@ -71,28 +80,27 @@ console.log("Form Data:", formData);
               className='placeholder-input-text w-full focus:outline-none'
               required
             />
-            <button
+            <span
               onClick={togglePassword}
-              className='absolute right-0 h-full   p-2 text-text-dark-gray'
+              className='absolute right-0 h-full inline-block top-[50%] translate-y-[-15%] px-2   text-text-dark-gray'
             >
               {showPassword ? (
                 <i className='fa-solid fa-eye-slash'></i> // Hide icon
               ) : (
                 <i className='fa-solid fa-eye'></i> // Show icon
               )}
-            </button>
+            </span>
           </div>
         </div>
         <NavLink to={"/forgot-password"}>
           {" "}
-          <p className='text-text-dark-gray hover:underline'>
-            Forgot password?
-          </p>
+          <p className='text-red  hover:underline'>Forgot password?</p>
         </NavLink>
         <button
           type='submit'
-          onClick={handleSubmit}
-          className='bg-background  w-full font-bold text-xl text-white py-3'
+          // onClick={handleSubmit}
+          // className='bg-background  w-full font-bold text-xl text-white py-3'
+          className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%] font-bold text-base text-white py-2 px-4'
         >
           Sign In
         </button>

@@ -15,8 +15,9 @@ function PasswordResetSuccess() {
           In page and log in with your new password.
         </p>
 
-        <button className='bg-background p-4  w-full font-bold text-xl text-white py-3'>
-Sign In        </button>
+        <button className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%]  font-bold text-base text-white py-2 px-4'>
+          Sign In{" "}
+        </button>
       </div>
     </div>
   );

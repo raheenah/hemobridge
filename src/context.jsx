@@ -10,6 +10,7 @@ const [user, setUser] = useState(() => {
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
+      console.log("User data saved to localStorage:", user);
     } else {
       localStorage.removeItem("user");
     }

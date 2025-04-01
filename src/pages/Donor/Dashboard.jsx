@@ -2,10 +2,11 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "../../assets/avatar.svg";
 import { PieChart, Pie, Cell } from "recharts";
+import InventoryOverview from "../../components/inventoryOverview";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const rowsPerPage = 6;
+  const rowsPerPage = 9;
 
   const data = [
     { name: "Hospitals", value: 40, color: "#680058" },
@@ -57,21 +58,33 @@ function Dashboard() {
     }
   };
 
+  useEffect(() => {
+    if (donate || submitted) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [donate, submitted]);
+
   return (
     <div className=' flex text-sm flex-col   gap-4 py-2  px-4   w-full'>
-      <div className='bg-white py-3  px-6 flex flex-col gap-2'>
+      <div className='bg-white py-3  px-6 flex flex-col gap-4 md:gap-2'>
         <div className='flex items-center justify-between'>
-          <h2 className='text-base font-bold'>Overview</h2>
+          <h2 className='text-lg md:text-base font-bold'>Overview</h2>
           <button
             onClick={() => {
               navigate("/user/donate");
             }}
             className='bg-background hover:bg-pink    w-full max-w-40  font-bold  text-white py-1 px-2'
           >
-            Book a Donation
+            Schedule a Donation
           </button>
         </div>{" "}
-        <div className='grid grid-cols-3 gap-2'>
+        <div className='flex flex-col md:grid grid-cols-3 gap-4 md:gap-2'>
           <div className='border-1 px-3.5 py-2.5 gap-2 flex flex-col justify-between'>
             <div className=' flex justify-between items-center'>
               <h3 className='font-bold text-base'>Recent Activity</h3>
@@ -104,7 +117,9 @@ function Dashboard() {
 
           <div className='border-1 px-3.5 py-2.5 gap-2 flex flex-col justify-between'>
             <div className=' flex justify-between items-center'>
-              <h3 className='font-bold text-base'>Total Facilities Registered</h3>
+              <h3 className='font-bold text-base'>
+                Total Facilities Registered
+              </h3>
               <button
                 onClick={() => {
                   navigate("/user/donate");
@@ -135,111 +150,72 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className='grid grid-cols-2 gap-4'>
+      <div className='flex flex-col md:grid grid-cols-2 gap-4'>
         <div className='flex flex-col gap-4'>
-          <div className='flex flex-col gap-2  py-3  px-6  bg-white '>
+          <div className='flex flex-col h-full gap-2  py-3  px-6  bg-white '>
             <h2 className='font-bold text-base'>Blood Donation Usage</h2>
-            <div className='flex items-center gap-2'>
-              <PieChart width={140} height={140} className='w-full'>
-                <Pie
-                  data={data}
-                  dataKey='value'
-                  nameKey='name'
-                  cx='50%'
-                  cy='50%'
-                  innerRadius={50}
-                  outerRadius={65}
-                  startAngle={90}
-                  endAngle={450}
-                >
-                  {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={entry.color}
-                      stroke={"white"}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-              <ul className='flex flex-col gap-1 border-r-1 px-4  border-text-gray'>
-                {data.map((item) => (
-                  <li className='flex flex-col'>
-                    <div className='flex items-center gap-2'>
-                      {" "}
-                      <div
-                        className='w-3 h-3 rounded-full'
-                        style={{ backgroundColor: item.color }}
-                      ></div>
-                      <p className='font-bold'>{item.value}%</p>
-                    </div>
-                    <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
-
-                    <p className='text-text-dark-gray'>{item.name}</p>
-                  </li>
-                ))}
-              </ul>
-              <div className='flex flex-col w-[30%] gap-1  px-4 '>
-                <h2 className='text-background text-xl'>Did You Know??</h2>
-                <p className='text-text-dark-gray'>
-                  When you donate, you help keep{" "}
-                  <span className='text-background font-bold'>
-                    up to 10 patients
-                  </span>{" "}
-                  alive each year...
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className='flex flex-col    overflow-hidden overflow-y-auto pb-3  px-6  bg-white '>
-            <div className='sticky bg-white py-3 top-0'>
-              <div className='flex justify-between items-center'>
-                <h2 className='font-bold text-base'>
-                  Live Blood Inventory Overview
-                </h2>
-                <button
-                  onClick={() => {
-                    navigate("/user/donate");
-                  }}
-                >
-                  <i className='fa-solid fa-arrow-up-right-from-square'></i>
-                </button>
-              </div>
-            </div>
-            <table className=' w-full  '>
-              <thead className='bg-light-pink text-left  '>
-                <tr className=''>
-                  <th className='py-0.5 pl-1'>Facility Name</th>
-                  <th>Address</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {facilities.slice(0, 10).map((facility) => (
-                  <tr
-                    className=' border-b-1  border-background-grey'
-                    key={facility.id}
+            <div className='flex flex-col justify-center h-full'>
+              {" "}
+              <div className='flex items-center gap-2'>
+                <PieChart width={140} height={140} className='w-full'>
+                  <Pie
+                    data={data}
+                    dataKey='value'
+                    nameKey='name'
+                    cx='50%'
+                    cy='50%'
+                    innerRadius={50}
+                    outerRadius={65}
+                    startAngle={90}
+                    endAngle={450}
                   >
-                    <td className='py-0.5 pl-1 font-bold'>{facility.name}</td>
-                    <td>{facility.address}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.color}
+                        stroke={"white"}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+                <ul className='flex flex-col gap-1 border-r-1 px-4  border-text-gray'>
+                  {data.map((item) => (
+                    <li className='flex flex-col'>
+                      <div className='flex items-center gap-2'>
+                        {" "}
+                        <div
+                          className='w-3 h-3 rounded-full'
+                          style={{ backgroundColor: item.color }}
+                        ></div>
+                        <p className='font-bold'>{item.value}%</p>
+                      </div>
+                      <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
+
+                      <p className='text-text-dark-gray'>{item.name}</p>
+                    </li>
+                  ))}
+                </ul>
+                <div className='flex flex-col w-[30%] gap-1  px-4 '>
+                  <h2 className='text-background text-xl'>Did You Know??</h2>
+                  <p className='text-text-dark-gray'>
+                    When you donate, you help keep{" "}
+                    <span className='text-background font-bold'>
+                      up to 10 patients
+                    </span>{" "}
+                    alive each year...
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <InventoryOverview />
         </div>
 
         <div className='flex flex-col    overflow-hidden overflow-y-auto   px-6  bg-white '>
           <div className='sticky bg-white py-3 top-0'>
             <div className='flex justify-between items-center'>
               <h2 className='font-bold text-lg'>Emergency requests </h2>
-              <button
-                onClick={() => {
-                  navigate("/user/donate");
-                }}
-              >
-                <i className='fa-solid fa-arrow-up-right-from-square'></i>
-              </button>
             </div>
           </div>
           <ul className='flex flex-col gap-2'>
@@ -293,7 +269,7 @@ function Dashboard() {
               </li>
             ))}
           </ul>
-          <div className='flex pb-3 justify-end  items-center gap-2 mt-auto ml-auto'>
+          <div className='flex  justify-end  items-center gap-2 my-4 ml-auto'>
             <button
               className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -333,11 +309,11 @@ function Dashboard() {
           onClick={(e) => {
             setDonate(!donate), e.stopPropagation();
           }}
-          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+          className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[40%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-2'
+            className=' w-[85%] md:w-[40%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-2'
           >
             <div className='flex justify-between items-center'>
               <h1 className='font-extrabold text-base'> Emergency Request </h1>
@@ -398,7 +374,7 @@ function Dashboard() {
                 </h2>
                 <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
               </div>
-              <form className=' flex flex-col gap-2'>
+              <form className=' flex flex-col gap-4 md:gap-2'>
                 <div className='grid  gap-2 grid-cols-2'>
                   <div className=' p-4 relative border-1 text-text-dark-gray'>
                     <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
@@ -441,19 +417,19 @@ function Dashboard() {
           onClick={(e) => {
             setSubmitted(!submitted), e.stopPropagation();
           }}
-          className=' absolute bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
+          className=' fixed bg-gray-100/50  inset-0   z-50 flex items-center justify-center'
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=' w-[50%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-2'
+            className='w-[85%] md:w-[50%] h-fit max-h-[95dvh]   shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-4  md:gap-2'
           >
             <div className='flex flex-col gap-2'>
-              <h1 className='font-extrabold text-base'>
+              <h1 className='font-extrabold text-sm'>
                 Schedule Request Submitted
               </h1>
               <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
             </div>
-            <div className='text-base flex flex-col gap-2'>
+            <div className='text-xs flex flex-col gap-2'>
               <div>
                 <p>
                   Donation schedule request successfully submitted to LifeBank

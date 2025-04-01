@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { registerUser } from "../api/auth";
+import { registerUser , registerFacility } from "../api/auth";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -12,29 +12,47 @@ function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [ConfirmFacilityPassword, setConfirmFacilityPassword] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: "donor",
-    notificationPreferences: {
-      email: true,
-      sms: false,
-      push: true,
-      donationReminders: true,
-      eligibilityUpdates: true,
-      emergencyAlerts: true,
-      marketingCommunications: false,
-    },
+    phone: "",
+    bloodType: "",
+    address: "",
+  });
+  const [facilityData, setFacilityData] = useState({
+    facilityName: "",
+    personnelName: "",
+    email: "",
+    phone: "",
+    personnelRole: "",
+    address: "",
+    password: "",
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    // setFormData({ ...formData, [e.target.name]: e.target.value.toLowerCase() });
+
+const { name, value } = e.target;
+setFormData((prev) => ({
+  ...prev,
+  [name]: value, // Ensure state updates correctly
+}));
+
+
+
+    console.log("Selected Blood Type:", e.target.value);
+    console.log("Selected Blood Type lowercase:", e.target.value.toLowerCase());
   };
 
-   const handleSubmit = async (e) => {
+  const handleChangeFacility = (e) => {
+    setFacilityData({ ...facilityData, [e.target.name]: e.target.value.toLowerCase() });
+  };
+  
+  const handleSubmitDonor = async (e) => {
      e.preventDefault();
-     //  console.log("Form Data:", formData);
+      console.log("Form Data:", formData);
      if(formData.password !== ConfirmPassword){
        setMessage("Passwords do not match");
        return;
@@ -56,6 +74,31 @@ function SignUp() {
         console.error("Registration Error:", error);
      }
   };
+
+   const handleSubmitFacility = async (e) => {
+     e.preventDefault();
+     console.log("Form Data:", facilityData);
+     if (facilityData.password !== ConfirmFacilityPassword) {
+       setMessage("Passwords do not match");
+       return;
+     }
+
+     try {
+       const response = await registerFacility(facilityData);
+       setMessage(response.message);
+       console.log("Registration Response:", response);
+       console.log("Registration Response message:", response.message);
+
+       if (response.message === "User created successfully") {
+         setTimeout(() => {
+           navigate("/");
+         }, 2000);
+       }
+     } catch (error) {
+       setMessage(error.message);
+       console.error("Registration Error:", error);
+     }
+   };
   
     const togglePassword = (e) => {
       e.preventDefault();
@@ -97,7 +140,7 @@ function SignUp() {
 
           {accountType === "donor" && (
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmitDonor}
               className='flex text-xs flex-col w-full gap-[25px]'
             >
               <div className=' p-4 relative border-1 text-text-dark-gray'>
@@ -137,20 +180,30 @@ function SignUp() {
                   <input
                     placeholder='0811 234 5678'
                     className='placeholder-input-text w-full focus:outline-none'
-                    type='number'
+                    type='text'
+                    name='phone'
+                    value={formData.phone}
+                    onChange={handleChange}
                     // required
                   />
                 </div>
 
                 <div className='w-full px-4  relative border-1 text-text-dark-gray'>
-                  <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                  <label className='absolute font-[700] px-1 top-[-10px] bg-white  left-[10px]'>
                     Blood Type <span className='text-red-500'>*</span>
                   </label>{" "}
-                  <select className=' focus:outline-none py-4   w-full   text-input-text '>
+                  <select
+                    // type='email'
+                    name='bloodType'
+                    value={formData.bloodType}
+                    onChange={handleChange}
+                    className=' focus:outline-none py-4   w-full   text-text-dark-gray '
+                  >
                     <option
                       className='text-input-text   focus:outline-none'
-                      disabled
+                      // disabled
                       // selected
+                      value=''
                     >
                       Choose...
                     </option>
@@ -178,22 +231,22 @@ function SignUp() {
                     >
                       B-{" "}
                     </option>{" "}
-                    <option value='B+'>O+ </option>
+                    <option value='O+'>O+ </option>
                     <option
                       className='text-input-text   focus:outline-none'
-                      value='B-'
+                      value='O-'
                     >
                       O-{" "}
                     </option>
                     <option
                       className='text-input-text   focus:outline-none'
-                      value='B+'
+                      value='AB+'
                     >
                       AB+{" "}
                     </option>
                     <option
                       className='text-input-text   focus:outline-none'
-                      value='B-'
+                      value='AB-'
                     >
                       AB-{" "}
                     </option>
@@ -208,6 +261,9 @@ function SignUp() {
                   placeholder='No., Street, Town, Zip Code, State.'
                   className='placeholder-input-text w-full focus:outline-none'
                   type='text'
+                  name='address'
+                  value={formData.address}
+                  onChange={handleChange}
                   // required
                 />
               </div>
@@ -276,14 +332,17 @@ function SignUp() {
               <button
                 // onClick={() => navigate("/")}
                 type='submit'
-                className='bg-background hover:bg-pink !important   w-full font-bold text-xl text-white py-3'
+                className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%]  font-bold text-base text-white py-2 px-4'
               >
                 Create Account{" "}
               </button>
             </form>
           )}
           {accountType === "facility" && (
-            <form className='flex text-xs  flex-col w-full gap-[25px]'>
+            <form
+              onSubmit={handleSubmitFacility}
+              className='flex text-xs  flex-col w-full gap-[25px]'
+            >
               <div className=' p-4 relative border-1 text-text-dark-gray'>
                 <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
                   Facility Name <span className='text-red-500'>*</span>
@@ -292,6 +351,9 @@ function SignUp() {
                   placeholder='John Doe'
                   className='placeholder-input-text w-full focus:outline-none'
                   type='text'
+                  name='facilityName'
+                  value={facilityData.name}
+                  onChange={handleChangeFacility}
                   required
                 />
               </div>
@@ -303,6 +365,9 @@ function SignUp() {
                   placeholder='John Doe'
                   className='placeholder-input-text w-full focus:outline-none'
                   type='text'
+                  name='personnelName'
+                  value={facilityData.personnelName}
+                  onChange={handleChangeFacility}
                   required
                 />
               </div>
@@ -315,6 +380,9 @@ function SignUp() {
                   placeholder='someone@example.com'
                   className='placeholder-input-text w-full focus:outline-none'
                   type='email'
+                  name='email'
+                  value={facilityData.email}
+                  onChange={handleChangeFacility}
                   required
                 />
               </div>
@@ -326,7 +394,10 @@ function SignUp() {
                   <input
                     placeholder='0811 234 5678'
                     className='placeholder-input-text w-full focus:outline-none'
-                    type='number'
+                    type='text'
+                    name='phone'
+                    value={facilityData.phone}
+                    onChange={handleChangeFacility}
                     required
                   />
                 </div>{" "}
@@ -335,9 +406,12 @@ function SignUp() {
                     Personnel Role<span className='text-red-500'>*</span>
                   </label>
                   <input
-                    placeholder='0811 234 5678'
+                    placeholder='Type here...'
                     className='placeholder-input-text w-full focus:outline-none'
                     type='text'
+                    name='personnelRole'
+                    value={facilityData.personnelRole}
+                    onChange={handleChangeFacility}
                     required
                   />
                 </div>
@@ -350,6 +424,9 @@ function SignUp() {
                   placeholder='No., Street, Town, Zip Code, State.'
                   className='placeholder-input-text w-full focus:outline-none'
                   type='text'
+                  name='address'
+                  value={facilityData.address}
+                  onChange={handleChangeFacility}
                   required
                 />
               </div>
@@ -361,8 +438,8 @@ function SignUp() {
                   placeholder='*******'
                   type={showPassword ? "text" : "password"}
                   name='password'
-                  value={formData.password}
-                  onChange={handleChange}
+                  value={facilityData.password}
+                  onChange={handleChangeFacility}
                   className='placeholder-input-text w-full focus:outline-none'
                   required
                 />
@@ -384,8 +461,8 @@ function SignUp() {
                 <input
                   placeholder='*******'
                   type={showConfirmPassword ? "text" : "password"}
-                  value={ConfirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={ConfirmFacilityPassword}
+                  onChange={(e) => setConfirmFacilityPassword(e.target.value)}
                   className='placeholder-input-text w-full focus:outline-none'
                   required
                 />

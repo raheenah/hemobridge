@@ -7,6 +7,7 @@
   /* backgrounds */
   --color-background: #58004b;
   --color-background-light: #6a1a5d;
+  --color-background-shadow: #58004B66;
   --color-background-grey: #f0f0f0;
   --color-pink: #ffb6e6;
   --color-light-pink: #f7def3;
@@ -29,9 +30,39 @@
   --color-chart-surgical-procedures: #ffb3f3;
 
   /* shadow */
-  --shadow-pink-glow: 5px 4px 5px var(--color-background-light);
+  --shadow-pink-glow: 5px 4px 5px var(--color-background-shadow);
 
   /* fonts */
   --font-space: "Space-Grotesk", sans-serif;
   --font-inter: "Inter", sans-serif;
+}
+
+
+
+
+.number-input::-webkit-outer-spin-button,
+.number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.number-input {
+  appearance: textfield;
+}
+
+
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down {
+  animation: slideDown 0.5s ease-in-out forwards;
 }

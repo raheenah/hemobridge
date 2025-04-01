@@ -2,10 +2,10 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import WelcomePage from "./pages/welcomePage";
-import { BrowserRouter as  Router , Routes , Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signin from "./pages/SignIn";
-import ForgotPassword from "./pages/ForgotPassword"
-import LinkSent from "./pages/LinkSent"
+import ForgotPassword from "./pages/ForgotPassword";
+import LinkSent from "./pages/LinkSent";
 import ResetPassword from "./pages/ResetPassword";
 import PasswordResetSuccess from "./pages/PasswordResetSuccess";
 import TermsAndConditions from "./pages/TnC";
@@ -18,6 +18,14 @@ import Account from "./pages/Donor/Account";
 import Help from "./pages/Donor/Help";
 import Dashboard from "./pages/Donor/Dashboard";
 import Notifications from "./pages/Donor/Notifications";
+import FacilityAccount from "./pages/Facility/Account";
+import FacilityDashboard from "./pages/Facility/Dashboard";
+import FacilityApp from "./pages/Facility/FacilityApp";
+import VerifyAccount from "./pages/Verify";
+import ProtectedRoute from "./ProtectedRoute";
+import Send_Code from "./pages/Resend Code";
+import Inventory from "./pages/Facility/Inventory";
+import Emergency_Requests from "./pages/Facility/Emergency";
 
 
 function App() {
@@ -39,18 +47,32 @@ function App() {
               element={<TermsAndConditions />}
             />
             <Route path='sign-up' element={<SignUp />} />
+            <Route path='verify-otp' element={<VerifyAccount />} />
+            <Route path='verify-email' element={<Send_Code />} />
           </Route>
-          <Route path='/user' element={<UserApp />}>
-            <Route
-              path='educational-content'
-              element={<EducationalContent />}
-            />
-            <Route path='donate' element={<Donate />} />
-            <Route path='account' element={<Account />} />
-            <Route path='help' element={<Help />} />
-            <Route path='dashboard' element={<Dashboard />} />
-            <Route path='notifications' element={<Notifications/>} />
-          </Route>
+
+          {/* <Route element={<ProtectedRoute />}> */}
+            <Route path='/user' element={<UserApp />}>
+              <Route
+                path='educational-content'
+                element={<EducationalContent />}
+              />
+              <Route path='donate' element={<Donate />} />
+              <Route path='account' element={<Account />} />
+              <Route path='help' element={<Help />} />
+              <Route path='dashboard' element={<Dashboard />} />
+              <Route path='notifications' element={<Notifications />} />
+            </Route>
+            <Route path='/facility' element={<FacilityApp />}>
+              <Route path='dashboard' element={<FacilityDashboard />} />
+              <Route path='account' element={<Account />} />
+              <Route path='help' element={<Help />} />
+              <Route path='inventory' element={<Inventory />} />
+              <Route path='emergency-requests' element={<Emergency_Requests />} />
+
+              <Route path='notifications' element={<Notifications />} />
+            </Route>
+          {/* </Route> */}
         </Routes>
       </Router>
     </AuthProvider>
