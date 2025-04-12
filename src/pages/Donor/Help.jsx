@@ -4,7 +4,7 @@ import Icon from "../../assets/book-open-02.png";
 
 function Help() {
   return (
-    <div className=' flex  h-full bg-white flex-col text-xs gap-4 py-3  px-6   w-full'>
+    <div className=' flex  h- bg-white flex-col text-xs gap-4 py-3  px-6   w-full'>
       <div className='flex flex-col gap-4'>
         {" "}
         <h1 className='text-sm font-bold '>

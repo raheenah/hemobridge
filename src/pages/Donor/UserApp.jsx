@@ -39,6 +39,7 @@ function UserApp() {
               onClick={() => {
                 setIsOpen(!isOpen);
               }}
+              className='md:hidden'
             >
               {" "}
               <i className='fa-solid fa-bars pl-8'></i>
@@ -176,7 +177,7 @@ function UserApp() {
             >
               <div
                 onClick={(e) => e.stopPropagation()}
-                className='box slide-down z-500 bg-white flex flex-col gap-4 pb-6 px-4 border-background-grey  '
+                className='box slide-down slide-up bg-white flex flex-col gap-4 pb-6 px-4 border-background-grey  '
               >
                 <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
                 <div className='flex flex-col gap-2'>
@@ -307,7 +308,7 @@ function UserApp() {
               </div>
             </div>
           )}
-          <div className='w-full h-screen overflow-y-auto p-4 bg-background-grey'>
+          <div className='w-full h-full overflow-y-auto p-4 bg-background-grey'>
             <Outlet />
           </div>{" "}
         </section>

@@ -62,14 +62,14 @@ function Account() {
 
 
   return (
-    <div className=' flex h-full   md:bg-white flex-col text-xs md:gap-4 md:py-3  md:px-6   w-full'>
+    <div className=' flex h-   md:bg-white flex-col text-xs md:gap-4 md:py-3  md:px-6   w-full'>
       <h1 className='text-xs font-bold hidden md:block '>
         Profile Information
       </h1>
 
       <div className='flex flex-col md:flex-row justify-between gap-4'>
         <div className='flex flex-col bg-white py-3  px-6 md:py-0  md:px-0 gap-4 md:gap-2'>
-          <h1 className='text-xs font-bold '>Profile Information</h1>
+          <h1 className='text-xs font-bold md:hidden '>Profile Information</h1>
           {user?.role === "donor" ? (
             <div className='grid grid-cols-[auto_auto] gap-8'>
               <div className='flex flex-col gap-3 md:gap-1'>
@@ -145,7 +145,7 @@ function Account() {
             Delete
           </button>
         </div>
-        <div className='flex justify-between text-xs font-bold items-center bg-white py-3  px-6 md:py-0  md:px-0 gap-4 md:gap-2'>
+        <div className='flex md:hidden justify-between text-xs font-bold items-center bg-white py-3  px-6 md:py-0  md:px-0 gap-4 md:gap-2'>
           <h1 className=''>Change Profile Picture</h1>
           <button
             onClick={() => {
@@ -158,7 +158,7 @@ function Account() {
       </div>
 
       <div className='flex flex-col gap-4 md:gap-0 md:grid grid-cols-2 py-4 md:border-t border-text-gray'>
-        <div className='  flex flex-col gap-6 md:gap-4 bg-white py-3  px-6 md:py-0  md:px-0  md:border-r border-text-gray'>
+        <div className='  flex flex-col gap-6 md:gap-4 md:bg-transparent bg-white py-3  px-6 md:py-0  md:px-0  md:border-r border-text-gray'>
           <h1 className='text-xs font-bold '>Change Password </h1>
           <div className='md:max-w-[70%] flex flex-col gap-4'>
             <div className=' p-4 relative flex items-center  border-1 text-text-dark-gray'>
@@ -246,7 +246,7 @@ function Account() {
           </button>
         </div>
 
-        <div className='pl-6 flex flex-col bg-white py-3  px-6 md:py-0  md:px-0 gap-4'>
+        <div className='pl-6 flex flex-col md:bg-transparent bg-white py-3  px-6 md:py-0  md:px-3 gap-4'>
           <h1 className='text-xs font-bold '>Notification Preferences </h1>
           <div className='grid grid-cols-[auto_auto] gap-8'>
             <div className='flex flex-col gap-1'>

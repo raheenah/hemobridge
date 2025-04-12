@@ -1,4 +1,5 @@
-import {useEffect,useState,useMemo} from 'react'
+import { useEffect, useState, useMemo } from 'react'
+import { useLocation } from 'react-router-dom';
 
 export default function Facilities() {
  const rowsPerPage = 14;
@@ -8,6 +9,9 @@ export default function Facilities() {
   const [details, setDetails] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
+  const location = useLocation();
+  const path = location.pathname;
+
 
   useEffect(() => {
     fetch("http://localhost:8000/facilities")
@@ -227,7 +231,10 @@ export default function Facilities() {
               <h2 className='font-bold text-sm text-text-dark-gray'>
                 Blood Stock Availability
               </h2>
-              <div className=' max-h-[10dvh] text-xs overflow-hidden overflow-y-scroll'>
+              <div
+                className={`  text-xs overflow-auto  
+                  ${path.startsWith("/user") ? "max-h-[10dvh]" : ""}`}
+              >
                 <table className=' w-full  '>
                   <thead className='bg-light-pink text-left  '>
                     <tr className='text-center'>
@@ -267,108 +274,118 @@ export default function Facilities() {
                   </tbody>
                 </table>
               </div>
+              <button
+                onClick={() => {
+                  setDetails(!details)
+                }}
+                className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
+              >
+                Close
+              </button>
             </div>
 
-            <div className='flex flex-col gap-4'>
-              <h2 className='font-bold text-sm text-text-dark-gray'>
-                Donation Booking Details
-              </h2>
-              <form className=' flex flex-col gap-4'>
-                <div className='grid max-w-[70%] grid-rows-2 gap-4 grid-cols-2'>
-                  <div className='w-full px-4  relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
-                      Blood Type <span className='text-red-500'>*</span>
-                    </label>{" "}
-                    <select
-                      className=' focus:outline-none py-4   w-full   text-input-text '
-                      required
-                    >
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        disabled
-                        selected
+            {path.startsWith("/user") && (
+              <div className='flex flex-col gap-4'>
+                <h2 className='font-bold text-sm text-text-dark-gray'>
+                  Donation Booking Details
+                </h2>
+                <form className=' flex flex-col gap-4'>
+                  <div className='grid max-w-[70%] grid-rows-2 gap-4 grid-cols-2'>
+                    <div className='w-full px-4  relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                        Blood Type <span className='text-red-500'>*</span>
+                      </label>{" "}
+                      <select
+                        className=' focus:outline-none py-4   w-full   text-input-text '
+                        required
                       >
-                        Choose...
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A+'
-                      >
-                        A+{" "}
-                      </option>{" "}
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A-'
-                      >
-                        A-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        B+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        B-{" "}
-                      </option>{" "}
-                      <option value='B+'>O+ </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        O-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        AB+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        AB-{" "}
-                      </option>
-                    </select>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          disabled
+                          selected
+                        >
+                          Choose...
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='A+'
+                        >
+                          A+{" "}
+                        </option>{" "}
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='A-'
+                        >
+                          A-{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B+'
+                        >
+                          B+{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          B-{" "}
+                        </option>{" "}
+                        <option value='B+'>O+ </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          O-{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B+'
+                        >
+                          AB+{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          AB-{" "}
+                        </option>
+                      </select>
+                    </div>
+                    <div className='col-span-1 row-span-1'></div>
+                    <div className=' p-4 relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Date<span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='No., Street, Town, Zip Code, State.'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='date'
+                        required
+                      />
+                    </div>
+                    <div className=' p-4 relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Time<span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='No., Street, Town, Zip Code, State.'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='time'
+                        required
+                      />
+                    </div>
                   </div>
-                  <div className='col-span-1 row-span-1'></div>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Date<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='date'
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Time<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='time'
-                      required
-                    />
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    setDetails(!details), setSubmitted(!submitted);
-                  }}
-                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
-                >
-                  Schedule
-                </button>
-              </form>
-            </div>
+                  <button
+                    onClick={() => {
+                      setDetails(!details), setSubmitted(!submitted);
+                    }}
+                    className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
+                  >
+                    Schedule
+                  </button>
+                </form>
+              </div>
+            )}
           </div>
         </div>
       )}{" "}

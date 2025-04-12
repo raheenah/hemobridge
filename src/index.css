@@ -22,14 +22,14 @@
   --color-yellow: #ffdf17;
   --color-red: #ea3b37;
 
-  /* chart */
+  /* chart colours*/
   --color-chart-hospitals: #680058;
   --color-chart-emergency-care: #8b0075;
   --color-chart-infants-and-children: #d003b0;
   --color-chart-cancer: #ff71e9;
   --color-chart-surgical-procedures: #ffb3f3;
 
-  /* shadow */
+  /* shadows */
   --shadow-pink-glow: 5px 4px 5px var(--color-background-shadow);
 
   /* fonts */
@@ -65,4 +65,20 @@
 
 .slide-down {
   animation: slideDown 0.5s ease-in-out forwards;
+}
+
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(0%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-1000);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.5s ease-in-out backwards;
 }

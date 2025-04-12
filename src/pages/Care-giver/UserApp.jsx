@@ -1,13 +1,11 @@
 import { useState , useEffect } from "react";
 import Logo from "../../assets/Vector.svg";
-import { NavLink, Outlet , useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
 
-
-
-function FacilityApp() {
+function Care_Giver_App() {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,10 +21,9 @@ function FacilityApp() {
         document.body.style.overflow = "auto";
       };
     }, [isOpen]);
-  
-  
+
   return (
-    <div className='flex  min-h-screen h-screen '>
+    <div className='flex   min-h-screen h-screen '>
       <div className='w-full flex flex-col '>
         <section className='w-full  pr-8 my-2  flex  gap- '>
           <div className='flex   w-full  items-center justify-between  '>
@@ -42,7 +39,7 @@ function FacilityApp() {
               onClick={() => {
                 setIsOpen(!isOpen);
               }}
-              className="md:hidden"
+              className='md:hidden'
             >
               {" "}
               <i className='fa-solid fa-bars pl-8'></i>
@@ -66,42 +63,57 @@ function FacilityApp() {
         </section>
 
         <section className='h- w-full   flex'>
-          <div className='w-[25%] hidden md:flex flex-col gap-6 pb-6 px-4 border-background-grey  '>
+          <div className='w-[25%] hidden md:flex flex-col gap-4 pb-6 px-4 border-background-grey  '>
             <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
             <div className='flex flex-col gap-2'>
               <NavLink
-                to={"/facility/dashboard"}
+                to={"/care-giver/dashboard"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/dashboard"
+                  location.pathname === "/care-giver/dashboard"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
               >
-                <i className='fa-solid fa-table-columns'></i> <p>Dashboard</p>
+                <i className='fa-solid fa-table-columns'></i>
+                <p>Dashboard</p>
               </NavLink>
               <NavLink
-                to={"/facility/emergency-requests"}
+                to={"/care-giver/emergency-requests"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/emergency-requests"
+                  location.pathname === "/care-giver/emergency-requests"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
               >
                 <i className='fa-solid fa-hospital'></i>{" "}
-                <p>Emergency Requests</p>
+                <p>Emergency Request</p>
               </NavLink>
               <NavLink
-                to={"/facility/inventory"}
+                to={"/care-giver/notifications"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/inventory"
+                  location.pathname === "/care-giver/notifications"
+                    ? "bg-background text-white"
+                    : ""
+                }
+                `}
+              >
+                <i className='fa-regular fa-bell'></i>
+                <p>Notifications</p>
+              </NavLink>
+              <NavLink
+                to={"/care-giver/inventory"}
+                className={` 
+                flex items-center justify-left   gap-4 p-4 text-text-dark-gray
+                ${
+                  location.pathname === "/care-giver/inventory"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -110,30 +122,17 @@ function FacilityApp() {
                 <i className='fa-solid fa-dolly'></i>
                 <p>Inventory</p>
               </NavLink>
-              <NavLink
-                to={"/facility/notifications"}
-                className={` 
-                flex items-center justify-left   gap-4 p-4 text-text-dark-gray
-                ${
-                  location.pathname === "/facility/notifications"
-                    ? "bg-background text-white"
-                    : ""
-                }
-                `}
-              >
-                <i className='fa-solid fa-book'></i> <p>Notifications</p>
-              </NavLink>
             </div>
 
             <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
 
             <div className='flex flex-col gap-2'>
               <NavLink
-                to={"/facility/account"}
+                to={"/care-giver/account"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/account"
+                  location.pathname === "/care-giver/account"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -143,11 +142,11 @@ function FacilityApp() {
                 <p>My Account</p>
               </NavLink>
               <NavLink
-                to={"/facility/help"}
+                to={"/care-giver/help"}
                 className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/help"
+                  location.pathname === "/care-giver/help"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -180,76 +179,76 @@ function FacilityApp() {
             >
               <div
                 onClick={(e) => e.stopPropagation()}
-                className='box slide-down  bg-white flex flex-col gap-4 pb-6 px-4 border-background-grey  '
+                className='box slide-down slide-up bg-white flex flex-col gap-4 pb-6 px-4 border-background-grey  '
               >
                 <div className='w-full h-0.5 top-0 mx-auto  bg-background-grey'></div>
                 <div className='flex flex-col gap-2'>
                   <NavLink
-                    to={"/facility/dashboard"}
+                    to={"/care-giver/dashboard"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/dashboard"
+                  location.pathname === "/care-giver/dashboard"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
                   >
-                    <i className='fa-solid fa-table-columns'></i>{" "}
+                    <i className='fa-solid fa-table-columns'></i>
                     <p>Dashboard</p>
                   </NavLink>
                   <NavLink
-                    to={"/facility/emergency-requests"}
+                    to={"/care-giver/donate"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/emergency-requests"
+                  location.pathname === "/care-giver/donate"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
                   >
-                    <i className='fa-solid fa-hospital'></i>{" "}
-                    <p>Emergency Requests</p>
+                    <i className='fa-solid fa-droplet'></i> <p>Donate</p>
                   </NavLink>
                   <NavLink
-                    to={"/facility/inventory"}
+                    to={"/care-giver/notifications"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/inventory"
+                  location.pathname === "/care-giver/notifications"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
                   >
-                    <i className='fa-solid fa-dolly'></i>
-                    <p>Inventory</p>
+                    <i className='fa-regular fa-bell'></i>
+                    <p>Notifications</p>
                   </NavLink>
                   <NavLink
-                    to={"/facility/notifications"}
+                    to={"/care-giver/educational-content"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/notifications"
+                  location.pathname === "/care-giver/educational-content"
                     ? "bg-background text-white"
                     : ""
                 }
                 `}
                   >
-                    <i className='fa-solid fa-book'></i> <p>Notifications</p>
+                    <i className='fa-solid fa-book'></i>{" "}
+                    <p>Educational Content</p>
                   </NavLink>
                 </div>
 
@@ -257,14 +256,14 @@ function FacilityApp() {
 
                 <div className='flex flex-col gap-2'>
                   <NavLink
-                    to={"/facility/account"}
+                    to={"/care-giver/account"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/account"
+                  location.pathname === "/care-giver/account"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -274,14 +273,14 @@ function FacilityApp() {
                     <p>My Account</p>
                   </NavLink>
                   <NavLink
-                    to={"/facility/help"}
+                    to={"/care-giver/help"}
                     onClick={() => {
                       setIsOpen(false);
                     }}
                     className={` 
                 flex items-center justify-left   gap-4 p-4 text-text-dark-gray
                 ${
-                  location.pathname === "/facility/help"
+                  location.pathname === "/care-giver/help"
                     ? "bg-background text-white"
                     : ""
                 }
@@ -297,9 +296,10 @@ function FacilityApp() {
 
                   <button
                     onClick={() => {
-                      navigate("/");  
+                      navigate("/");
+
                       setIsOpen(false);
-                     logout();
+                      logout();
                     }}
                     className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'
                   >
@@ -310,7 +310,7 @@ function FacilityApp() {
               </div>
             </div>
           )}
-          <div className='w-full md:h-screen overflow-y-auto p-4 bg-background-grey'>
+          <div className='w-full h-full overflow-y-auto p-4 bg-background-grey'>
             <Outlet />
           </div>{" "}
         </section>
@@ -319,4 +319,4 @@ function FacilityApp() {
   );
 }
 
-export default FacilityApp;
+export default Care_Giver_App;

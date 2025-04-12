@@ -26,6 +26,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Send_Code from "./pages/Resend Code";
 import Inventory from "./pages/Facility/Inventory";
 import Emergency_Requests from "./pages/Facility/Emergency";
+import Care_Giver_App from "./pages/Care-giver/UserApp";
 
 
 function App() {
@@ -52,26 +53,43 @@ function App() {
           </Route>
 
           {/* <Route element={<ProtectedRoute />}> */}
-            <Route path='/user' element={<UserApp />}>
-              <Route
-                path='educational-content'
-                element={<EducationalContent />}
-              />
-              <Route path='donate' element={<Donate />} />
-              <Route path='account' element={<Account />} />
-              <Route path='help' element={<Help />} />
-              <Route path='dashboard' element={<Dashboard />} />
-              <Route path='notifications' element={<Notifications />} />
-            </Route>
-            <Route path='/facility' element={<FacilityApp />}>
-              <Route path='dashboard' element={<FacilityDashboard />} />
-              <Route path='account' element={<Account />} />
-              <Route path='help' element={<Help />} />
-              <Route path='inventory' element={<Inventory />} />
-              <Route path='emergency-requests' element={<Emergency_Requests />} />
 
-              <Route path='notifications' element={<Notifications />} />
-            </Route>
+          <Route path='/user' element={<UserApp />}>
+            <Route
+              path='educational-content'
+              element={<EducationalContent />}
+            />
+            <Route path='donate' element={<Donate />} />
+            <Route path='account' element={<Account />} />
+            <Route path='help' element={<Help />} />
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='notifications' element={<Notifications />} />
+          </Route>
+
+          <Route path='/facility' element={<FacilityApp />}>
+            <Route path='dashboard' element={<FacilityDashboard />} />
+            <Route path='account' element={<Account />} />
+            <Route path='help' element={<Help />} />
+            <Route path='inventory' element={<Inventory />} />
+            <Route path='emergency-requests' element={<Emergency_Requests />} />
+
+            <Route path='notifications' element={<Notifications />} />
+          </Route>
+
+          <Route path='/care-giver' element={<Care_Giver_App />}>
+            <Route path='inventory' element={<Donate />} />
+            <Route
+              path='educational-content'
+              element={<EducationalContent />}
+            />
+            <Route path='emergency-requests' element={<Emergency_Requests />} />
+
+            <Route path='account' element={<Account />} />
+            <Route path='help' element={<Help />} />
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='notifications' element={<Notifications />} />
+          </Route>
+
           {/* </Route> */}
         </Routes>
       </Router>
