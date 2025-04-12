@@ -1,26 +1,26 @@
 import { useState , useEffect } from "react";
 import Logo from "../../assets/Vector.svg";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context";
+import { useProfileContext } from "../../shared/context/user-profile-context";
 
 function UserApp() {
+
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const user = useProfileContext();
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
 
-    useEffect(() => {
-      if (isOpen) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "auto";
-      }
-  
-      return () => {
-        document.body.style.overflow = "auto";
-      };
-    }, [isOpen]);
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen, user]);
 
   return (
     <div className='flex   min-h-screen h-screen '>
@@ -47,7 +47,7 @@ function UserApp() {
               <div className='w-0.5 my-2 hidden md:inline bg-background-grey'></div>
 
               <div className='flex   items-center justify-self-start  gap-4 '>
-                <div classsName='flex flex-col '>
+                <div className='flex flex-col '>
                   <p className='text-xs text-right text-input-text'>
                     Welcome back,
                   </p>
@@ -158,7 +158,8 @@ function UserApp() {
 
               <button
                 onClick={() => {
-                  navigate("/"), logout();
+                  navigate("/");
+                  // logout();
                 }}
                 className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'
               >
@@ -296,7 +297,7 @@ function UserApp() {
                       navigate("/");
 
                       setIsOpen(false);
-                      logout();
+                      // logout();
                     }}
                     className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'
                   >

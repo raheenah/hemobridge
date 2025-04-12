@@ -1,10 +1,10 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
-import { useAuth } from "../context";
+// import { useAuth } from "../context";
 
 function Signin() {
-  const { login } = useAuth();
+  // const { login } = useAuth();
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -13,27 +13,22 @@ function Signin() {
     email: "",
     password: "",
   });
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    try {
-      const response = await loginUser(formData);
-      setMessage(response.message);
-      console.log("Login Response:", response.user);
-      if (response.success) {
-        console.log("successful user:", response);
-         login(response.user);
-        // navigate("/user/dashboard");
-         if (response.user.role === "donor") {
-           navigate("/user/dashboard");
-         } else {
-           navigate("/facility/dashboard");
-         }
-      }
-    } catch (error) {
-      setMessage(error.message);
-      console.error("Registration Error:", error);
-    }
+
+    const response = await loginUser(formData)
+    .then((res)=> {
+      setMessage(res.message);
+      return res.user
+    })
+    .catch((error)=> {
+      console.error(error)
+      throw error
+    })
+
+    if(response.role === "donor") navigate("/user/dashboard")
+    if(response.role === "facility-staff") navigate("/facility/dashboard")
   };
 
   const handleChange = (e) => {
@@ -98,7 +93,7 @@ function Signin() {
         </NavLink>
         <button
           type='submit'
-          // onClick={handleSubmit}
+          onClick={handleSubmit}
           // className='bg-background  w-full font-bold text-xl text-white py-3'
           className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%] font-bold text-base text-white py-2 px-4'
         >

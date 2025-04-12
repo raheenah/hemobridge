@@ -55,9 +55,11 @@ export const registerFacility = async (userData) => {
 // log in
 export const loginUser = async (userData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/auth/login`, userData);
-    // console.log("Login Response:", response.data);
+    const response = await axios.post(`/api/auth/login`, userData)
+    .catch((error)=> { throw error })
+    
     return response.data; 
+
   } catch (error) {
     console.error("Login Error:", error.response?.data || error.message);
     throw (

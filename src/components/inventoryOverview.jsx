@@ -1,13 +1,13 @@
-import {useEffect,useState,useMemo} from 'react'
+import {useEffect,useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Facilities from './Facilities';
-import { useAuth } from '../context';
+import { useProfileContext } from '../shared/context/user-profile-context';
 
 
 
 export default function InventoryOverview() {
   const navigate = useNavigate()
-  const { user } = useAuth();
+  const user = useProfileContext();
   const [facilities, setFacilities] = useState([]);
   const [viewList, setViewList] = useState(false);
 

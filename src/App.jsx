@@ -1,6 +1,3 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import WelcomePage from "./pages/welcomePage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signin from "./pages/SignIn";
@@ -13,7 +10,6 @@ import SignUp from "./pages/SignUp";
 import UserApp from "./pages/Donor/UserApp";
 import EducationalContent from "./pages/Donor/EduContent";
 import Donate from "./pages/Donor/Donate";
-import { AuthProvider } from "./context";
 import Account from "./pages/Donor/Account";
 import Help from "./pages/Donor/Help";
 import Dashboard from "./pages/Donor/Dashboard";
@@ -30,7 +26,6 @@ import Emergency_Requests from "./pages/Facility/Emergency";
 
 function App() {
   return (
-    <AuthProvider>
       <Router>
         <Routes>
           <Route path='/' element={<WelcomePage />}>
@@ -51,31 +46,29 @@ function App() {
             <Route path='verify-email' element={<Send_Code />} />
           </Route>
 
-          {/* <Route element={<ProtectedRoute />}> */}
-            <Route path='/user' element={<UserApp />}>
-              <Route
-                path='educational-content'
-                element={<EducationalContent />}
-              />
-              <Route path='donate' element={<Donate />} />
-              <Route path='account' element={<Account />} />
-              <Route path='help' element={<Help />} />
-              <Route path='dashboard' element={<Dashboard />} />
-              <Route path='notifications' element={<Notifications />} />
-            </Route>
-            <Route path='/facility' element={<FacilityApp />}>
-              <Route path='dashboard' element={<FacilityDashboard />} />
-              <Route path='account' element={<Account />} />
-              <Route path='help' element={<Help />} />
-              <Route path='inventory' element={<Inventory />} />
-              <Route path='emergency-requests' element={<Emergency_Requests />} />
+          <Route path='/user' element={<ProtectedRoute children={<UserApp />} />}>
+            <Route
+              path='educational-content'
+              element={<EducationalContent />}
+            />
+            <Route path='donate' element={<Donate />} />
+            <Route path='account' element={<Account />} />
+            <Route path='help' element={<Help />} />
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='notifications' element={<Notifications />} />
+          </Route>
+          
+          <Route path='/facility' element={<FacilityApp />}>
+            <Route path='dashboard' element={<FacilityDashboard />} />
+            <Route path='account' element={<Account />} />
+            <Route path='help' element={<Help />} />
+            <Route path='inventory' element={<Inventory />} />
+            <Route path='emergency-requests' element={<Emergency_Requests />} />
 
-              <Route path='notifications' element={<Notifications />} />
-            </Route>
-          {/* </Route> */}
+            <Route path='notifications' element={<Notifications />} />
+          </Route>
         </Routes>
       </Router>
-    </AuthProvider>
   );
 }
 

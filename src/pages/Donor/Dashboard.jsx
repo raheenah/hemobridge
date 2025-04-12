@@ -1,6 +1,5 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import Avatar from "../../assets/avatar.svg";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { PieChart, Pie, Cell } from "recharts";
 import InventoryOverview from "../../components/inventoryOverview";
 
@@ -179,8 +178,8 @@ function Dashboard() {
                   </Pie>
                 </PieChart>
                 <ul className='flex flex-col gap-1 border-r-1 px-4  border-text-gray'>
-                  {data.map((item) => (
-                    <li className='flex flex-col'>
+                  {data.map((item, index) => (
+                    <li key={index} className='flex flex-col'>
                       <div className='flex items-center gap-2'>
                         {" "}
                         <div
@@ -189,13 +188,13 @@ function Dashboard() {
                         ></div>
                         <p className='font-bold'>{item.value}%</p>
                       </div>
-                      <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
+                      <div className='w-[50%] h-0.5 top-0 bg-background-grey'></div>
 
                       <p className='text-text-dark-gray'>{item.name}</p>
                     </li>
                   ))}
                 </ul>
-                <div className='flex flex-col w-[30%] gap-1  px-4 '>
+                <div className='flex flex-col w-[30%] gap-1  px-4'>
                   <h2 className='text-background text-xl'>Did You Know??</h2>
                   <p className='text-text-dark-gray'>
                     When you donate, you help keep{" "}
