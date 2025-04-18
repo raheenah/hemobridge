@@ -2,6 +2,8 @@ import { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 import { useAuth } from "../context";
+import { toast } from "react-toastify";
+import { fetchUserProfile } from "../api/fetchProfile";
 
 function Signin() {
   const { login } = useAuth();
@@ -9,31 +11,58 @@ function Signin() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null); 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage(null);
     console.log("Form Data:", formData);
     try {
       const response = await loginUser(formData);
       setMessage(response.message);
-      console.log("Login Response:", response.user);
+      console.log("Login Response:", response);
       if (response.success) {
-        console.log("successful user:", response);
-         login(response.user);
+        console.log("successful user:", response.user);
+        setUser(response.user);
         // navigate("/user/dashboard");
-         if (response.user.role === "donor") {
-           navigate("/user/dashboard");
-         } else {
-           navigate("/facility/dashboard");
-         }
+        if (response.user.role === "donor") {
+          navigate("/user/dashboard");
+        } else if (response.user.role === "facility_staff") {
+          navigate("/facility/dashboard");
+        } else {
+          navigate("/care-giver/dashboard");
+        }
       }
     } catch (error) {
       setMessage(error.message);
       console.error("Registration Error:", error);
+    } finally {
+      setLoading(false);
     }
+
+// const loginResponse = await loginUser(formData);
+
+// if (loginResponse.success) {
+//   const profile = await fetchUserProfile();
+
+//   if (profile) {
+//     console.log("User Profile:", profile);
+//     setUser(profile); // or set global context/user state
+//     navigate(`/${profile.role}/dashboard`);
+//   } else {
+//     toast.error("Failed to load user profile.");
+//   }
+// } else {
+//   toast.error(loginResponse.message);
+// }
+
+// setLoading(false);
+
   };
 
   const handleChange = (e) => {
@@ -100,9 +129,17 @@ function Signin() {
           type='submit'
           // onClick={handleSubmit}
           // className='bg-background  w-full font-bold text-xl text-white py-3'
-          className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%] font-bold text-base text-white py-2 px-4'
+          className='bg-background  hover:bg-pink  mx-auto w-full max-w-[80%] font-bold text-base text-white py-2 px-4'
         >
-          Sign In
+          {/* {!loading && (<p> Sign In</p> )} */}
+          {loading ? (
+            <span className='flex justify-center items-center gap-2'>
+              {/* Signing in */}
+              <i className='fa-solid fa-spinner animate-spin'></i>
+            </span>
+          ) : (
+            "Sign In"
+          )}
         </button>
       </form>
       {message && (

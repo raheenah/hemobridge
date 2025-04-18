@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { registerUser , registerFacility } from "../api/auth";
 import { toast } from "react-toastify";
@@ -13,6 +13,8 @@ function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [ConfirmFacilityPassword, setConfirmFacilityPassword] = useState("");
+  const [openingTime, setOpeningTime] = useState("");
+  const [closingTime, setClosingTime] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,13 +32,14 @@ function SignUp() {
       address: "",
     });
   const [facilityData, setFacilityData] = useState({
-    facilityName: "",
-    personnelName: "",
+    name: "",
+    // personnelName: "",
     email: "",
     phone: "",
-    personnelRole: "",
+    // personnelRole: "",
     address: "",
     password: "",
+    operationalHours: "",
   });
 
 const handleChange = (e) => {
@@ -57,6 +60,14 @@ const handleChangeCaregiver = (e) => {
 
 
 
+  useEffect(() => {
+    if (openingTime && closingTime) {
+      setFacilityData((prev) => ({
+        ...prev,
+        operationalHours: `${openingTime} - ${closingTime}`,
+      }));
+    }
+  }, [openingTime, closingTime]);
   
 
   const handleChangeFacility = (e) => {
@@ -64,7 +75,9 @@ const handleChangeCaregiver = (e) => {
   setFacilityData((prev) => ({
     ...prev,
     [name]: name === "email" ? value.toLowerCase() : value,
-  }));  };
+  }));
+  
+  };
   
   const handleSubmitDonor = async (e) => {
      e.preventDefault();
@@ -90,6 +103,11 @@ const handleChangeCaregiver = (e) => {
         console.error("Registration Error:", error);
      }
   };
+
+
+
+  
+
 
    const handleSubmitFacility = async (e) => {
      e.preventDefault();
@@ -129,7 +147,7 @@ const handleChangeCaregiver = (e) => {
       <div className='  md:w-[85%] bg- mx-auto flex  py-8  md:px-0 flex-col text-center gap-5 items-center '>
         <h1 className=' font-[700] font-space text-2xl'>Create New Account </h1>
         <div className='flex md:w-[80%] mx-auto  flex-col gap-6 '>
-          <div className='grid grid-cols-3 text-sm font-base w-full '>
+          <div className='grid grid-cols-2 text-sm font-base w-full '>
             <button
               onClick={() => setAccountType("donor")}
               className={`${
@@ -141,7 +159,7 @@ const handleChangeCaregiver = (e) => {
             >
               Donor
             </button>
-            <button
+            {/* <button
               onClick={() => setAccountType("facility")}
               className={`${
                 accountType === "facility"
@@ -151,7 +169,7 @@ const handleChangeCaregiver = (e) => {
                w-full  border-b  border-b-2 py-3 px-4 `}
             >
               HealthCare
-            </button>
+            </button> */}
             <button
               onClick={() => setAccountType("care-giver")}
               className={`${
@@ -258,7 +276,13 @@ const handleChangeCaregiver = (e) => {
                     >
                       B-{" "}
                     </option>{" "}
-                    <option value='O+'>O+ </option>
+                    <option
+                      className='text-input-text   focus:outline-none'
+                      value='O+'
+                    >
+                      {" "}
+                      O+{" "}
+                    </option>
                     <option
                       className='text-input-text   focus:outline-none'
                       value='O-'
@@ -375,10 +399,10 @@ const handleChangeCaregiver = (e) => {
                   Facility Name <span className='text-red-500'>*</span>
                 </label>
                 <input
-                  placeholder='John Doe'
+                  placeholder='City Blood Bank'
                   className='placeholder-input-text w-full focus:outline-none'
                   type='text'
-                  name='facilityName'
+                  name='name'
                   value={facilityData.name}
                   onChange={handleChangeFacility}
                   required
@@ -413,32 +437,46 @@ const handleChangeCaregiver = (e) => {
                   required
                 />
               </div>
+              <div className=' p-4  w-full relative border-1 text-text-dark-gray'>
+                <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                  Phone Number <span className='text-red-500'>*</span>
+                </label>
+                <input
+                  placeholder='0811 234 5678'
+                  className='placeholder-input-text w-full focus:outline-none'
+                  type='text'
+                  name='phone'
+                  value={facilityData.phone}
+                  onChange={handleChangeFacility}
+                  required
+                />
+              </div>
               <div className='flex items-center gap-6'>
                 <div className=' p-4  w-full relative border-1 text-text-dark-gray'>
                   <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                    Phone Number <span className='text-red-500'>*</span>
+                    Opening Time <span className='text-red-500'>*</span>
                   </label>
                   <input
                     placeholder='0811 234 5678'
                     className='placeholder-input-text w-full focus:outline-none'
-                    type='text'
+                    type='time'
                     name='phone'
-                    value={facilityData.phone}
-                    onChange={handleChangeFacility}
+                    value={openingTime}
+                    onChange={(e) => setOpeningTime(e.target.value)}
                     required
                   />
                 </div>{" "}
                 <div className=' p-4  w-full relative border-1 text-text-dark-gray'>
                   <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                    Personnel Role<span className='text-red-500'>*</span>
+                    Closing Time<span className='text-red-500'>*</span>
                   </label>
                   <input
                     placeholder='Type here...'
                     className='placeholder-input-text w-full focus:outline-none'
-                    type='text'
+                    type='time'
                     name='personnelRole'
-                    value={facilityData.personnelRole}
-                    onChange={handleChangeFacility}
+                    value={closingTime}
+                    onChange={(e) => setClosingTime(e.target.value)}
                     required
                   />
                 </div>

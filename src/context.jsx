@@ -7,14 +7,14 @@ const [user, setUser] = useState(() => {
   return JSON.parse(localStorage.getItem("user")) || null; 
 });
   
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-      console.log("User data saved to localStorage:", user);
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     localStorage.setItem("user", JSON.stringify(user));
+  //     console.log("User data saved to localStorage:", user);
+  //   } else {
+  //     localStorage.removeItem("user");
+  //   }
+  // }, [user]);
   
 
    const login = (userData) => {

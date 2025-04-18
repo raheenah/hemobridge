@@ -15,7 +15,7 @@ const BASE_URL = "https://hemobridge-project.onrender.com";
 export const registerUser = async (userData) => {
   try {
     const response = await axios.post(`${BASE_URL}/auth/register/donor`, userData);
-    // console.log("Registration Response:", response.data);
+    // console.log("Registration Response:", response.header);
     return response.data; 
   } catch (error) {
     console.error("Registration Error:", error.response?.data || error.message);
@@ -56,7 +56,13 @@ export const registerFacility = async (userData) => {
 export const loginUser = async (userData) => {
   try {
     const response = await axios.post(`${BASE_URL}/auth/login`, userData);
-    // console.log("Login Response:", response.data);
+    console.log("Login Response:", response);
+    console.log("document cookie", document.cookie);
+    console.log("session cookie", response.headers["set-cookie"]);
+    console.log("Header", response.headers);
+    console.log("session cookie CAPS", response.headers["Set-cookie"]);
+    localStorage.setItem("token", response.token);
+    console.log("Token:", response.token);
     return response.data; 
   } catch (error) {
     console.error("Login Error:", error.response?.data || error.message);
@@ -66,6 +72,19 @@ export const loginUser = async (userData) => {
   }
 };
 
+// export const loginUser = async (formData) => {
+//   const response = await fetch("http://localhost:5000/login", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     credentials: "include",
+//     body: JSON.stringify(formData),
+//   });
+
+//   const data = await response.json();
+//   return data;
+// };
 
 
 

@@ -9,6 +9,7 @@ function FacilityApp() {
   const location = useLocation();
   const navigate = useNavigate()
   const { user, logout } = useAuth();
+  const facilityId = user.id
   const [isOpen, setIsOpen] = useState(false);
 
 
@@ -24,6 +25,13 @@ function FacilityApp() {
       };
     }, [isOpen]);
   
+  
+  useEffect(() => {
+    fetch("http://localhost:8000/facilities")
+      .then((res) => res.json())
+      .then((data) => setFacilities(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
   
   return (
     <div className='flex  min-h-screen h-screen '>
