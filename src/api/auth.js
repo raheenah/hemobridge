@@ -57,6 +57,13 @@ export const loginUser = async (userData) => {
   try {
     const response = await axios.post(`${BASE_URL}/auth/login`, userData);
     // console.log("Login Response:", response.data);
+    console.log("Login Response:", response);
+    console.log("document cookie", document.cookie);
+    console.log("session cookie", response.headers["set-cookie"]);
+    console.log("Header", response.headers);
+    console.log("session cookie CAPS", response.headers["Set-cookie"]);
+    localStorage.setItem("token", response.token);
+    console.log("Token:", response.token);
     return response.data; 
   } catch (error) {
     console.error("Login Error:", error.response?.data || error.message);
