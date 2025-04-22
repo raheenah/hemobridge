@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { loginUser } from "../api/auth";
+import { NavLink } from "react-router-dom";
+import { loginUser } from "../api/auth.api";
 // import { useAuth } from "../context";
+import { useRoleNavigation } from "src/shared/hooks/use-role-navigation";
 
 function Signin() {
-  // const { login } = useAuth();
 
-  const navigate = useNavigate();
+  const { navigateByRole } = useRoleNavigation()
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -17,18 +17,16 @@ function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await loginUser(formData)
+    await loginUser(formData)
     .then((res)=> {
+      console.log(res.user.role)
       setMessage(res.message);
-      return res.user
+      navigateByRole(res.user.role)
     })
     .catch((error)=> {
       console.error(error)
       throw error
     })
-
-    if(response.role === "donor") navigate("/user/dashboard")
-    if(response.role === "facility-staff") navigate("/facility/dashboard")
   };
 
   const handleChange = (e) => {

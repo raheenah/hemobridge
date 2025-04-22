@@ -1,14 +1,13 @@
 import { useState , useEffect } from "react";
 import Logo from "../../assets/Vector.svg";
 import { NavLink, Outlet , useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context";
-
+import { useProfileContext } from "src/shared/context/user-profile-context";
 
 
 function FacilityApp() {
   const location = useLocation();
   const navigate = useNavigate()
-  const { user, logout } = useAuth();
+  const { user } = useProfileContext()
   const [isOpen, setIsOpen] = useState(false);
 
 
@@ -161,7 +160,7 @@ function FacilityApp() {
 
               <button
                 onClick={() => {
-                  navigate("/"), logout();
+                  navigate("/")
                 }}
                 className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'
               >
@@ -298,7 +297,6 @@ function FacilityApp() {
                     onClick={() => {
                       navigate("/");  
                       setIsOpen(false);
-                     logout();
                     }}
                     className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'
                   >

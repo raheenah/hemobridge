@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { registerUser , registerFacility } from "../api/auth";
-import { toast } from "react-toastify";
+import { NavLink } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-
+import { DonorApi } from "../api/donor.api";
+import { useRoleNavigation } from "src/shared/hooks/use-role-navigation";
+import { FacilityApi } from "../api/facility.api";
 
 function SignUp() {
+
+  const { navigateByRole } = useRoleNavigation()
   const [accountType, setAccountType] = useState("donor");
-  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -23,12 +24,13 @@ function SignUp() {
   });
   const [facilityData, setFacilityData] = useState({
     facilityName: "",
-    personnelName: "",
-    email: "",
-    phone: "",
-    personnelRole: "",
+    operationalHours: "",
     address: "",
-    password: "",
+    personnelFullname: "",
+    personnelEmail: "",
+    personnelPhoneNumber: "",
+    personnelRole: "Admin",
+    personnelPassword: ""
   });
 
   const handleChange = (e) => {
@@ -51,59 +53,68 @@ setFormData((prev) => ({
   };
   
   const handleSubmitDonor = async (e) => {
-     e.preventDefault();
-      console.log("Form Data:", formData);
-     if(formData.password !== ConfirmPassword){
-       setMessage("Passwords do not match");
-       return;
-     }
+    e.preventDefault();
+    setMessage("")
+    
+    if(formData.password !== ConfirmPassword){
+      setMessage("Passwords do not match");
+      return;
+    }
 
-     try {
-       const response = await registerUser(formData);
-       setMessage(response.message);
-       console.log("Registration Response:", response);
-       console.log("Registration Response message:", response.message);
+    await DonorApi.register({
+      firstName: formData.name.split(" ")[0],
+      lastName: formData.name.split(" ")[1] ?? "null",
+      email: formData.email,
+      password: formData.password,
+      phoneNumber: formData.phone,
+      bloodType: formData.bloodType,
+      address: formData.address
 
-        if (response.message === "User created successfully") {
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        }
-     } catch (error) {
-       setMessage(error.message);
-        console.error("Registration Error:", error);
-     }
+    }).then((response)=> {
+      setMessage(response.message);
+      setTimeout(()=> navigateByRole(response.user.role), 2000);
+      
+    }).catch((error)=> { 
+      setMessage(error.response.data?.message ?? error.message);
+      console.error("Registration Error:", error);
+    })
   };
 
-   const handleSubmitFacility = async (e) => {
-     e.preventDefault();
-     console.log("Form Data:", facilityData);
-     if (facilityData.password !== ConfirmFacilityPassword) {
-       setMessage("Passwords do not match");
-       return;
-     }
+  const handleSubmitFacility = async (e) => {
+    e.preventDefault();
 
-     try {
-       const response = await registerFacility(facilityData);
-       setMessage(response.message);
-       console.log("Registration Response:", response);
-       console.log("Registration Response message:", response.message);
+    if (facilityData.personnelPassword !== ConfirmFacilityPassword) {
+      setMessage("Passwords do not match");
+      return;
+    }
 
-       if (response.message === "User created successfully") {
-         setTimeout(() => {
-           navigate("/");
-         }, 2000);
-       }
-     } catch (error) {
-       setMessage(error.message);
-       console.error("Registration Error:", error);
-     }
-   };
+    const payload = {
+      facilityName: facilityData.facilityName,
+      operationalHours: facilityData.operationalHours,
+      address: facilityData.address,
+      personnelEmail: facilityData.personnelEmail,
+      personnelPhoneNumber: facilityData.personnelPhoneNumber,
+      personnelFirstname: facilityData.personnelFullname.split(" ")[0],
+      personnelLastname: facilityData.personnelFullname.split(" ")[1] ?? "null",
+      personnelPassword: facilityData.personnelPassword
+    }
+
+    await FacilityApi.register(payload)
+    .then((response)=> {
+      setMessage(response.message);
+      setTimeout(()=> navigateByRole("facility-staff"), 1000);
+      
+    }).catch((error)=> { 
+      setMessage(error.response.data?.message ?? error.message);
+      console.error("Registration Error:", error);
+    })
+  };
   
-    const togglePassword = (e) => {
-      e.preventDefault();
-      setShowPassword((prev) => !prev);
+  const togglePassword = (e) => {
+    e.preventDefault();
+    setShowPassword((prev) => !prev);
   };
+
   const toggleConfirmPassword = (e) => {
     e.preventDefault();
     setShowConfirmPassword((prev) => !prev);
@@ -132,7 +143,7 @@ setFormData((prev) => ({
                   ? " text-background border-b-background"
                   : "border-b-pink text-input-text"
               }  
-               w-full  border-b  border-b-2 py-3 px-4 `}
+               w-full border-b-2 py-3 px-4 `}
             >
               HealthCare
             </button>
@@ -343,6 +354,7 @@ setFormData((prev) => ({
               onSubmit={handleSubmitFacility}
               className='flex text-xs  flex-col w-full gap-[25px]'
             >
+              {/* FACILITY DETAILS */}
               <div className=' p-4 relative border-1 text-text-dark-gray'>
                 <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
                   Facility Name <span className='text-red-500'>*</span>
@@ -352,36 +364,67 @@ setFormData((prev) => ({
                   className='placeholder-input-text w-full focus:outline-none'
                   type='text'
                   name='facilityName'
-                  value={facilityData.name}
+                  value={facilityData.facilityName}
                   onChange={handleChangeFacility}
                   required
                 />
               </div>
               <div className=' p-4 relative border-1 text-text-dark-gray'>
                 <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                  Personnel Name <span className='text-red-500'>*</span>
+                  Operational Hours <span className='text-red-500'>*</span>
                 </label>
                 <input
-                  placeholder='John Doe'
+                  placeholder='9AM to 5PM'
                   className='placeholder-input-text w-full focus:outline-none'
                   type='text'
-                  name='personnelName'
-                  value={facilityData.personnelName}
+                  name='operationalHours'
+                  value={facilityData.operationalHours}
                   onChange={handleChangeFacility}
                   required
                 />
               </div>
               <div className=' p-4 relative border-1 text-text-dark-gray'>
                 <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                  Email Address
+                  Address<span className='text-red-500'>*</span>
+                </label>
+                <input
+                  placeholder='No., Street, Town, Zip Code, State.'
+                  className='placeholder-input-text w-full focus:outline-none'
+                  type='text'
+                  name={"address"}
+                  value={facilityData.address}
+                  onChange={handleChangeFacility}
+                  required
+                />
+              </div>
+
+              {/* PERSONNEL DETAILS */}
+              <div className=' p-4 relative border-1 text-text-dark-gray'>
+                <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                  Personnel Fullname
+                  <span className='text-red-500'>*</span>
+                </label>
+                <input
+                  placeholder='John doe'
+                  className='placeholder-input-text w-full focus:outline-none'
+                  type='text'
+                  name={"personnelFullname"}
+                  value={facilityData.personnelFullname}
+                  onChange={handleChangeFacility}
+                  required
+                />
+              </div>
+              <div className=' p-4 relative border-1 text-text-dark-gray'>
+                <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                  Personnel Email Address
                   <span className='text-red-500'>*</span>
                 </label>
                 <input
                   placeholder='someone@example.com'
                   className='placeholder-input-text w-full focus:outline-none'
                   type='email'
-                  name='email'
-                  value={facilityData.email}
+                  name={"personnelEmail"}
+                  value={facilityData.personnelEmail}
                   onChange={handleChangeFacility}
                   required
                 />
@@ -389,14 +432,14 @@ setFormData((prev) => ({
               <div className='flex items-center gap-6'>
                 <div className=' p-4  w-full relative border-1 text-text-dark-gray'>
                   <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                    Phone Number <span className='text-red-500'>*</span>
+                  Personnel Phone Number <span className='text-red-500'>*</span>
                   </label>
                   <input
                     placeholder='0811 234 5678'
                     className='placeholder-input-text w-full focus:outline-none'
                     type='text'
-                    name='phone'
-                    value={facilityData.phone}
+                    name={"personnelPhoneNumber"}
+                    value={facilityData.personnelPhoneNumber}
                     onChange={handleChangeFacility}
                     required
                   />
@@ -410,25 +453,12 @@ setFormData((prev) => ({
                     className='placeholder-input-text w-full focus:outline-none'
                     type='text'
                     name='personnelRole'
+                    readOnly
                     value={facilityData.personnelRole}
                     onChange={handleChangeFacility}
                     required
                   />
                 </div>
-              </div>
-              <div className=' p-4 relative border-1 text-text-dark-gray'>
-                <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                  Address<span className='text-red-500'>*</span>
-                </label>
-                <input
-                  placeholder='No., Street, Town, Zip Code, State.'
-                  className='placeholder-input-text w-full focus:outline-none'
-                  type='text'
-                  name='address'
-                  value={facilityData.address}
-                  onChange={handleChangeFacility}
-                  required
-                />
               </div>
               <div className=' p-4 relative flex items-center border-1 text-text-dark-gray'>
                 <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
@@ -437,8 +467,8 @@ setFormData((prev) => ({
                 <input
                   placeholder='*******'
                   type={showPassword ? "text" : "password"}
-                  name='password'
-                  value={facilityData.password}
+                  name={"personnelPassword"}
+                  value={facilityData.personnelPassword}
                   onChange={handleChangeFacility}
                   className='placeholder-input-text w-full focus:outline-none'
                   required

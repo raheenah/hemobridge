@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ProfileApi } from "./api/profile";
+import { ProfileApi } from "./api/profile.api";
 import { ProfileContext } from "./shared/context/user-profile-context";
 
 const ProtectedRoute = ({children}) => {

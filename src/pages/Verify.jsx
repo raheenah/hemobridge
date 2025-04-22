@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { NavLink , useNavigate} from "react-router-dom";
-import { verifyEmail } from "../api/auth";
+import { useNavigate} from "react-router-dom";
+import { verifyEmail } from "../api/auth.api";
 
 function VerifyAccount() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function VerifyAccount() {
      });
    };
 
-   const handleSubmit = async (e) => {
+   const handleSubmit = async () => {
       // e.preventDefault();
       console.log("Form Data:", formData);
       try {
@@ -40,7 +40,7 @@ function VerifyAccount() {
           Verify your Email Address
         </h1>
         <div className='flex flex-col w-full gap-1'>
-          <div className=' p-4 relative border border-1 text-text-dark-gray'>
+          <div className=' p-4 relative border-1 text-text-dark-gray'>
             <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
               One Time Password <span className='text-red-500'>*</span>
             </label>

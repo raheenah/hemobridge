@@ -1,11 +1,9 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Avatar from "../../assets/avatar.svg";
-import { useDropzone } from "react-dropzone";
-import { useAuth } from "../../context";
+import { useProfileContext } from "src/shared/context/user-profile-context.jsx";
 
 function Account() {
-  const { user } = useAuth();
+  const { user } = useProfileContext();
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
@@ -186,7 +184,7 @@ function Account() {
               </button>
             </div>
 
-            <div className=' p-4 relative flex items-center border border-1 text-text-dark-gray'>
+            <div className=' p-4 relative flex items-center border-1 text-text-dark-gray'>
               <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
                 New Password<span className='text-red-500'>*</span>
               </label>
@@ -211,7 +209,7 @@ function Account() {
               </button>
             </div>
 
-            <div className=' p-4 relative flex items-center border border-1 text-text-dark-gray'>
+            <div className=' p-4 relative flex items-center border-1 text-text-dark-gray'>
               <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
                 Confirm New Password<span className='text-red-500'>*</span>
               </label>
