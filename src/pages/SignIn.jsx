@@ -17,10 +17,11 @@ function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await loginUser(formData)
+    await loginUser(formData)
     .then((res)=> {
+      console.log(res.user.role)
       setMessage(res.message);
-      navigateByRole(response.role)
+      navigateByRole(res.user.role)
     })
     .catch((error)=> {
       console.error(error)
