@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { NavLink , useNavigate} from "react-router-dom";
-import { verifyEmail } from "../api/auth";
+import { useNavigate} from "react-router-dom";
+import { verifyEmail } from "../api/auth.api";
 
 function VerifyAccount() {
   const navigate = useNavigate();
