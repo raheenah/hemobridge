@@ -6,11 +6,14 @@ export const useRoleNavigation = () => {
     const navigateByRole = (role) => {
         const roleRoutes = {
             "donor": "/user/dashboard",
-            "facility-staff": "/facility/dashboard"
+            "facility_staff": "/facility/dashboard"
         };
         
         const route = roleRoutes[role];
-        if (route) navigate(route);
+        if (route) {
+            console.log(route)
+            navigate(route);
+        }
     };
     
     return { navigateByRole };
