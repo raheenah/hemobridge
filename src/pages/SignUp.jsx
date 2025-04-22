@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { registerUser , registerFacility } from "../api/auth";
-import { toast } from "react-toastify";
+import { registerFacility } from "../api/auth.api";
 import "react-toastify/dist/ReactToastify.css";
-
+import { DonorApi } from "../api/donor.api";
+import { useRoleNavigation } from "src/shared/hooks/use-role-navigation";
 
 function SignUp() {
+
+  const { navigateByRole } = useRoleNavigation()
   const [accountType, setAccountType] = useState("donor");
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
@@ -51,28 +53,31 @@ setFormData((prev) => ({
   };
   
   const handleSubmitDonor = async (e) => {
-     e.preventDefault();
-      console.log("Form Data:", formData);
-     if(formData.password !== ConfirmPassword){
-       setMessage("Passwords do not match");
-       return;
-     }
+    e.preventDefault();
+    setMessage("")
+    
+    if(formData.password !== ConfirmPassword){
+      setMessage("Passwords do not match");
+      return;
+    }
 
-     try {
-       const response = await registerUser(formData);
-       setMessage(response.message);
-       console.log("Registration Response:", response);
-       console.log("Registration Response message:", response.message);
+    await DonorApi.register({
+      firstName: formData.name.split(" ")[0],
+      lastName: formData.name.split(" ")[1] ?? "null",
+      email: formData.email,
+      password: formData.password,
+      phoneNumber: formData.phone,
+      bloodType: formData.bloodType,
+      address: formData.address
 
-        if (response.message === "User created successfully") {
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        }
-     } catch (error) {
-       setMessage(error.message);
-        console.error("Registration Error:", error);
-     }
+    }).then((response)=> {
+      setMessage(response.message);
+      setTimeout(()=> navigateByRole(response.user.role), 2000);
+      
+    }).catch((error)=> { 
+      setMessage(error.response.data?.message ?? error.message);
+      console.error("Registration Error:", error);
+    })
   };
 
    const handleSubmitFacility = async (e) => {
@@ -132,7 +137,7 @@ setFormData((prev) => ({
                   ? " text-background border-b-background"
                   : "border-b-pink text-input-text"
               }  
-               w-full  border-b  border-b-2 py-3 px-4 `}
+               w-full border-b-2 py-3 px-4 `}
             >
               HealthCare
             </button>
