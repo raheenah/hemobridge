@@ -1,8 +1,5 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
-import { NavLink } from "react-router-dom";
-import Avatar from "../../assets/avatar.svg";
-import { useAuth } from "../../context";
-
+import { useState, useEffect } from "react";
+// import { useProfileContext } from "src/shared/context/user-profile-context.jsx";
 
 function Inventory() {
 const facilityData = {
@@ -23,7 +20,7 @@ const facilityData = {
   ],
   hours: "24/7",
 };
-  const { user } = useAuth(); 
+  // const { user } = useProfileContext();
   const [editing, setEditing] = useState(false);
   const [editingBloodType, setEditingBloodType] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -104,7 +101,7 @@ const facilityData = {
               <input
                 type='number'
                 value={editingBloodType.stock}
-                onInput={(e) => {
+                onInput={() => {
                   // e.target.style.width = `${e.target.value.length * 10 + 20}px`;
                 }}
                 className='number-input w-8 text-center appearance-none focus:outline-none border border-background'
