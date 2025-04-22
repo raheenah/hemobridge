@@ -19,7 +19,7 @@ import FacilityDashboard from "./pages/Facility/Dashboard";
 import FacilityApp from "./pages/Facility/FacilityApp";
 import VerifyAccount from "./pages/Verify";
 import ProtectedRoute from "./ProtectedRoute";
-import Send_Code from "./pages/Resend Code";
+import Send_Code from "./pages/ResendCode";
 import Inventory from "./pages/Facility/Inventory";
 import Emergency_Requests from "./pages/Facility/Emergency";
 
@@ -58,7 +58,7 @@ function App() {
             <Route path='notifications' element={<Notifications />} />
           </Route>
           
-          <Route path='/facility' element={<FacilityApp />}>
+          <Route path='/facility' element={<ProtectedRoute children={<FacilityApp />} /> }>
             <Route path='dashboard' element={<FacilityDashboard />} />
             <Route path='account' element={<Account />} />
             <Route path='help' element={<Help />} />
