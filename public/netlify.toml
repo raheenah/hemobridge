@@ -1,6 +1,6 @@
 [[redirects]]
   from = "/api/*"
-  to = "https://proxima-api-o00b.onrender.com/:splat"
+  to = "https://https://hemobridge-project.onrender.com/:splat"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
