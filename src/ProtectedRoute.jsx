@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }) => {
 
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading route.....</p>;
 
   if (!user) {
     return <Navigate to="/" state={{ from: location }} replace />;

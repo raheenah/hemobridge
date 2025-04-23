@@ -43,7 +43,7 @@ function App() {
           <Route path='verify-email' element={<Send_Code />} />
         </Route>
 
-        {/* <Route element={<ProtectedRoute />}> */}
+        <Route element={<ProtectedRoute />}>
 
          <Route path='/user' element={<ProtectedRoute children={<UserApp />} />}>
           <Route path='educational-content' element={<EducationalContent />} />
@@ -69,7 +69,7 @@ function App() {
 
        
           
-        {/* </Route> */}
+        </Route>
       </Routes>
     </Router>
   );
