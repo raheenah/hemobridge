@@ -19,9 +19,10 @@ function Signin() {
 
     await loginUser(formData)
     .then((res)=> {
-      console.log(res.user.role)
+      console.log("user's role", res.user.role)
       setMessage(res.message);
       navigateByRole(res.user.role)
+      
     })
     .catch((error)=> {
       console.error(error)
@@ -29,8 +30,16 @@ function Signin() {
     })
   };
 
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: name === "email" ? value.toLowerCase() : value,
+    });
   };
 
   const togglePassword = () => {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ProfileApi } from "./api/profile.api";
 import { ProfileContext } from "./shared/context/user-profile-context";
 
-const ProtectedRoute = ({children}) => {
+const ProtectedRoute = ({ children }) => {
   // const { user } = useAuth();
   // const { user  } = useProfileContext();
   const [user, setUser] = useState();
@@ -10,16 +10,34 @@ const ProtectedRoute = ({children}) => {
 
   useEffect(() => {
     ProfileApi.fetchMyProfile()
-    .then((data)=> setUser(data))
-    .catch((error)=> {
-      console.error(error)
-      throw error
-    })
-    .finally(()=> setTimeout(() => setLoading(false), 100))
+      .then((data) => setUser(data))
+      .catch((error) => {
+        console.error(error)
+        throw error
+      })
+      .finally(() => setTimeout(() => setLoading(false), 100))
 
   }, []);
 
   if (loading) return <p>Loading...</p>;
+
+//  else if (!user) return <Navigate to='/' replace />;
+//  else if (user.role === "donor") {
+//     return window.location.pathname.startsWith("/facility") ? (
+//       <Navigate to='/user/dashboard' replace />
+//     ) : (
+//       <Outlet />
+//     );
+//   }
+//   else {
+//     return window.location.pathname.startsWith("/user") ? (
+//       <Navigate to='/facility/dashboard' replace />
+//     ) : (
+//       <Outlet />
+//     );
+//   }
+
+
   return (
     <ProfileContext.Provider value={{ user }}>
       { children }

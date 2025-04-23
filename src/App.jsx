@@ -26,49 +26,49 @@ import Emergency_Requests from "./pages/Facility/Emergency";
 
 function App() {
   return (
-      <Router>
-        <Routes>
-          <Route path='/' element={<WelcomePage />}>
-            <Route index element={<Signin />} />
-            <Route path='forgot-password' element={<ForgotPassword />} />
-            <Route path='reset-link-sent' element={<LinkSent />} />
-            <Route path='reset-password' element={<ResetPassword />} />
-            <Route
-              path='reset-password-success'
-              element={<PasswordResetSuccess />}
-            />
-            <Route
-              path='terms-and-conditions'
-              element={<TermsAndConditions />}
-            />
-            <Route path='sign-up' element={<SignUp />} />
-            <Route path='verify-otp' element={<VerifyAccount />} />
-            <Route path='verify-email' element={<Send_Code />} />
-          </Route>
+    <Router>
+      <Routes>
+        <Route path='/' element={<WelcomePage />}>
+          <Route index element={<Signin />} />
+          <Route path='forgot-password' element={<ForgotPassword />} />
+          <Route path='reset-link-sent' element={<LinkSent />} />
+          <Route path='reset-password' element={<ResetPassword />} />
+          <Route
+            path='reset-password-success'
+            element={<PasswordResetSuccess />}
+          />
+          <Route path='terms-and-conditions' element={<TermsAndConditions />} />
+          <Route path='sign-up' element={<SignUp />} />
+          <Route path='verify-otp' element={<VerifyAccount />} />
+          <Route path='verify-email' element={<Send_Code />} />
+        </Route>
 
-          <Route path='/user' element={<ProtectedRoute children={<UserApp />} />}>
-            <Route
-              path='educational-content'
-              element={<EducationalContent />}
-            />
-            <Route path='donate' element={<Donate />} />
-            <Route path='account' element={<Account />} />
-            <Route path='help' element={<Help />} />
-            <Route path='dashboard' element={<Dashboard />} />
-            <Route path='notifications' element={<Notifications />} />
-          </Route>
-          
-          <Route path='/facility' element={<ProtectedRoute children={<FacilityApp />} /> }>
-            <Route path='dashboard' element={<FacilityDashboard />} />
-            <Route path='account' element={<Account />} />
-            <Route path='help' element={<Help />} />
-            <Route path='inventory' element={<Inventory />} />
-            <Route path='emergency-requests' element={<Emergency_Requests />} />
+        {/* <Route element={<ProtectedRoute />}> */}
 
-            <Route path='notifications' element={<Notifications />} />
+        <Route path='/user' element={<ProtectedRoute children={<UserApp />} />}>
+          <Route path='educational-content' element={<EducationalContent />} />
+          <Route path='donate' element={<Donate />} />
+          <Route path='account' element={<Account />} />
+          <Route path='help' element={<Help />} />
+          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='notifications' element={<Notifications />} />
+        </Route>
+
+        <Route
+          path='/facility'
+          element={<ProtectedRoute children={<FacilityApp />} />}
+        >
+          <Route path='dashboard' element={<FacilityDashboard />} />
+          <Route path='account' element={<Account />} />
+          <Route path='help' element={<Help />} />
+          <Route path='inventory' element={<Inventory />} />
+          <Route path='emergency-requests' element={<Emergency_Requests />} />
+
+          <Route path='notifications' element={<Notifications />} />
           </Route>
-        </Routes>
-      </Router>
+          {/* </Route> */}
+      </Routes>
+    </Router>
   );
 }
 
