@@ -12,12 +12,15 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     ProfileApi.fetchMyProfile()
-      .then((data) => setUser(data))
-      .catch((error) => {
-        console.error(error)
-        throw error
+      .then((data) => {
+        setUser(data);
+        console.log("user data", data);
       })
-      .finally(() => setTimeout(() => setLoading(false), 100))
+      .catch((error) => {
+        console.error(error);
+        throw error;
+      })
+      .finally(() => setTimeout(() => setLoading(false), 100));
 
   }, []);
 
@@ -26,6 +29,7 @@ const ProtectedRoute = ({ children }) => {
   if (!user) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
+
   return (
     <ProfileContext.Provider value={{ user }}>
       { children }
