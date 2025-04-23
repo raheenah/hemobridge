@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, Navigate } from "react-router-dom";
 import { ProfileApi } from "./api/profile.api";
 import { ProfileContext } from "./shared/context/user-profile-context";
 
@@ -7,6 +8,7 @@ const ProtectedRoute = ({ children }) => {
   // const { user  } = useProfileContext();
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     ProfileApi.fetchMyProfile()
@@ -21,23 +23,9 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) return <p>Loading...</p>;
 
-//  else if (!user) return <Navigate to='/' replace />;
-//  else if (user.role === "donor") {
-//     return window.location.pathname.startsWith("/facility") ? (
-//       <Navigate to='/user/dashboard' replace />
-//     ) : (
-//       <Outlet />
-//     );
-//   }
-//   else {
-//     return window.location.pathname.startsWith("/user") ? (
-//       <Navigate to='/facility/dashboard' replace />
-//     ) : (
-//       <Outlet />
-//     );
-//   }
-
-
+  if (!user) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
   return (
     <ProfileContext.Provider value={{ user }}>
       { children }

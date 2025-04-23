@@ -72,13 +72,13 @@ function Dashboard() {
   return (
     <div className=' flex text-sm flex-col   gap-4 py-2  px-4   w-full'>
       <div className='bg-white py-3  px-6 flex flex-col gap-4 md:gap-2'>
-        <div className='flex items-center justify-between'>
+        <div className='flex flex-col gap-4 md:gap-0 md:flex-row md:items-center justify-between'>
           <h2 className='text-lg md:text-base font-bold'>Overview</h2>
           <button
             onClick={() => {
               navigate("/user/donate");
             }}
-            className='bg-background hover:bg-pink    w-full max-w-40  font-bold  text-white py-1 px-2'
+            className='bg-background hover:bg-pink  self-end md:self-start  w-full max-w-40  font-bold  text-white py-1 px-2'
           >
             Schedule a Donation
           </button>

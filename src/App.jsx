@@ -45,16 +45,16 @@ function App() {
 
         {/* <Route element={<ProtectedRoute />}> */}
 
-        <Route path='/user' element={<ProtectedRoute children={<UserApp />} />}>
+         <Route path='/user' element={<ProtectedRoute children={<UserApp />} />}>
           <Route path='educational-content' element={<EducationalContent />} />
           <Route path='donate' element={<Donate />} />
           <Route path='account' element={<Account />} />
           <Route path='help' element={<Help />} />
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='notifications' element={<Notifications />} />
-        </Route>
+         </Route>
 
-        <Route
+         <Route
           path='/facility'
           element={<ProtectedRoute children={<FacilityApp />} />}
         >
@@ -65,8 +65,11 @@ function App() {
           <Route path='emergency-requests' element={<Emergency_Requests />} />
 
           <Route path='notifications' element={<Notifications />} />
-          </Route>
-          {/* </Route> */}
+         </Route>
+
+       
+          
+        {/* </Route> */}
       </Routes>
     </Router>
   );
