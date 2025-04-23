@@ -23,7 +23,7 @@ function ResetPassword() {
               <i className='fa-solid fa-eye'></i>
             </button>
           </div>
-          <div className=' p-4 relative flex items-center border border-1 text-text-dark-gray'>
+          <div className=' p-4 relative flex items-center border-1 text-text-dark-gray'>
             <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
              Confirm New Password<span className='text-red-500'>*</span>
             </label>
