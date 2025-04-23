@@ -24,8 +24,7 @@ function Signin() {
       navigateByRole(res.user.role)
     })
     .catch((error)=> {
-      console.error(error)
-      throw error
+      setMessage(error.message)
     })
   };
 
