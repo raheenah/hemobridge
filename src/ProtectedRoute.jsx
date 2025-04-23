@@ -10,7 +10,11 @@ const ProtectedRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
+
+
   useEffect(() => {
+        console.log("user data", user);
+
     ProfileApi.fetchMyProfile()
       .then((data) => {
         setUser(data);
@@ -26,9 +30,9 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) return <p>Loading route.....</p>;
 
-  if (!user) {
-    return <Navigate to="/" state={{ from: location }} replace />;
-  }
+  // if (!user) {
+  //   return <Navigate to="/" state={{ from: location }} replace />;
+  // }
 
   return (
     <ProfileContext.Provider value={{ user }}>
