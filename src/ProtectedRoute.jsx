@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
 import { ProfileApi } from "./api/profile.api";
+import { useNavigate } from "react-router-dom";
 import { ProfileContext } from "./shared/context/user-profile-context";
 
 const ProtectedRoute = ({children}) => {
   // const { user } = useAuth();
-  // const { user  } = useProfileContext();
+  // const { profile } = useProfileContext();
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     ProfileApi.fetchMyProfile()
     .then((data)=> setUser(data))
     .catch((error)=> {
       console.error(error)
-      throw error
+      navigate("/");
     })
     .finally(()=> setTimeout(() => setLoading(false), 100))
 
-  }, []);
+  }, [navigate]);
 
   if (loading) return <p>Loading...</p>;
   return (

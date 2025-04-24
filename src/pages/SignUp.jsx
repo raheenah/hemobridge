@@ -156,7 +156,7 @@ setFormData((prev) => ({
             >
               <div className=' p-4 relative border-1 text-text-dark-gray'>
                 <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                  Full Name <span className='text-red-500'>*</span>
+                 Name <span className='text-red-500'>*</span>
                 </label>
                 <input
                   placeholder='John Doe'
