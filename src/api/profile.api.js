@@ -8,7 +8,7 @@ export const ProfileApi = {
         .catch((error)=> { throw error })
     
 
-            console.log("Profile fetched:", data);
+          console.log("Profile fetched:", data);
 
         return data
     }
