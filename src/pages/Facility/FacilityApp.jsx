@@ -54,7 +54,7 @@ function FacilityApp() {
                     Welcome back,
                   </p>
                   <p className='font-semibold text-right text-sm'>
-                    {user.name}{" "}
+                    {/* {user.name}{" "} */}
                   </p>
                 </div>
                 <img src={Logo} className='rounded-full' />{" "}
