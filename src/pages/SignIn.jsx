@@ -93,6 +93,7 @@ setLoading(true)
         <button
           type='submit'
           onClick={handleSubmit}
+          disabled={loading}
           // className='bg-background  w-full font-bold text-xl text-white py-3'
           className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%] font-bold text-base text-white py-2 px-4'
         >

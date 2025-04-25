@@ -351,6 +351,7 @@ setHealthLoading(true)
               <button
                 // onClick={() => navigate("/")}
                 type='submit'
+                disabled={loading}
                 className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%]  font-bold text-base text-white py-2 px-4'
               >
                 {/* Create Account{" "} */}
@@ -534,6 +535,7 @@ setHealthLoading(true)
               <button
                 // onClick={() => navigate("/")}
                 type='submit'
+                disabled={healthLoading}
                 className='bg-background hover:bg-pink !important   w-full font-bold text-xl text-white py-3'
               >
                 {/* Create Account{" "} */}
