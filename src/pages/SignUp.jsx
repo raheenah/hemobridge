@@ -11,6 +11,8 @@ function SignUp() {
   const [accountType, setAccountType] = useState("donor");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [healthLoading, setHealthLoading] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [ConfirmFacilityPassword, setConfirmFacilityPassword] = useState("");
@@ -44,8 +46,8 @@ setFormData((prev) => ({
 
 
 
-    console.log("Selected Blood Type:", e.target.value);
-    console.log("Selected Blood Type lowercase:", e.target.value.toLowerCase());
+    // console.log("Selected Blood Type:", e.target.value);
+    // console.log("Selected Blood Type lowercase:", e.target.value.toLowerCase());
   };
 
   const handleChangeFacility = (e) => {
@@ -54,12 +56,14 @@ setFormData((prev) => ({
   
   const handleSubmitDonor = async (e) => {
     e.preventDefault();
-    setMessage("")
     
     if(formData.password !== ConfirmPassword){
       setMessage("Passwords do not match");
       return;
     }
+    setMessage("")
+
+    setLoading(true)
 
     await DonorApi.register({
       firstName: formData.name.split(" ")[0],
@@ -78,6 +82,7 @@ setFormData((prev) => ({
       setMessage(error.response.data?.message ?? error.message);
       console.error("Registration Error:", error);
     })
+    .finally(()=> setLoading(false))
   };
 
   const handleSubmitFacility = async (e) => {
@@ -87,6 +92,8 @@ setFormData((prev) => ({
       setMessage("Passwords do not match");
       return;
     }
+setHealthLoading(true)
+    setMessage("")
 
     const payload = {
       facilityName: facilityData.facilityName,
@@ -107,7 +114,8 @@ setFormData((prev) => ({
     }).catch((error)=> { 
       setMessage(error.response.data?.message ?? error.message);
       console.error("Registration Error:", error);
-    })
+    }).finally(()=> setHealthLoading(false))
+    
   };
   
   const togglePassword = (e) => {
@@ -120,10 +128,10 @@ setFormData((prev) => ({
     setShowConfirmPassword((prev) => !prev);
   };
   return (
-    <div className=' flex items-center font-inter w-full'>
-      <div className='  md:w-[85%]  mx-auto flex px-16 py-8  md:px-0 flex-col text-center gap-5 items-center '>
+    <div className=' flex items-center font-inter  w-full'>
+      <div className='  md:w-[85%] w-full  mx-auto flex px-4 py-8  md:px-0 flex-col text-center gap-5 items-center '>
         <h1 className=' font-[700] font-space text-2xl'>Create New Account </h1>
-        <div className='flex w-[80%] mx-auto  flex-col gap-6 '>
+        <div className='flex w-full md:w-[80%] mx-auto  flex-col gap-6 '>
           <div className='grid grid-cols-2 text-sm font-base w-full '>
             <button
               onClick={() => setAccountType("donor")}
@@ -145,7 +153,7 @@ setFormData((prev) => ({
               }  
                w-full border-b-2 py-3 px-4 `}
             >
-              HealthCare
+              HealthCare Staff
             </button>
           </div>
 
@@ -345,7 +353,8 @@ setFormData((prev) => ({
                 type='submit'
                 className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%]  font-bold text-base text-white py-2 px-4'
               >
-                Create Account{" "}
+                {/* Create Account{" "} */}
+                {loading ? "Creating..." : "Create Account"}
               </button>
             </form>
           )}
@@ -527,7 +536,8 @@ setFormData((prev) => ({
                 type='submit'
                 className='bg-background hover:bg-pink !important   w-full font-bold text-xl text-white py-3'
               >
-                Create Account{" "}
+                {/* Create Account{" "} */}
+                {healthLoading ? "Creating..." : "Create Account"}
               </button>
             </form>
           )}

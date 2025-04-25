@@ -3,13 +3,14 @@ import Logo from "../../assets/Vector.svg";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useProfileContext } from "../../shared/context/user-profile-context";
 
+
 function UserApp() {
 
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const user = useProfileContext();
-
+// console.log(user)
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -52,7 +53,7 @@ function UserApp() {
                     Welcome back,
                   </p>
                   <p className='font-semibold text-right text-sm'>
-                    {user.name}{" "}
+                    {user.user.firstName}{" "}
                   </p>
                 </div>
                 <img src={Logo} className='rounded-full' />{" "}

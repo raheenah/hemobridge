@@ -13,7 +13,15 @@ function Account() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [message, setMessage] = useState("");
     const [editNotifications, setEditNotifications] = useState(false);
+  const facilityId = user?.facilityId 
+  
+  
 
+  // const async fetchFacility() {
+    
+  // }
+  
+  console.log("user",user);
   const togglePassword = (e) => {
     e.preventDefault();
     setShowPassword((prev) => !prev);
@@ -61,14 +69,14 @@ function Account() {
 
   return (
     <div className=' flex h-full   md:bg-white flex-col text-xs md:gap-4 md:py-3  md:px-6   w-full'>
-      <h1 className='text-xs font-bold hidden md:block '>
+      {/* <h1 className='text-xs font-bold hidden md:block '>
         Profile Information
-      </h1>
+      </h1> */}
 
       <div className='flex flex-col md:flex-row justify-between gap-4'>
         <div className='flex flex-col bg-white py-3  px-6 md:py-0  md:px-0 gap-4 md:gap-2'>
           <h1 className='text-xs font-bold '>Profile Information</h1>
-          {user?.role === "donor" ? (
+          {/* {user?.role === "donor" ? (
             <div className='grid grid-cols-[auto_auto] gap-8'>
               <div className='flex flex-col gap-3 md:gap-1'>
                 <p>Full Name</p>
@@ -108,7 +116,27 @@ function Account() {
                 <p>221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos</p>
               </div>
             </div>
-          )}
+          )} */}
+          <div className='grid grid-cols-[auto_auto] gap-8'>
+            <div className='flex flex-col gap-1'>
+              { (user?.firstName || user?.lastName) && (<p>Full Name</p>)}
+              {user?.facilityId && <p>Facility ID</p>}
+              <p>User ID</p>
+              {/* <p>Email Address</p> */}
+              <p>Phone Number</p>
+              {/* <p>Contact Address</p> */}
+            </div>
+            <div className='flex flex-col gap-1'>
+              <p>
+                {user?.firstName} {user?.lastName}
+              </p>
+              {user?.facilityId && <p>{user?.facilityId}</p>}
+              <p>{user?.id}</p>
+              {/* <p>{user?.email}</p> */}
+              <p>{user?.phoneNumber}</p>
+              {/* <p>221B, Baker Street, Off Asake Road, Lekki Phase 1, Lagos</p> */}
+            </div>
+          </div>
 
           <button
             onClick={() => {

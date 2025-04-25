@@ -9,6 +9,7 @@ function Signin() {
   const { navigateByRole } = useRoleNavigation()
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,7 +17,7 @@ function Signin() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+setLoading(true)
     await loginUser(formData)
     .then((res)=> {
       console.log(res.user.role)
@@ -26,6 +27,7 @@ function Signin() {
     .catch((error)=> {
       setMessage(error.message)
     })
+    .finally(()=> setLoading(false))
   };
 
   const handleChange = (e) => {
@@ -94,7 +96,7 @@ function Signin() {
           // className='bg-background  w-full font-bold text-xl text-white py-3'
           className='bg-background hover:bg-pink  mx-auto w-full max-w-[80%] font-bold text-base text-white py-2 px-4'
         >
-          Sign In
+          {loading ? "Signing In..." : "Sign In"}
         </button>
       </form>
       {message && (

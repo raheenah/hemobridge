@@ -22,11 +22,16 @@ const ProtectedRoute = ({children}) => {
   }, [navigate]);
 
   if (loading) return <p>Loading...</p>;
+
+  if (!user) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+
   return (
     <ProfileContext.Provider value={{ user }}>
-      { children }
+      {children}
     </ProfileContext.Provider>
-  )
+  );
 
   // if (!user) return <Navigate to='/' replace />;
   // if (user.role === "donor") {

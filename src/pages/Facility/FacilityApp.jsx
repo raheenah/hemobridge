@@ -2,16 +2,43 @@ import { useState , useEffect } from "react";
 import Logo from "../../assets/Vector.svg";
 import { NavLink, Outlet , useLocation, useNavigate } from "react-router-dom";
 import { useProfileContext } from "src/shared/context/user-profile-context";
-
+import { FacilityDetailsApi } from "../../api/facilityDetails.api ";
 
 function FacilityApp() {
   const location = useLocation();
   const navigate = useNavigate()
   const { user } = useProfileContext()
+  // const facility = useFacilityContext()
+  const [facility, setFacility] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+const  facilityId = user.facilityId
 
 
-    useEffect(() => {
+// console.log("facility details...:", facility);
+// console.log("user details...:", user);
+
+ 
+
+//   useEffect(() => {
+// FacilityDetailsApi.fetchFacilityDetails(facilityId)
+//   .then((data) => {
+//     setFacility(data) 
+//     console.log("facility details fetched", data);
+//   })
+//       .catch((error) => {
+//         console.error(error);
+//         // navigate("/");
+//       })
+//       .finally(() => setTimeout(() => setIsOpen(false), 100));
+//   }, []);
+
+  
+  
+  
+  // console.log("facility details fetched", facility);
+
+
+  useEffect(() => {
       if (isOpen) {
         document.body.style.overflow = "hidden";
       } else {
@@ -23,7 +50,7 @@ function FacilityApp() {
       };
     }, [isOpen]);
   
-  
+  // console.log("current user ",user)
   return (
     <div className='flex  min-h-screen h-screen '>
       <div className='w-full flex flex-col '>

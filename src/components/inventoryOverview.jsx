@@ -1,6 +1,8 @@
 import {useEffect,useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Facilities from './Facilities';
+import { FacilityListApi } from "../api/facilityList";
+
 import { useProfileContext } from '../shared/context/user-profile-context';
 
 
@@ -9,14 +11,25 @@ export default function InventoryOverview() {
   const navigate = useNavigate()
   const user = useProfileContext();
   const [facilities, setFacilities] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [viewList, setViewList] = useState(false);
 
 
    useEffect(() => {
-     fetch("http://localhost:8000/facilities")
-       .then((res) => res.json())
-       .then((data) => setFacilities(data))
-       .catch((error) => console.error("Error fetching data:", error));
+     setLoading(true);
+    //  console.log("Fetching facilities list... current page:", 1);
+     FacilityListApi.fetchFacilitiesList(1)
+       .then((res) => {
+         // res.json()
+        //  console.log("res", res);
+         setFacilities(res.list);
+        //  setTotalPages(res.totalPages);
+       })
+
+       .catch((error) => console.error("Error fetching data:", error))
+       .finally(() => {
+         setLoading(false);
+       });
    }, []);
 
    useEffect(() => {
@@ -44,8 +57,8 @@ export default function InventoryOverview() {
    navigate("/user/donate");
  } else {
    setViewList(!viewList);
-   console.log("clicked");
-   console.log(user.role);
+  //  console.log("clicked");
+  //  console.log(user.role);
  }            }}
           >
             <i className='fa-solid fa-arrow-up-right-from-square'></i>

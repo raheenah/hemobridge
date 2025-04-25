@@ -1,20 +1,57 @@
-import {useEffect,useState,useMemo} from 'react'
+import { useEffect, useState, useMemo,  } from 'react'
+import { FacilityListApi } from '../api/facilityList';
+import { useProfileContext } from "src/shared/context/user-profile-context.jsx";
+
 
 export default function Facilities() {
- const rowsPerPage = 14;
+  //  const rowsPerPage = 14;
+  const user = useProfileContext();
   const [facilities, setFacilities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [details, setDetails] = useState(false);
+  const [totalPages, setTotalPages] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
 
+  // console.log("currentpage...", currentPage
+  // );
   useEffect(() => {
-    fetch("http://localhost:8000/facilities")
-      .then((res) => res.json())
-      .then((data) => setFacilities(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+    setLoading(true);
+    // console.log("Fetching facilities list... current page:", currentPage);
+    FacilityListApi.fetchFacilitiesList(currentPage)
+      .then((res) => {
+        // res.json()
+        // console.log("res", res)
+        setFacilities(res.list);
+        setTotalPages(res.totalPages);
+  })
+      
+      .catch((error) => console.error("Error fetching data:", error))
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [currentPage]);
+
+  // useEffect(() => { 
+  //   // console.log("Facilities data:", facilities);
+  //   if (facilities.length > 0) {
+  //     console.log("Updated facilities data:", facilities);
+  //   } else {
+  //     console.log("Still loading or empty...");
+  //   }
+  // }, [facilities])
+  
+  useEffect(() => {
+    if (!loading) {
+      // console.log("Final facilities data:", facilities);
+    }
+    else {
+      // console.log("Loading facilities data...");
+    }
+  }, [facilities, loading]);
+
 
   const filteredList = useMemo(() => {
     if (!searchQuery) {
@@ -26,27 +63,27 @@ export default function Facilities() {
     );
   }, [searchQuery, facilities]);
 
-  const totalPages = Math.ceil(filteredList.length / rowsPerPage);
-  const indexOfLastFacility = currentPage * rowsPerPage;
-  const indexOfFirstFacility = indexOfLastFacility - rowsPerPage;
-  const currentFacilities = filteredList.slice(
-    indexOfFirstFacility,
-    indexOfLastFacility
-  );
+  // const totalPages = Math.ceil(filteredList.length / rowsPerPage);
+  // const indexOfLastFacility = currentPage * rowsPerPage;
+  // const indexOfFirstFacility = indexOfLastFacility - rowsPerPage;
+  // const currentFacilities = filteredList.slice(
+  //   indexOfFirstFacility,
+  //   indexOfLastFacility
+  // );
 
-  const getPaginationNumbers = () => {
-    if (totalPages <= 5) {
-      return [...Array(totalPages)].map((_, index) => index + 1);
-    } else {
-      if (currentPage <= 3) {
-        return [1, 2, 3, "...", totalPages];
-      } else if (currentPage >= totalPages - 2) {
-        return [1, "...", totalPages - 2, totalPages - 1, totalPages];
-      } else {
-        return [1, "...", currentPage, "...", totalPages];
-      }
-    }
-  };
+  // const getPaginationNumbers = () => {
+  //   if (totalPages <= 5) {
+  //     return [...Array(totalPages)].map((_, index) => index + 1);
+  //   } else {
+  //     if (currentPage <= 3) {
+  //       return [1, 2, 3, "...", totalPages];
+  //     } else if (currentPage >= totalPages - 2) {
+  //       return [1, "...", totalPages - 2, totalPages - 1, totalPages];
+  //     } else {
+  //       return [1, "...", currentPage, "...", totalPages];
+  //     }
+  //   }
+  // };
   return (
     <div className='flex flex-col h-full   gap-4 '>
       <div className='flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between w-full'>
@@ -92,20 +129,56 @@ export default function Facilities() {
           <thead className='bg-light-pink text-left  '>
             <tr className='text-xs md:text-sm'>
               <th className='py-1 pl-1 pr-2 md:pl-0'>Facility Name</th>
-              <th className='hidden md:table-cell'>Address</th>
-              <th className='pr-2 md:pl-0'> Blood Type</th>
-              <th>Urgency Level</th>
-              <th className='hidden md:table-cell'>Operating Hours</th>
+              <th className=''>Address</th>
+              {/* <th className='pr-2 md:pl-0 hidden md:table-cell'> Blood Type</th> */}
+              {/* <th className='hidden md:table-cell'>Urgency Level</th> */}
+              <th className=''>Operating Hours</th>
             </tr>
           </thead>
 
           <tbody>
-            {currentFacilities.map((facility) => (
+            {/* {currentFacilities.map((facility) => ( */}
+            {filteredList.map((facility) => (
+              // <tr
+              //   className='text-xs md:text-sm border-b-1  border-background-grey'
+              //   key={facility.id}
+              // >
+              //   <button
+              //     onClick={() => {
+              //       setDetails(true);
+              //       setSelectedFacility(facility);
+              //     }}
+              //     className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold'
+              //   >
+              //     {facility.name}
+              //   </button>
+              //   <td className='hidden md:table-cell'>{facility.address}</td>
+              //   <td className='pr-2 md:pl-0'>
+              //     {facility.bloodType.join(", ")}
+              //   </td>
+              //   <td className=' '>
+              //     <div className='flex items-center my-auto  gap-2'>
+              //       <i
+              //         className={` fa-solid fa-circle text-green
+              //       ${
+              //         facility.urgency === "High"
+              //           ? "text-red"
+              //           : facility.urgency === "Medium"
+              //           ? "text-yellow"
+              //           : "text-green"
+              //       }`}
+              //       ></i>
+
+              //       {facility.urgency}
+              //     </div>
+              //   </td>
+              //   <td className='hidden md:table-cell'>{facility.hours}</td>
+              // </tr>
               <tr
                 className='text-xs md:text-sm border-b-1  border-background-grey'
                 key={facility.id}
               >
-                <button
+               <td> <button
                   onClick={() => {
                     setDetails(true);
                     setSelectedFacility(facility);
@@ -113,12 +186,12 @@ export default function Facilities() {
                   className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold'
                 >
                   {facility.name}
-                </button>
-                <td className='hidden md:table-cell'>{facility.address}</td>
-                <td className='pr-2 md:pl-0'>
+                </button></td>
+                <td className=''>{facility.address}</td>
+                {/* <td className='pr-2 md:pl-0'>
                   {facility.bloodType.join(", ")}
-                </td>
-                <td className=' '>
+                </td> */}
+                {/* <td className=' '>
                   <div className='flex items-center my-auto  gap-2'>
                     <i
                       className={` fa-solid fa-circle text-green
@@ -133,8 +206,8 @@ export default function Facilities() {
 
                     {facility.urgency}
                   </div>
-                </td>
-                <td className='hidden md:table-cell'>{facility.hours}</td>
+                </td> */}
+                <td className=''>{facility.operationalHours}</td>
               </tr>
             ))}
           </tbody>
@@ -149,7 +222,7 @@ export default function Facilities() {
           <i className='fa-solid fa-angle-left'></i>
         </button>
 
-        {getPaginationNumbers().map((page, index) => (
+        {/* {getPaginationNumbers().map((page, index) => (
           <button
             key={index}
             className={`px-2 py-1 hover:bg-light-pink  ${
@@ -160,12 +233,13 @@ export default function Facilities() {
           >
             {page}
           </button>
-        ))}
-
+        ))} */}
+        <p>{currentPage}</p>
         <button
           className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          onClick={
+            () => setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            // setCurrentPage((prev) => (prev + 1))
           }
           disabled={currentPage === totalPages}
         >
@@ -187,7 +261,8 @@ export default function Facilities() {
               <div className='flex justify-between items-center'>
                 <h1 className='font-extrabold text-sm'>
                   {" "}
-                  {selectedFacility.name}
+                  {selectedFacility.name?.charAt(0).toUpperCase() +
+                    selectedFacility.name?.slice(1)}
                 </h1>
                 <button onClick={() => setDetails(!details)}>
                   {" "}
@@ -206,18 +281,18 @@ export default function Facilities() {
                   <span className='text-text-dark-gray'>Address:</span>{" "}
                   {selectedFacility.address}
                 </p>
-                <p>
+                {/* <p>
                   <span className='text-text-dark-gray'>Contact Number:</span>{" "}
                   {selectedFacility.phone}
                 </p>
                 <p>
                   <span className='text-text-dark-gray'>Email:</span>{" "}
                   {selectedFacility.email}
-                </p>
+                </p> */}
 
                 <p>
                   <span className='text-text-dark-gray'>Operationg Hours:</span>{" "}
-                  {selectedFacility.hours}
+                  {selectedFacility.operationalHours}
                 </p>
               </div>
               <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
@@ -236,7 +311,7 @@ export default function Facilities() {
                       <th className='text-left'>Urgency</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  {/* <tbody>
                     {selectedFacility.stock.map((blood, index) => (
                       <tr
                         className='text-xs border-b-1 text-center border-background-grey'
@@ -264,111 +339,121 @@ export default function Facilities() {
                         </td>
                       </tr>
                     ))}
-                  </tbody>
+                  </tbody> */}
                 </table>
               </div>
             </div>
 
-            <div className='flex flex-col gap-4'>
-              <h2 className='font-bold text-sm text-text-dark-gray'>
-                Donation Booking Details
-              </h2>
-              <form className=' flex flex-col gap-4'>
-                <div className='grid max-w-[70%] grid-rows-2 gap-4 grid-cols-2'>
-                  <div className='w-full px-4  relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
-                      Blood Type <span className='text-red-500'>*</span>
-                    </label>{" "}
-                    <select
-                      className=' focus:outline-none py-4   w-full   text-input-text '
-                      required
-                    >
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        disabled
-                        selected
+            {user.role === "donor" && (
+              <div className='flex flex-col gap-4'>
+                <h2 className='font-bold text-sm text-text-dark-gray'>
+                  Donation Booking Details
+                </h2>
+                <form className=' flex flex-col gap-4'>
+                  <div className='grid max-w-[70%] grid-rows-2 gap-4 grid-cols-2'>
+                    <div className='w-full px-4  relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                        Blood Type <span className='text-red-500'>*</span>
+                      </label>{" "}
+                      <select
+                        className=' focus:outline-none py-4   w-full   text-input-text '
+                        required
                       >
-                        Choose...
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A+'
-                      >
-                        A+{" "}
-                      </option>{" "}
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A-'
-                      >
-                        A-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        B+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        B-{" "}
-                      </option>{" "}
-                      <option value='B+'>O+ </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        O-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        AB+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        AB-{" "}
-                      </option>
-                    </select>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          disabled
+                          selected
+                        >
+                          Choose...
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='A+'
+                        >
+                          A+{" "}
+                        </option>{" "}
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='A-'
+                        >
+                          A-{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B+'
+                        >
+                          B+{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          B-{" "}
+                        </option>{" "}
+                        <option value='B+'>O+ </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          O-{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B+'
+                        >
+                          AB+{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          AB-{" "}
+                        </option>
+                      </select>
+                    </div>
+                    <div className='col-span-1 row-span-1'></div>
+                    <div className=' p-4 relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Date<span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='No., Street, Town, Zip Code, State.'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='date'
+                        required
+                      />
+                    </div>
+                    <div className=' p-4 relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Time<span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='No., Street, Town, Zip Code, State.'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='time'
+                        required
+                      />
+                    </div>
                   </div>
-                  <div className='col-span-1 row-span-1'></div>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Date<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='date'
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Time<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='time'
-                      required
-                    />
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    setDetails(!details), setSubmitted(!submitted);
-                  }}
-                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
-                >
-                  Schedule
-                </button>
-              </form>
-            </div>
+                  <button
+                    onClick={() => {
+                      setDetails(!details), setSubmitted(!submitted);
+                    }}
+                    className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
+                  >
+                    Schedule
+                  </button>
+                </form>
+              </div>
+            )}
+            <button
+              onClick={() => {
+                setDetails(!details)
+              }}
+              className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
+            >
+              Close
+            </button>
           </div>
         </div>
       )}{" "}
