@@ -20,7 +20,7 @@ function Signin() {
 setLoading(true)
     await loginUser(formData)
     .then((res)=> {
-      console.log(res.user.role)
+      // console.log(res.user.role)
       setMessage(res.message);
       navigateByRole(res.user.role)
     })

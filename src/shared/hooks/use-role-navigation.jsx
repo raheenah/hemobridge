@@ -11,7 +11,7 @@ export const useRoleNavigation = () => {
         
         const route = roleRoutes[role];
         if (route) {
-            console.log(route)
+            // console.log(route)
             navigate(route);
         }
     };
