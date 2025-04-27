@@ -28,7 +28,6 @@ import ProfileContextProvider  from "./ProfileContextProvider";
 function App() {
   return (
       <Router>
-         <ProfileContextProvider>
    
         <Routes>
           <Route path='/' element={<WelcomePage />}>
@@ -49,7 +48,7 @@ function App() {
             <Route path='verify-email' element={<Send_Code />} />
           </Route>
 
-          <Route path='/user' element={<UserApp />}>
+        <Route path='/user' element={<ProtectedRoute children={<UserApp />}/>}>
             <Route
               path='educational-content'
               element={<EducationalContent />}
@@ -61,7 +60,7 @@ function App() {
             <Route path='notifications' element={<Notifications />} />
           </Route>
 
-          <Route path='/facility' element={<FacilityApp />}>
+        <Route path='/facility' element={<ProtectedRoute children={<FacilityApp />} />}>
             <Route path='dashboard' element={<FacilityDashboard />} />
             <Route path='account' element={<Account />} />
             <Route path='help' element={<Help />} />
@@ -71,7 +70,6 @@ function App() {
             <Route path='notifications' element={<Notifications />} />
           </Route>
         </Routes>
-         </ProfileContextProvider>
  </Router>
   );
 }

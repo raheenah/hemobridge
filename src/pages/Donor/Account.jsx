@@ -21,7 +21,7 @@ function Account() {
     
   // }
   
-  console.log("user",user);
+  // console.log("user",user);
   const togglePassword = (e) => {
     e.preventDefault();
     setShowPassword((prev) => !prev);

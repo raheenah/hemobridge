@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ProfileApi } from "./api/profile.api";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { ProfileContext } from "./shared/context/user-profile-context";
 
 const ProfileContextProvider = ({children}) => {
@@ -8,6 +8,7 @@ const ProfileContextProvider = ({children}) => {
   // const { profile } = useProfileContext();
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
   // const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +22,8 @@ const ProfileContextProvider = ({children}) => {
   }, []);
 
   if (loading) return <p>Loading...</p>;
+
+console.log("user", user);
 
   if (!user) {
     return <Navigate to='/' state={{ from: location }} replace />;
