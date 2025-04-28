@@ -1,52 +1,37 @@
 import {useEffect,useState,useMemo} from 'react'
+import { FacilityApi } from '../api/facility.api';
 
 export default function Facilities() {
- const rowsPerPage = 14;
-  const [facilities, setFacilities] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const [facilities, setFacilities] = useState({
+    list: [],
+    currentPage: 1,
+    totalPages: 1
+  });
+  const [currentPage, setCurrentPage] = useState(2);
   const [searchQuery, setSearchQuery] = useState("");
   const [details, setDetails] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/facilities")
-      .then((res) => res.json())
-      .then((data) => setFacilities(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+    FacilityApi.fetch(currentPage)
+    .then((data)=> setFacilities(data))
+    .catch((error)=> console.error("Error fetching data:", error));
+    
+  }, [currentPage]);
 
   const filteredList = useMemo(() => {
     if (!searchQuery) {
-      return facilities;
+      console.log(facilities.list)
+      return facilities.list;
     }
 
-    return facilities.filter((facility) =>
+    return facilities.list.filter((facility) =>
       facility.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [searchQuery, facilities]);
+  }, [searchQuery, facilities.list]);
 
-  const totalPages = Math.ceil(filteredList.length / rowsPerPage);
-  const indexOfLastFacility = currentPage * rowsPerPage;
-  const indexOfFirstFacility = indexOfLastFacility - rowsPerPage;
-  const currentFacilities = filteredList.slice(
-    indexOfFirstFacility,
-    indexOfLastFacility
-  );
-
-  const getPaginationNumbers = () => {
-    if (totalPages <= 5) {
-      return [...Array(totalPages)].map((_, index) => index + 1);
-    } else {
-      if (currentPage <= 3) {
-        return [1, 2, 3, "...", totalPages];
-      } else if (currentPage >= totalPages - 2) {
-        return [1, "...", totalPages - 2, totalPages - 1, totalPages];
-      } else {
-        return [1, "...", currentPage, "...", totalPages];
-      }
-    }
-  };
   return (
     <div className='flex flex-col h-full   gap-4 '>
       <div className='flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between w-full'>
@@ -98,46 +83,46 @@ export default function Facilities() {
               <th className='hidden md:table-cell'>Operating Hours</th>
             </tr>
           </thead>
-
-          <tbody>
-            {currentFacilities.map((facility) => (
-              <tr
-                className='text-xs md:text-sm border-b-1  border-background-grey'
-                key={facility.id}
-              >
-                <button
-                  onClick={() => {
-                    setDetails(true);
-                    setSelectedFacility(facility);
-                  }}
-                  className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold'
-                >
-                  {facility.name}
-                </button>
-                <td className='hidden md:table-cell'>{facility.address}</td>
-                <td className='pr-2 md:pl-0'>
-                  {facility.bloodType.join(", ")}
-                </td>
-                <td className=' '>
-                  <div className='flex items-center my-auto  gap-2'>
-                    <i
-                      className={` fa-solid fa-circle text-green
-                    ${
-                      facility.urgency === "High"
-                        ? "text-red"
-                        : facility.urgency === "Medium"
-                        ? "text-yellow"
-                        : "text-green"
-                    }`}
-                    ></i>
-
-                    {facility.urgency}
-                  </div>
-                </td>
-                <td className='hidden md:table-cell'>{facility.hours}</td>
-              </tr>
-            ))}
-          </tbody>
+            {
+              facilities.list
+              ? <tbody>
+                  {filteredList.map((facility) => (
+                    <tr
+                      className='text-xs md:text-sm border-b-1  border-background-grey'
+                      key={facility.id}
+                    >
+                      <div
+                        onClick={() => {
+                          setDetails(true);
+                          setSelectedFacility(facility);
+                        }}
+                        className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold'
+                      >
+                        {facility.name}
+                      </div>
+                      <td className='hidden md:table-cell'>{facility.address}</td>
+                      <td className='pr-2 md:pl-0'>
+                        {facility.bloodTypes?.join(", ")}
+                      </td>
+                      <td className=' '>
+                        <div className='flex items-center my-auto  gap-2'>
+                          <i
+                            className={` fa-solid fa-circle text-green
+                          ${facility.urgency === "high" && "text-red"}
+                          ${facility.urgency === "medium" && "text-yellow"}
+                          ${facility.urgency === "low" && "text-green"}
+                          }`}
+                          ></i>
+      
+                          {facility.urgency}
+                        </div>
+                      </td>
+                      <td className='hidden md:table-cell'>{facility.operationalHours}</td>
+                    </tr>
+                  ))}
+                </tbody>
+            : <div>No data</div>
+            }
         </table>
       </div>
       <div className='flex justify-center  items-center gap-2 mt-auto ml-auto'>
@@ -148,7 +133,7 @@ export default function Facilities() {
         >
           <i className='fa-solid fa-angle-left'></i>
         </button>
-
+{/* 
         {getPaginationNumbers().map((page, index) => (
           <button
             key={index}
@@ -160,14 +145,14 @@ export default function Facilities() {
           >
             {page}
           </button>
-        ))}
+        ))} */}
 
         <button
           className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
           onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            setCurrentPage((prev) => Math.min(prev + 1, facilities.totalPages))
           }
-          disabled={currentPage === totalPages}
+          disabled={currentPage === facilities.totalPages}
         >
           <i className='fa-solid fa-angle-right'></i>
         </button>
