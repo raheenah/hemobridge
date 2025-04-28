@@ -5,9 +5,16 @@ export const FacilityApi = {
         const res = await ApiFetch.post(`/api/facility`, formData)
         .then((response)=> response)
         .catch((error)=> { throw error })
-        console.log(res)
         
         if(res.status !== 201) throw new Error("There was an error creating new donor, try again.");
+        return res.data
+    },
+
+    async fetch(page) {
+        const res = await ApiFetch.get(`/api/facility/${page}`)
+        .then((response)=> response.data)
+        .catch((error)=> { throw error })
+
         return res.data
     }
 }
