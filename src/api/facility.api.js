@@ -16,5 +16,13 @@ export const FacilityApi = {
         .catch((error)=> { throw error })
 
         return res.data
+    },
+
+    async createBloodDonation() {
+        const res = await ApiFetch.post(`/api/facility/donation`)
+        .then((response)=> response.data)
+        .catch((error)=> { throw error })
+
+        return res.data
     }
 }
