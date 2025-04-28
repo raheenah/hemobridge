@@ -17,4 +17,20 @@ export const FacilityApi = {
 
         return res.data
     },
+
+    async fetchBloodInventory(facilityId) {
+        const res = await ApiFetch.get(`/api/facility/${facilityId}/inventory`)
+        .then((response)=> response.data)
+        .catch((error)=> { throw error })
+
+        return res.data
+    },
+
+    async fetchStaffProfile(userId) {
+        const res = await ApiFetch.get(`/api/facility/staff/${userId}`)
+        .then((response)=> response.data)
+        .catch((error)=> { throw error })
+
+        return res.data
+    }
 }
