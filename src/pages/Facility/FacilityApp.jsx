@@ -1,27 +1,24 @@
 import { useState , useEffect } from "react";
 import Logo from "../../assets/Vector.svg";
 import { NavLink, Outlet , useLocation, useNavigate } from "react-router-dom";
-import { useProfileContext } from "src/shared/context/user-profile-context";
-
 
 function FacilityApp() {
+  
   const location = useLocation();
   const navigate = useNavigate()
-  const { user } = useProfileContext()
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
 
-    useEffect(() => {
-      if (isOpen) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "auto";
-      }
-  
-      return () => {
-        document.body.style.overflow = "auto";
-      };
-    }, [isOpen]);
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
   
   
   return (
@@ -49,7 +46,7 @@ function FacilityApp() {
               <div className='w-0.5 my-2 hidden md:inline bg-background-grey'></div>
 
               <div className='flex   items-center justify-self-start  gap-4 '>
-                <div classsName='flex flex-col '>
+                <div className='flex flex-col '>
                   <p className='text-xs text-right text-input-text'>
                     Welcome back,
                   </p>
