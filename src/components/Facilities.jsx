@@ -1,29 +1,47 @@
 import {useEffect,useState,useMemo} from 'react'
 import { FacilityApi } from '../api/facility.api';
+import { DonationApi } from '../api/donation.api';
+import { useProfileContext } from '../shared/context/user-profile-context';
+import { DateUtils } from '../shared/utils/date.utils';
+import Pagination from './common/Pagination';
+import Loader from './common/Loader';
 
 export default function Facilities() {
+
+  const { user } = useProfileContext();
 
   const [facilities, setFacilities] = useState({
     list: [],
     currentPage: 1,
     totalPages: 1
   });
-  const [currentPage, setCurrentPage] = useState(2);
+  const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [details, setDetails] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
 
+  const [selectedBloodType, setSelectedBloodType] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [scheduleError, setScheduleError] = useState('');
+  const [createdSchedule, setCreatedSchedule] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    setLoading(true);
     FacilityApi.fetch(currentPage)
-    .then((data)=> setFacilities(data))
-    .catch((error)=> console.error("Error fetching data:", error));
-    
+    .then((data)=> {
+      setFacilities(data);
+      setLoading(false);
+    })
+    .catch((error)=> {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    });
   }, [currentPage]);
 
   const filteredList = useMemo(() => {
     if (!searchQuery) {
-      console.log(facilities.list)
       return facilities.list;
     }
 
@@ -32,8 +50,16 @@ export default function Facilities() {
     );
   }, [searchQuery, facilities.list]);
 
-  function submitSchedule() {
-    
+  function submitSchedule(newDonationSchedule) {
+    setScheduleError(''); 
+    DonationApi.createBloodDonationSchedule(newDonationSchedule)
+    .then((data)=> {
+      setCreatedSchedule(data);
+      setSubmitted(true);
+    })
+    .catch((error)=> { 
+      setScheduleError(error.response?.data?.message || 'Failed to schedule donation. Please try again.');
+    })
   }
 
   return (
@@ -76,9 +102,9 @@ export default function Facilities() {
         </div>
       </div>
       <h2 className='font-bold text-xl'>All Facilities</h2>
-      <div className='max-h-[60dvh] w-full overflow-hidden overflow-y-auto '>
-        <table className=' w-full  '>
-          <thead className='bg-light-pink text-left  '>
+      <div className='max-h-[60dvh] w-full overflow-hidden overflow-y-auto'>
+        <table className='w-full'>
+          <thead className='bg-light-pink text-left'>
             <tr className='text-xs md:text-sm'>
               <th className='py-1 pl-1 pr-2 md:pl-0'>Facility Name</th>
               <th className='hidden md:table-cell'>Address</th>
@@ -87,79 +113,61 @@ export default function Facilities() {
               <th className='hidden md:table-cell'>Operating Hours</th>
             </tr>
           </thead>
-            {
-              facilities.list
-              ? <tbody>
-                  {filteredList.map((facility) => (
-                    <tr
-                      className='text-xs md:text-sm border-b-1  border-background-grey'
-                      key={facility.id}
-                    >
-                      <div
-                        onClick={() => {
-                          setDetails(true);
-                          setSelectedFacility(facility);
-                        }}
-                        className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold'
-                      >
-                        {facility.name}
-                      </div>
-                      <td className='hidden md:table-cell'>{facility.address}</td>
-                      <td className='pr-2 md:pl-0'>
-                        {facility.bloodTypes?.join(", ")}
-                      </td>
-                      <td className=' '>
-                        <div className='flex items-center my-auto  gap-2'>
-                          <i
-                            className={` fa-solid fa-circle text-green
-                          ${facility.urgency === "high" && "text-red"}
-                          ${facility.urgency === "medium" && "text-yellow"}
-                          ${facility.urgency === "low" && "text-green"}
-                          }`}
-                          ></i>
-      
-                          {facility.urgency}
-                        </div>
-                      </td>
-                      <td className='hidden md:table-cell'>{facility.operationalHours}</td>
-                    </tr>
-                  ))}
-                </tbody>
-            : <div>No data</div>
-            }
+          {loading ? (
+            <tbody>
+              <tr>
+                <td colSpan={5} className="h-[200px]">
+                  <Loader />
+                </td>
+              </tr>
+            </tbody>
+          ) : facilities.list ? (
+            <tbody>
+              {filteredList.map((facility) => (
+                <tr
+                  className='text-xs md:text-sm border-b-1  border-background-grey'
+                  key={facility.id}
+                >
+                  <td
+                    onClick={() => {
+                      setSelectedFacility(facility);
+                    }}
+                    className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold cursor-pointer'
+                  >
+                    {facility.name}
+                  </td>
+                  <td className='hidden md:table-cell'>{facility.address}</td>
+                  <td className='pr-2 md:pl-0'>
+                    {facility.bloodTypes?.join(", ")}
+                  </td>
+                  <td className=' '>
+                    <div className='flex items-center my-auto  gap-2'>
+                      <i
+                        className={` fa-solid fa-circle text-green
+                      ${facility.urgency === "high" && "text-red"}
+                      ${facility.urgency === "medium" && "text-yellow"}
+                      ${facility.urgency === "low" && "text-green"}
+                      }`}
+                      ></i>
+    
+                      {facility.urgency}
+                    </div>
+                  </td>
+                  <td className='hidden md:table-cell'>{facility.operationalHours}</td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <div>No data</div>
+          )}
         </table>
       </div>
-      <div className='flex justify-center  items-center gap-2 mt-auto ml-auto'>
-        <button
-          className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          <i className='fa-solid fa-angle-left'></i>
-        </button>
-{/* 
-        {getPaginationNumbers().map((page, index) => (
-          <button
-            key={index}
-            className={`px-2 py-1 hover:bg-light-pink  ${
-              currentPage === page ? "bg-light-pink" : ""
-            }`}
-            onClick={() => typeof page === "number" && setCurrentPage(page)}
-            disabled={page === "..."}
-          >
-            {page}
-          </button>
-        ))} */}
-
-        <button
-          className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, facilities.totalPages))
-          }
-          disabled={currentPage === facilities.totalPages}
-        >
-          <i className='fa-solid fa-angle-right'></i>
-        </button>
+      <div className='flex justify-end mt-4'>
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={facilities.totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
       {selectedFacility && (
         <div
@@ -179,9 +187,9 @@ export default function Facilities() {
                   {" "}
                   {selectedFacility.name}
                 </h1>
-                <button onClick={() => setDetails(!details)}>
+                <button onClick={() => setSelectedFacility(null)}>
                   {" "}
-                  <i className='fa-regular fa-circle-xmark'></i>
+                  <i className='fa-regular fa-circle-xmark hover:text-pink cursor-pointer'></i>
                 </button>
               </div>{" "}
               <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
@@ -270,18 +278,27 @@ export default function Facilities() {
                       Blood Type <span className='text-red-500'>*</span>
                     </label>{" "}
                     <select
-                      className=' focus:outline-none py-4   w-full   text-input-text '
+                      className='focus:outline-none py-4 w-full text-input-text'
+                      value={selectedBloodType}
+                      onChange={(e) => setSelectedBloodType(e.target.value)}
                       required
                     >
+                      <option
+                        className='text-input-text focus:outline-none'
+                        value=""
+                        disabled
+                        selected={!selectedBloodType}
+                      > -- Select blood type --</option>
+
                       {
-                        selectedFacility.bloodTypes.map((bloodType, index)=> (
-                          <option
+                        selectedFacility.bloodTypes.map((bloodType, index)=> {
+                          return <option
                             key={index}
-                            className='text-input-text   focus:outline-none'
+                            className='text-input-text focus:outline-none'
                             value={bloodType}
   
                           > { bloodType } </option>
-                        ))
+                        })
                       }
                       {/* <option
                         className='text-input-text   focus:outline-none'
@@ -344,6 +361,7 @@ export default function Facilities() {
                       placeholder='No., Street, Town, Zip Code, State.'
                       className='placeholder-input-text w-full focus:outline-none'
                       type='date'
+                      onChange={(e) => setSelectedDate(e.target.value)}
                       required
                     />
                   </div>
@@ -355,18 +373,35 @@ export default function Facilities() {
                       placeholder='No., Street, Town, Zip Code, State.'
                       className='placeholder-input-text w-full focus:outline-none'
                       type='time'
+                      onChange={(e) => setSelectedTime(e.target.value)}
                       required
                     />
                   </div>
                 </div>
                 <button
-                  onClick={() => {
-                    submitSchedule()
+                  disabled={!selectedBloodType || !user || !selectedFacility || !selectedDate || !selectedTime}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    submitSchedule({
+                      donorId: user.id,
+                      facilityId: selectedFacility.id,
+                      bloodType: selectedBloodType ?? setSelectedBloodType(selectedFacility?.bloodTypes[0]),
+                      unitsRequested: "",
+                      additionalNotes: "",
+                      preferredDate: `${selectedDate} ${selectedTime}`
+                    })
                   }}
-                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
+                  className={`
+                    bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6
+                    ${(!selectedBloodType || !user || !selectedFacility || !selectedDate || !selectedTime) && 'opacity-50'}
+                    `
+                  }
                 >
                   Schedule
                 </button>
+                {scheduleError && (
+                    <p className="text-red text-sm self-end mt-2">{scheduleError}</p>
+                  )}
               </form>
             </div>
           </div>
@@ -392,10 +427,14 @@ export default function Facilities() {
             <div className='text-sm flex flex-col gap-2'>
               <div>
                 <p>
-                  Donation schedule request successfully submitted to LifeBank
+                  Donation schedule request successfully submitted to {selectedFacility.name}
                   Hospital for{" "}
-                  <span className='font-bold'>14th February, 2025</span> by{" "}
-                  <span className='font-bold'>10:00AM.</span>
+                  <span className='font-bold'>
+                    {DateUtils.formatDate(createdSchedule?.preferredDate)}
+                  </span> by{" "}
+                  <span className='font-bold'>
+                    {DateUtils.formatTime(createdSchedule?.preferredDate)}
+                  </span>
                 </p>
                 <p>
                   You can monitor your Request Progress on the Notifications
