@@ -1,30 +1,32 @@
 import { useState, useEffect } from "react";
-// import { useProfileContext } from "src/shared/context/user-profile-context.jsx";
+import { FacilityApi } from "../../api/facility.api";
+import { useProfileContext  } from "src/shared/context/user-profile-context";
+
 
 function Inventory() {
-const facilityData = {
-  id: 1,
-  name: "Lagos General Hospital",
-  address: "12 Broad Street, Lagos",
-  bloodType: ["A+", "B-", "O+"],
-  urgency: "High",
-  stock: [
-    { type: "A+", stock: 10, expiry: "2025-12-31" },
-    { type: "A-", stock: 1, expiry: "2025-12-31" },
-    { type: "O+", stock: 4, expiry: "2025-12-31" },
-    { type: "O-", stock: 0, expiry: "2025-12-31" },
-    { type: "AB+", stock: 10, expiry: "2025-12-31" },
-    { type: "AB-", stock: 10, expiry: "2025-12-31" },
-    { type: "B+", stock: 20, expiry: "2025-12-31" },
-    { type: "B-", stock: 10, expiry: "2025-12-31" },
-  ],
-  hours: "24/7",
-};
-  // const { user } = useProfileContext();
+
+  const { user } = useProfileContext();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [inventory, setInventory] = useState([]);
   const [editing, setEditing] = useState(false);
   const [editingBloodType, setEditingBloodType] = useState(null);
   const [success, setSuccess] = useState(false);
   
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    FacilityApi.fetchBloodInventory(user.facilityId)
+    .then((data) => setInventory(data))
+    .catch((error) => {
+      console.error("Error fetching inventory:", error);
+      setError(error.response?.data?.message || "Failed to fetch inventory data");
+    })
+    .finally(()=> setLoading(false))
+    
+  }, [user.facilityId]);
+
   useEffect(() => {
     if (editing || success) {
       document.body.style.overflow = "hidden"; 
@@ -37,45 +39,63 @@ const facilityData = {
     };
   }, [editing, success]);
   
+  if (loading) {
+    return <div className="flex items-center justify-center h-full">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full gap-4">
+        <p className="text-red-500">{error}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="bg-background hover:bg-pink font-bold text-xs text-white py-2 px-4"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className=' flex  h-full bg-white flex-col text-xs gap-4 py-3  px-6   w-full'>
-      <h1 className='text-lg md:text-xs font-bold '>Blood Stock Levels </h1>
+    <div className='flex h-full bg-white flex-col text-xs gap-4 py-3 px-6 w-full'>
+      <h1 className='text-lg md:text-xs font-bold'>Blood Stock Levels</h1>
       <div className='flex flex-col md:grid grid-cols-3 gap-4'>
-        {facilityData.stock.map((bloodType, index) => (
+        {inventory.map((bloodType, index) => (
           <div
             key={index}
             className='border flex flex-col gap-12 border-text-dark-gray p-2'
           >
-            <div className='flex justify-between items-start '>
-              <h2 className='text-3xl font-extrabold '>{bloodType.type}</h2>
+            <div className='flex justify-between items-start'>
+              <h2 className='text-3xl font-extrabold'>{bloodType.bloodType}</h2>
               <button
                 onClick={() => {
                   setEditing(true);
                   setEditingBloodType(bloodType);
                 }}
-                className='bg-background hover:bg-pink   self-start  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
+                className='bg-background hover:bg-pink self-start w-full max-w-32 font-bold text-xs text-white py-2 px-4'
               >
                 Edit
               </button>
             </div>
-            <p className='text-xl font-bold '>
+            <p className='text-xl font-bold'>
               <span
                 className={`${
-                  bloodType.stock < 3
+                  bloodType.unitsAvailable < 3
                     ? "text-red-600"
-                    : bloodType.stock < 7
+                    : bloodType.unitsAvailable < 7
                     ? "text-yellow-500"
                     : "text-green-600"
-                }   `}
+                }`}
               >
-                {bloodType.stock}
+                {bloodType.unitsAvailable}
               </span>{" "}
               units available
             </p>
           </div>
         ))}
       </div>
+      
       {editing && (
         <div
           onClick={(e) => {
