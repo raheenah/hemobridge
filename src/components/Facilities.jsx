@@ -32,6 +32,10 @@ export default function Facilities() {
     );
   }, [searchQuery, facilities.list]);
 
+  function submitSchedule() {
+    
+  }
+
   return (
     <div className='flex flex-col h-full   gap-4 '>
       <div className='flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between w-full'>
@@ -157,10 +161,11 @@ export default function Facilities() {
           <i className='fa-solid fa-angle-right'></i>
         </button>
       </div>
-      {details && (
+      {selectedFacility && (
         <div
           onClick={(e) => {
-            setDetails(!details), e.stopPropagation();
+            // setDetails(!details)
+            e.stopPropagation();
           }}
           className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
@@ -202,7 +207,7 @@ export default function Facilities() {
 
                 <p>
                   <span className='text-text-dark-gray'>Operationg Hours:</span>{" "}
-                  {selectedFacility.hours}
+                  {selectedFacility.operationalHours}
                 </p>
               </div>
               <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
@@ -222,7 +227,7 @@ export default function Facilities() {
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedFacility.stock.map((blood, index) => (
+                    {/* {selectedFacility..map((blood, index) => (
                       <tr
                         className='text-xs border-b-1 text-center border-background-grey'
                         key={index}
@@ -248,7 +253,7 @@ export default function Facilities() {
                           </span>
                         </td>
                       </tr>
-                    ))}
+                    ))} */}
                   </tbody>
                 </table>
               </div>
@@ -268,7 +273,17 @@ export default function Facilities() {
                       className=' focus:outline-none py-4   w-full   text-input-text '
                       required
                     >
-                      <option
+                      {
+                        selectedFacility.bloodTypes.map((bloodType, index)=> (
+                          <option
+                            key={index}
+                            className='text-input-text   focus:outline-none'
+                            value={bloodType}
+  
+                          > { bloodType } </option>
+                        ))
+                      }
+                      {/* <option
                         className='text-input-text   focus:outline-none'
                         disabled
                         selected
@@ -317,7 +332,7 @@ export default function Facilities() {
                         value='B-'
                       >
                         AB-{" "}
-                      </option>
+                      </option> */}
                     </select>
                   </div>
                   <div className='col-span-1 row-span-1'></div>
@@ -346,7 +361,7 @@ export default function Facilities() {
                 </div>
                 <button
                   onClick={() => {
-                    setDetails(!details), setSubmitted(!submitted);
+                    submitSchedule()
                   }}
                   className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
                 >
