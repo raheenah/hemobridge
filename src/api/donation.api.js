@@ -24,17 +24,20 @@ export const DonationApi = {
         return response.data;
     },
 
-    acceptSchedule: async (scheduleId) => {
-        const response = await ApiFetch.post(`/api/donation/schedule/${scheduleId}/accept`)
-        .then((response)=> response.data)
-        .catch((error)=> { throw error })
+    approveSchedule: async (scheduleId) => {
+        const response = await ApiFetch.post(`/api/donation/schedule/${scheduleId}/approve`)
+        .then((response)=> {
+            console.log(response)
+            response.data
+        })
+        .catch((error)=> {throw error.response.data})
         return response.data;
     },
 
     declineSchedule: async (scheduleId) => {
         const response = await ApiFetch.post(`/api/donation/schedule/${scheduleId}/decline`)
         .then((response)=> response.data)
-        .catch((error)=> { throw error })
+        .catch((error)=> {throw error.response.data})
         return response.data;
     }
 }
