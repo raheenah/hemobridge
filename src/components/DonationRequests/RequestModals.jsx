@@ -1,10 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from '../common/Modal';
 import RequestRow from './RequestRow';
+import { DonationApi } from '../../api/donation.api';
+import { DonationScheduleStatus } from '../../shared/constants/donation-schedule.constant';
 
-export function ViewRequestModal({ request, onClose, onAccept, onDecline, isOpen }) {
-  if (!isOpen || !request) return null;
+export function ViewRequestModal({ request, onClose, isOpen }) {
+  const [approveState, setApproveState] = useState({
+    error: false,
+    message: ""
+  });
+
+  function handleApproveRequest() {
+    setApproveState({
+      error: false,
+      message: ""
+    })
+    DonationApi.approveSchedule(request.id)
+    .then((data)=> { 
+      setApproveState({
+        error: false,
+        message: data.message
+      })
+    })
+    .catch((error)=> {
+      setApproveState({
+        error: true,
+        message: error.message
+      })
+    })
+  }
+
+  function handleDeclineRequest() {
+    setApproveState({
+      error: false,
+      message: ""
+    })
+
+    DonationApi.declineSchedule(request.id)
+    .then((data)=> { 
+      setApproveState({
+        error: false,
+        message: data.message
+      })
+    })
+    .catch((error)=> {
+      setApproveState({
+        error: true,
+        message: error.message
+      })
+    })
+  }
   
+  if (!isOpen || !request) return null;
   return (
     <Modal onClose={onClose}>
       <div className='flex flex-col gap-4 bg-white top-0'>
@@ -34,17 +81,21 @@ export function ViewRequestModal({ request, onClose, onAccept, onDecline, isOpen
 
         <div className='flex gap-4 mx-auto mt-8'>
           <button
-            onClick={onDecline}
+            onClick={handleDeclineRequest}
             className='text-background hover:bg-pink w-24 font-bold border border-background py-1 px-2'
-          >
-            Decline
-          </button>
-          <button
-            onClick={onAccept}
-            className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
-          >
-            Accept
-          </button>
+          > Decline </button>
+          
+          {
+            request.status === DonationScheduleStatus.PENDING &&
+            <button
+              onClick={handleApproveRequest}
+              className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
+            > Accept </button>
+          }
+        </div>
+
+        <div className={`text-center mt-4 font-medium ${approveState.error ? 'text-red-500' : 'text-green-500'}`}>
+          {approveState.message}
         </div>
       </div>
     </Modal>
