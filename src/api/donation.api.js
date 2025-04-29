@@ -26,17 +26,14 @@ export const DonationApi = {
 
     approveSchedule: async (scheduleId) => {
         const response = await ApiFetch.post(`/api/donation/schedule/${scheduleId}/approve`)
-        .then((response)=> {
-            console.log(response)
-            response.data
-        })
+        .then((response)=> response)
         .catch((error)=> {throw error.response.data})
         return response.data;
     },
 
     declineSchedule: async (scheduleId) => {
         const response = await ApiFetch.post(`/api/donation/schedule/${scheduleId}/decline`)
-        .then((response)=> response.data)
+        .then((response)=> response)
         .catch((error)=> {throw error.response.data})
         return response.data;
     }
