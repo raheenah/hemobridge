@@ -43,8 +43,8 @@ function FacilityDashboard() {
   const chartColors = ["#8B0075", "#D003B0", "#FF71E9", "#FFB3F3"];
 
   const lowestStock = [...facilityData.stock]
-    .sort((a, b) => a.stock - b.stock)
-    .slice(0, 4);
+  .sort((a, b) => a.stock - b.stock)
+  .slice(0, 4);
 
   // Replace the old useEffect
   useEffect(() => {
@@ -135,8 +135,6 @@ function FacilityDashboard() {
       <ViewRequestModal
         request={selectedRequest}
         onClose={() => setModalState(prev => ({ ...prev, view: false }))}
-        onAccept={() => {}}
-        onDecline={() => setModalState(prev => ({ ...prev, confirm: true }))}
         isOpen={modalState.view}
       />
 
