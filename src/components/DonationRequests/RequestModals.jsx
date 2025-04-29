@@ -1,8 +1,9 @@
 import React from 'react';
 import Modal from '../common/Modal';
+import RequestRow from './RequestRow';
 
-export function ViewRequestModal({ request, onClose, onAccept, onDecline }) {
-  if (!request) return null;
+export function ViewRequestModal({ request, onClose, onAccept, onDecline, isOpen }) {
+  if (!isOpen || !request) return null;
   
   return (
     <Modal onClose={onClose}>
@@ -21,14 +22,13 @@ export function ViewRequestModal({ request, onClose, onAccept, onDecline }) {
           <h3 className='text-text-dark-gray font-bold text-sm'>
             Donor Information
           </h3>
-          {/* Request details */}
           <div className='flex flex-col gap-1'>
-            {Object.entries(request).map(([key, value]) => (
-              <p key={key} className='flex gap-2'>
-                <span className='text-text-dark-gray capitalize'>{key}:</span>
-                {value}
-              </p>
-            ))}
+            <RequestRow
+                key={request.id}
+                request={request}
+                onView={() => {}}
+                isExpandable={false}
+            />
           </div>
         </div>
 
