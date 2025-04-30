@@ -1,15 +1,13 @@
 import { ApiFetch } from "./fetch"
 
 export const DonationApi = {
-  async createBloodDonationSchedule(body) {
-    const res = await ApiFetch.post(`/api/donation/schedule`, body)
-      .then((response) => response.data)
-      .catch((error) => {
-        throw error;
-      });
+    async createBloodDonationSchedule(body) {
+        const res = await ApiFetch.post(`/api/donation/schedule`, body)
+        .then((response)=> response.data)
+        .catch((error)=> { throw error.response.data })
 
-    return res.data;
-  },
+        return res
+    },
 
   fetchDonorSchedules: async (page = 1) => {
     const response = await ApiFetch.get(

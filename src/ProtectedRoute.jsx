@@ -6,7 +6,6 @@ import Loader from "./components/common/Loader";
 
 const ProtectedRoute = ({children}) => {
   // const { user } = useAuth();
-  // const { profile } = useProfileContext();
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -14,15 +13,13 @@ const ProtectedRoute = ({children}) => {
 
   useEffect(() => {
     ProfileApi.fetchMyProfile()
-      .then((data) => {
-        setUser(data) 
-        // console.log("user data is...", data)
-      })
-      .catch((error) => {
-        console.error(error);
-        navigate("/");
-      })
-      .finally(() => setTimeout(() => setLoading(false), 100));
+    .then((data) => setUser(data))
+    .catch((error) => {
+      console.error(error);
+      navigate("/");
+    })
+    .finally(() => setTimeout(() => setLoading(false), 100));
+
   }, [navigate]);
 
   if (loading) return (

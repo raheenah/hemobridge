@@ -72,7 +72,6 @@ function FacilityDashboard() {
   
   // console.log("lowest Stock", lowestStock)
 
-  // Replace the old useEffect
   useEffect(() => {
     loadDonationRequests(requests.currentPage);
   }, [requests.currentPage]);
