@@ -1,7 +1,7 @@
 import { DateUtils } from '../../shared/utils/date.utils';
 import { StringUtils } from '../../shared/utils/string.utils';
 
-export default function RequestRow({ request, onView, isExpandable = true }) {
+export default function EmergencyRequestRow({ request, onView, isExpandable = true }) {
   return (
     <li className={`px-2 py-1 flex items-start justify-between ${isExpandable ? 'border-1 border-text-gray' : ''}`}>
       <div className='flex flex-col gap-1'>
