@@ -46,7 +46,6 @@ function FacilityDashboard() {
   .sort((a, b) => a.stock - b.stock)
   .slice(0, 4);
 
-  // Replace the old useEffect
   useEffect(() => {
     loadDonationRequests(requests.currentPage);
   }, [requests.currentPage]);
