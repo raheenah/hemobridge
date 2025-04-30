@@ -23,13 +23,14 @@ import Send_Code from "./pages/ResendCode";
 import Inventory from "./pages/Facility/Inventory";
 import Emergency_Requests from "./pages/Facility/Emergency";
 import ProfileContextProvider  from "./ProfileContextProvider";
-
+import NotFound from "./pages/404";
 
 function App() {
   return (
       <Router>
    
-        <Routes>
+      <Routes>
+        <Route path='*' element={<NotFound />} />
           <Route path='/' element={<WelcomePage />}>
             <Route index element={<Signin />} />
             <Route path='forgot-password' element={<ForgotPassword />} />
