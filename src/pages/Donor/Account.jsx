@@ -68,7 +68,7 @@ function Account() {
 
 
   return (
-    <div className=' flex h-full   md:bg-white flex-col text-xs md:gap-4 md:py-3  md:px-6   w-full'>
+    <div className=' flex min-h-screen md:bg-white flex-col text-xs md:gap-4 md:py-3  md:px-6   w-full'>
       {/* <h1 className='text-xs font-bold hidden md:block '>
         Profile Information
       </h1> */}
@@ -171,7 +171,7 @@ function Account() {
             Delete
           </button>
         </div>
-        <div className='flex justify-between text-xs font-bold items-center bg-white py-3  px-6 md:py-0  md:px-0 gap-4 md:gap-2'>
+        <div className='flex md:hidden justify-between text-xs font-bold items-center bg-white py-3  px-6 md:py-0  md:px-0 gap-4 md:gap-2'>
           <h1 className=''>Change Profile Picture</h1>
           <button
             onClick={() => {
@@ -272,7 +272,7 @@ function Account() {
           </button>
         </div>
 
-        <div className='pl-6 flex flex-col bg-white py-3  px-6 md:py-0  md:px-0 gap-4'>
+        <div className='pl-6 flex flex-col bg-white py-3  px-6 md:py-0  md:pl-4 gap-4'>
           <h1 className='text-xs font-bold '>Notification Preferences </h1>
           <div className='grid grid-cols-[auto_auto] gap-8'>
             <div className='flex flex-col gap-1'>

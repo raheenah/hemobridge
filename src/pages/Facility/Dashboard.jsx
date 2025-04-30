@@ -4,6 +4,8 @@ import { ViewRequestModal, ConfirmationModal } from "../../components/DonationRe
 import { DonationApi } from "../../api/donation.api";
 import FacilityRecentActivity from "../../components/FacilityRecentActivity";
 import InventoryOverview from "../../components/inventoryOverview";
+import { FacilityApi } from "../../api/facility.api";
+import { useProfileContext } from "../../shared/context/user-profile-context";
 
 function FacilityDashboard() {
 
@@ -20,31 +22,55 @@ function FacilityDashboard() {
     success: false,
     message: ''
   });
+  const [inventory, setInventory] = useState([]);
 
-  const [facilityData] = useState({
-    id: 1,
-    name: "Lagos General Hospital",
-    address: "12 Broad Street, Lagos",
-    bloodType: ["A+", "B-", "O+"],
-    urgency: "High",
-    stock: [
-      { type: "A+", stock: 15, expiry: "2025-12-31" },
-      { type: "A-", stock: 5, expiry: "2025-12-31" },
-      { type: "O+", stock: 9, expiry: "2025-12-31" },
-      { type: "O-", stock: 12, expiry: "2025-12-31" },
-      { type: "AB+", stock: 50, expiry: "2025-12-31" },
-      { type: "AB-", stock: 50, expiry: "2025-12-31" },
-      { type: "B+", stock: 20, expiry: "2025-12-31" },
-      { type: "B-", stock: 50, expiry: "2025-12-31" },
-    ],
-    hours: "24/7",
-  });
+  const { user } = useProfileContext();
+
+//   const [facilityData] = useState({
+//     id: 1,
+//     name: "Lagos General Hospital",
+//     address: "12 Broad Street, Lagos",
+//     bloodType: ["A+", "B-", "O+"],
+//     urgency: "High",
+//     stock: [
+//       { type: "A+", stock: 15, expiry: "2025-12-31" },
+//       { type: "A-", stock: 5, expiry: "2025-12-31" },
+//       { type: "O+", stock: 9, expiry: "2025-12-31" },
+//       { type: "O-", stock: 12, expiry: "2025-12-31" },
+//       { type: "AB+", stock: 50, expiry: "2025-12-31" },
+//       { type: "AB-", stock: 50, expiry: "2025-12-31" },
+//       { type: "B+", stock: 20, expiry: "2025-12-31" },
+//       { type: "B-", stock: 50, expiry: "2025-12-31" },
+//     ],
+//     hours: "24/7",
+//   });
+
+// console.log("Facility data:", facilityData);
+  // console.log("User data:", user);
+  useEffect(() => {
+      //  console.log("Fetching inventory for facility:", user.facilityId);
+
+      FacilityApi.fetchBloodInventory(user.facilityId)
+        .then((data) => {
+          setInventory(data);
+          // console.log("Inventory data:", data);
+         })
+      .catch((error) => {
+        console.error("Error fetching inventory:", error);
+      })
+      
+  }, [user]);
+  
+
+
 
   const chartColors = ["#8B0075", "#D003B0", "#FF71E9", "#FFB3F3"];
 
-  const lowestStock = [...facilityData.stock]
-  .sort((a, b) => a.stock - b.stock)
-  .slice(0, 4);
+  const lowestStock = [...inventory]
+    .sort((a, b) => a.unitsAvailable - b.unitsAvailable)
+    .slice(0, 4);
+  
+  // console.log("lowest Stock", lowestStock)
 
   // Replace the old useEffect
   useEffect(() => {
@@ -54,7 +80,7 @@ function FacilityDashboard() {
   const loadDonationRequests = async (page) => {
     DonationApi.fetchFacilitySchedules(page)
     .then((data)=> {
-      console.log(data)
+      // console.log(data)
       setRequests(data)
     })
     .catch((error)=> { 
@@ -83,27 +109,27 @@ function FacilityDashboard() {
             <h2 className='text-sm font-semibold '>
               Lowest Blood Stock Levels
             </h2>
-            <div className='flex flex-col w-full gap-2'>
-              {lowestStock.map((bloodType, index) => (
+            <div className='flex text-xs flex-col w-full gap-2'>
+              {lowestStock.map((stock, index) => (
                 <div
-                  key={bloodType.type}
-                  className='w-full flex items-center gap-1 '
+                  key={stock.bloodType}
+                  className='w-full flex  items-center gap-1 '
                 >
-                  <p className='w-6 font-bold text-text-dark-gray'>
-                    {bloodType.type}
+                  <p className='w-10 font-bold text-text-dark-gray'>
+                    {stock.bloodType}
                   </p>
                   <div className='w-full h-3 bg-text-gray rounded-full relative'>
                     <div
                       className='h-full rounded-full transition-all duration-500'
                       style={{
                         backgroundColor:
-                          chartColors[index % chartColors.length], // Rotates colors
-                        width: `${(bloodType.stock / 20) * 100}%`, // Adjusting dynamically
+                          chartColors[index % chartColors.length], 
+                        width: `${(stock.unitsAvailable / 20) * 100}%`, 
                       }}
                     ></div>
                   </div>
                   <div className='w-6  text-right'>
-                    <p className='text-text-dark-gray '> {bloodType.stock}</p>
+                    <p className='text-text-dark-gray '> {stock.unitsAvailable}</p>
                   </div>
                 </div>
               ))}

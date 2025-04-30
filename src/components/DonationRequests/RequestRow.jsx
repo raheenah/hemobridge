@@ -13,10 +13,10 @@ export default function RequestRow({ request, onView, isExpandable = true }) {
           <span className='text-text-dark-gray font-bold'>Blood Type:</span>
           {request.bloodType}
         </p>
-        <p className='flex items-start gap-2'>
+        {/* <p className='flex items-start gap-2'>
           <span className='text-text-dark-gray font-bold'>Units Requested:</span>
           {request.unitsRequested}
-        </p>
+        </p> */}
         <p className='flex items-start gap-2'>
           <span className='text-text-dark-gray font-bold'>Date:</span>
           {DateUtils.formatDate(request.preferredDate)}

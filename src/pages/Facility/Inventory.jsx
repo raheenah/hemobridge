@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FacilityApi } from "../../api/facility.api";
 import { useProfileContext  } from "src/shared/context/user-profile-context";
-
+import Loader from "../../components/common/Loader";
 
 function Inventory() {
 
@@ -40,7 +40,12 @@ function Inventory() {
   }, [editing, success]);
   
   if (loading) {
-    return <div className="flex items-center justify-center h-full">Loading...</div>;
+    return (
+     <div className="flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center">
+          <Loader />
+          <p className="font-bold text-background  ">Fetching inventory...</p>
+      </div>
+    )
   }
 
   if (error) {

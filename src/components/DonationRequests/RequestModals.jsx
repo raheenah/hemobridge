@@ -50,9 +50,33 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
       })
     })
   }
+
+    function handleCompleteRequest() {
+      setApproveState({
+        error: false,
+        message: "",
+      });
+
+      DonationApi.completeSchedule(request.id)
+        .then((data) => {
+          setApproveState({
+            error: false,
+            message: data.message,
+          });
+        })
+        .catch((error) => {
+          setApproveState({
+            error: true,
+            message: error.message,
+          });
+        });
+  }
+  
+   
   
   if (!isOpen || !request) return null;
   return (
+    <>
     <Modal onClose={onClose}>
       <div className='flex flex-col gap-4 bg-white top-0'>
         <div className='flex w-full gap-1 justify-between'>
@@ -71,34 +95,71 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
           </h3>
           <div className='flex flex-col gap-1'>
             <RequestRow
-                key={request.id}
-                request={request}
-                onView={() => {}}
-                isExpandable={false}
+              key={request.id}
+              request={request}
+              onView={() => {}}
+              isExpandable={false}
             />
           </div>
         </div>
 
         <div className='flex gap-4 mx-auto mt-8'>
-          <button
-            onClick={handleDeclineRequest}
-            className='text-background hover:bg-pink w-24 font-bold border border-background py-1 px-2'
-          > Decline </button>
-          
-          {
-            request.status === DonationScheduleStatus.PENDING &&
+          {request.status === DonationScheduleStatus.PENDING && (
+            <button
+              onClick={handleDeclineRequest}
+              className='text-background hover:bg-pink w-24 font-bold border border-background py-1 px-2'
+            >
+              Decline
+            </button>
+          )}
+          {request.status === DonationScheduleStatus.APPROVED && (
+            <button
+              onClick={handleDeclineRequest}
+              className='text-background hover:bg-pink w-24 font-bold border border-background py-1 px-2'
+            >
+              Cancel
+            </button>
+          )}
+          {request.status === DonationScheduleStatus.PENDING && (
             <button
               onClick={handleApproveRequest}
               className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
-            > Accept </button>
-          }
+            >
+              {" "}
+              Accept{" "}
+            </button>
+          )}{" "}
+          {request.status === DonationScheduleStatus.APPROVED && (
+            <button
+              onClick={handleCompleteRequest}
+              className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
+            >
+              {" "}
+              Complete{" "}
+            </button>
+          )}
+          {request.status === DonationScheduleStatus.COMPLETED && (
+            <button
+              onClick={onClose}
+              className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
+            >
+              {" "}
+              Close{" "}
+            </button>
+          )}
         </div>
 
-        <div className={`text-center mt-4 font-medium ${approveState.error ? 'text-red-500' : 'text-green-500'}`}>
+        <div
+          className={`text-center mt-4 font-medium ${
+            approveState.error ? "text-red-500" : "text-green-500"
+          }`}
+        >
           {approveState.message}
         </div>
       </div>
-    </Modal>
+      </Modal>
+
+      </>
   );
 }
 

@@ -28,7 +28,10 @@ export const FacilityApi = {
 
     async fetchStaffProfile(userId) {
         const res = await ApiFetch.get(`/api/facility/staff/${userId}`)
-        .then((response)=> response.data)
+            .then((response) => {
+                response.data 
+                // console.log("staff profile", response.data)
+            })
         .catch((error)=> { throw error })
 
         return res.data

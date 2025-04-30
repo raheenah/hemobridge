@@ -10,8 +10,8 @@ export default function DonationRequestList({
   onViewRequest 
 }) {
   return (
-    <div className='flex flex-col overflow-hidden overflow-y-auto px-6 bg-white'>
-      <div className='sticky bg-white py-3 top-0'>
+    <div className='flex flex-col overflow-hidden py-3 overflow-y-auto px-6 bg-white'>
+      <div className='sticky bg-white pb-3 top-0'>
         <div className='flex justify-between items-center'>
           <h2 className='font-bold text-lg'>Donation requests</h2>
         </div>

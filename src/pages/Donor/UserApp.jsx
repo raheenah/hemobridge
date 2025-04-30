@@ -40,6 +40,7 @@ function UserApp() {
               onClick={() => {
                 setIsOpen(!isOpen);
               }}
+              className="md:hidden"
             >
               {" "}
               <i className='fa-solid fa-bars pl-8'></i>

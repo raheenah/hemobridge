@@ -2,7 +2,7 @@ import { useState , useEffect } from "react";
 import Logo from "../../assets/Vector.svg";
 import { NavLink, Outlet , useLocation, useNavigate } from "react-router-dom";
 import { useProfileContext } from "src/shared/context/user-profile-context";
-import { FacilityDetailsApi } from "../../api/facilityDetails.api ";
+// import { FacilityDetailsApi } from "../../api/facilityDetails.api ";
 
 function FacilityApp() {
   
@@ -43,6 +43,7 @@ function FacilityApp() {
               onClick={() => {
                 setIsOpen(!isOpen);
               }}
+              className='md:hidden'
             >
               {" "}
               <i className='fa-solid fa-bars pl-8'></i>
@@ -162,7 +163,7 @@ function FacilityApp() {
 
               <button
                 onClick={() => {
-                  navigate("/")
+                  navigate("/");
                 }}
                 className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'
               >
@@ -297,7 +298,7 @@ function FacilityApp() {
 
                   <button
                     onClick={() => {
-                      navigate("/");  
+                      navigate("/");
                       setIsOpen(false);
                     }}
                     className='flex items-center justify-left   text-text-dark-gray gap-4 p-4'

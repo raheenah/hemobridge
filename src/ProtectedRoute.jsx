@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ProfileApi } from "./api/profile.api";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { ProfileContext } from "./shared/context/user-profile-context";
+import Loader from "./components/common/Loader";
 
 const ProtectedRoute = ({children}) => {
   // const { user } = useAuth();
@@ -13,7 +14,10 @@ const ProtectedRoute = ({children}) => {
 
   useEffect(() => {
     ProfileApi.fetchMyProfile()
-      .then((data) => setUser(data))
+      .then((data) => {
+        setUser(data) 
+        // console.log("user data is...", data)
+      })
       .catch((error) => {
         console.error(error);
         navigate("/");
@@ -21,7 +25,11 @@ const ProtectedRoute = ({children}) => {
       .finally(() => setTimeout(() => setLoading(false), 100));
   }, [navigate]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (
+    <div className="flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center">
+      <Loader />
+      <p className="font-bold text-background  ">Fetching user...</p>
+  </div>);
 // console.log("user", user.role);
   if (!user) {
     return <Navigate to='/' state={{ from: location }} replace />;

@@ -16,7 +16,7 @@ export default function FacilityRecentActivity() {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  const rowsPerPage = 10;
+  const rowsPerPage = 9;
 
   const totalPages = Math.ceil(recentActivities.length / rowsPerPage);
   const indexOfLastFacility = currentPage * rowsPerPage;
@@ -78,7 +78,7 @@ export default function FacilityRecentActivity() {
           </thead>
 
           <tbody>
-            {recentActivities.slice(0, 10).map((activity) => (
+            {currentActivities.map((activity) => (
               <tr
                 className=' border-b-1  text-center border-background-grey'
                 key={activity.donorId}

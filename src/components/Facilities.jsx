@@ -15,6 +15,7 @@ export default function Facilities() {
     currentPage: 1,
     totalPages: 1
   });
+  const [schedule, setSchedule] = useState({})
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,8 +67,8 @@ export default function Facilities() {
   }
 
   return (
-    <div className='flex flex-col h-full   gap-4 '>
-      <div className='flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between w-full'>
+    <div className='flex flex-col h-full gap-4 '>
+      <div className='flex flex-col lg:flex-row gap-4 lg:gap-0 lg:items-center justify-between w-full'>
         <div className='flex flex-col gap-2 w-full md:w-[50%]'>
           <h2 className='font-bold text-lg'>Search</h2>
           <div className='flex gap-2  w-full'>
@@ -105,21 +106,21 @@ export default function Facilities() {
         </div>
       </div>
       <h2 className='font-bold text-xl'>All Facilities</h2>
-      <div className='max-h-[60dvh] w-full overflow-hidden overflow-y-auto'>
-        <table className='w-full'>
+      <div className=' w-full p-4  overflow-hidden overflow-y-auto'>
+        <table className='w-full '>
           <thead className='bg-light-pink text-left'>
             <tr className='text-xs md:text-sm'>
-              <th className='py-1 pl-1 pr-2 md:pl-0'>Facility Name</th>
+              <th className='py-1 pl-1 pr-2 lg:pl-0'>Facility Name</th>
               <th className=''>Address</th>
-              {/* <th className='pr-2 md:pl-0 hidden md:table-cell'> Blood Type</th> */}
-              {/* <th className='hidden md:table-cell'>Urgency Level</th> */}
-              <th className=''>Operating Hours</th>
+              <th className='pr-2 lg:pl-0 hidden lg:flex'> Blood Type</th>
+              <th className='hidden lg:table-cell'>Urgency Level</th>
+              {/* <th className=''>Operating Hours</th> */}
             </tr>
           </thead>
           {loading ? (
             <tbody>
               <tr>
-                <td colSpan={5} className="h-[200px]">
+                <td colSpan={5} className='h-[200px]'>
                   <Loader />
                 </td>
               </tr>
@@ -135,16 +136,16 @@ export default function Facilities() {
                     onClick={() => {
                       setSelectedFacility(facility);
                     }}
-                    className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold cursor-pointer'
+                    className='py-2 text-left pl-1 pr-2 lg:pl-0 font-bold cursor-pointer'
                   >
                     {facility.name}
                   </td>
-                  <td className='hidden md:table-cell'>{facility.address}</td>
-                  <td className='pr-2 md:pl-0'>
+                  <td className=''>{facility.address}</td>
+                  <td className='pr-2 hidden lg:table-cell md:pl-0'>
                     {facility.bloodTypes?.join(", ")}
                   </td>
                   <td className=' '>
-                    <div className='flex items-center my-auto  gap-2'>
+                    <div className='lg:flex hidden items-center my-auto  gap-2'>
                       <i
                         className={` fa-solid fa-circle text-green
                       ${facility.urgency === "high" && "text-red"}
@@ -152,11 +153,11 @@ export default function Facilities() {
                       ${facility.urgency === "low" && "text-green"}
                       }`}
                       ></i>
-    
+
                       {facility.urgency}
                     </div>
                   </td>
-                  <td className='hidden md:table-cell'>{facility.operationalHours}</td>
+                  {/* <td className='hidden md:table-cell'>{facility.operationalHours}</td> */}
                 </tr>
               ))}
             </tbody>
@@ -166,7 +167,7 @@ export default function Facilities() {
         </table>
       </div>
       <div className='flex justify-end mt-4'>
-        <Pagination 
+        <Pagination
           currentPage={currentPage}
           totalPages={facilities.totalPages}
           onPageChange={setCurrentPage}
@@ -175,7 +176,7 @@ export default function Facilities() {
       {selectedFacility && (
         <div
           onClick={(e) => {
-            // setDetails(!details)
+            setSelectedFacility(null);
             e.stopPropagation();
           }}
           className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
@@ -271,143 +272,184 @@ export default function Facilities() {
               </div>
             </div>
 
-            <div className='flex flex-col gap-4'>
-              <h2 className='font-bold text-sm text-text-dark-gray'>
-                Donation Booking Details
-              </h2>
-              <form className=' flex flex-col gap-4'>
-                <div className='grid max-w-[70%] grid-rows-2 gap-4 grid-cols-2'>
-                  <div className='w-full px-4  relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
-                      Blood Type <span className='text-red-500'>*</span>
-                    </label>{" "}
-                    <select
-                      className='focus:outline-none py-4 w-full text-input-text'
-                      value={selectedBloodType}
-                      onChange={(e) => setSelectedBloodType(e.target.value)}
-                      required
-                    >
-                      <option
-                        className='text-input-text focus:outline-none'
-                        value=""
-                        disabled
-                        selected={!selectedBloodType}
-                      > -- Select blood type --</option>
-
-                      {
-                        selectedFacility.bloodTypes.map((bloodType, index)=> {
-                          return <option
+            {user.role === "donor" && (
+              <div className='flex flex-col gap-4'>
+                <h2 className='font-bold text-sm text-text-dark-gray'>
+                  Donation Booking Details
+                </h2>
+                <form className=' flex flex-col gap-4'>
+                  <div className='grid max-w-[70%] grid-rows-2 gap-4 grid-cols-2'>
+                    <div className='w-full px-4  relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                        Blood Type <span className='text-red-500'>*</span>
+                      </label>{" "}
+                      <select
+                        className='focus:outline-none py-4 w-full text-input-text'
+                        value={selectedBloodType}
+                        onChange={(e) => setSelectedBloodType(e.target.value)}
+                        required
+                      >
+                        <option
+                          className='text-input-text focus:outline-none'
+                          value=''
+                          disabled
+                          selected={!selectedBloodType}
+                        >
+                          {" "}
+                          -- Select blood type --
+                        </option>
+                        {/* {selectedFacility.bloodTypes.map((bloodType, index) => {
+                        return (
+                          <option
                             key={index}
                             className='text-input-text focus:outline-none'
                             value={bloodType}
-  
-                          > { bloodType } </option>
-                        })
-                      }
-                      {/* <option
-                        className='text-input-text   focus:outline-none'
-                        disabled
-                        selected
-                      >
-                        Choose...
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A+'
-                      >
-                        A+{" "}
-                      </option>{" "}
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='A-'
-                      >
-                        A-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        B+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        B-{" "}
-                      </option>{" "}
-                      <option value='B+'>O+ </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        O-{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B+'
-                      >
-                        AB+{" "}
-                      </option>
-                      <option
-                        className='text-input-text   focus:outline-none'
-                        value='B-'
-                      >
-                        AB-{" "}
-                      </option> */}
-                    </select>
+                          >
+                            {" "}
+                            {bloodType}{" "}
+                          </option>
+                        );
+                      })} */}
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          disabled
+                          selected
+                        >
+                          Choose...
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='A+'
+                        >
+                          A+{" "}
+                        </option>{" "}
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='A-'
+                        >
+                          A-{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B+'
+                        >
+                          B+{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          B-{" "}
+                        </option>{" "}
+                        <option value='B+'>O+ </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          O-{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B+'
+                        >
+                          AB+{" "}
+                        </option>
+                        <option
+                          className='text-input-text   focus:outline-none'
+                          value='B-'
+                        >
+                          AB-{" "}
+                        </option>
+                      </select>
+                    </div>
+                    <div className='col-span-1 row-span-1'></div>
+                    <div className=' p-4 relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Date<span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='No., Street, Town, Zip Code, State.'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='date'
+                        onChange={(e) => setSelectedDate(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className=' p-4 relative border-1 text-text-dark-gray'>
+                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                        Time<span className='text-red-500'>*</span>
+                      </label>
+                      <input
+                        placeholder='No., Street, Town, Zip Code, State.'
+                        className='placeholder-input-text w-full focus:outline-none'
+                        type='time'
+                        onChange={(e) => setSelectedTime(e.target.value)}
+                        required
+                      />
+                    </div>
                   </div>
-                  <div className='col-span-1 row-span-1'></div>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Date<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='date'
-                      onChange={(e) => setSelectedDate(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Time<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='time'
-                      onChange={(e) => setSelectedTime(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-                <button
-                  disabled={!selectedBloodType || !user || !selectedFacility || !selectedDate || !selectedTime}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    submitSchedule({
-                      donorId: user.id,
-                      facilityId: selectedFacility.id,
-                      bloodType: selectedBloodType ?? setSelectedBloodType(selectedFacility?.bloodTypes[0]),
-                      unitsRequested: "",
-                      additionalNotes: "",
-                      preferredDate: `${selectedDate} ${selectedTime}`
-                    })
-                  }}
-                  className={`
+                  <button
+                    disabled={
+                      !selectedBloodType ||
+                      !user ||
+                      !selectedFacility ||
+                      !selectedDate ||
+                      !selectedTime
+                    }
+                    onClick={(e) => {
+                      e.preventDefault();
+                      submitSchedule({
+                        donorId: user.id,
+                        facilityId: selectedFacility.id,
+                        bloodType:
+                          selectedBloodType ??
+                          setSelectedBloodType(selectedFacility?.bloodTypes[0]),
+                        unitsRequested: "",
+                        additionalNotes: "",
+                        preferredDate: `${selectedDate} ${selectedTime}`,
+                      });
+                      setSchedule({
+                        donorId: user.id,
+                        facilityId: selectedFacility.id,
+                        bloodType:
+                          selectedBloodType ??
+                          setSelectedBloodType(selectedFacility?.bloodTypes[0]),
+                        unitsRequested: "",
+                        additionalNotes: "",
+                        preferredDate: `${selectedDate} ${selectedTime}`,
+                      });
+                    }}
+                    className={`
                     bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6
-                    ${(!selectedBloodType || !user || !selectedFacility || !selectedDate || !selectedTime) && 'opacity-50'}
-                    `
-                  }
-                >
-                  Schedule
-                </button>
-                {scheduleError && (
-                    <p className="text-red text-sm self-end mt-2">{scheduleError}</p>
+                    ${
+                      (!selectedBloodType ||
+                        !user ||
+                        !selectedFacility ||
+                        !selectedDate ||
+                        !selectedTime) &&
+                      "opacity-50"
+                    }
+                    `}
+                  >
+                    Schedule
+                  </button>
+                  {scheduleError && (
+                    <p className='text-red text-sm self-end mt-2'>
+                      {scheduleError}
+                    </p>
                   )}
-              </form>
-            </div>
+                </form>
+              </div>
+            )}
+            {user.role !== "donor" && (
+              <button
+                className=' bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6
+'
+                onClick={()=>setSelectedFacility(null)}
+              >
+                Close
+              </button>
+            )}
           </div>
         </div>
       )}{" "}
@@ -431,11 +473,13 @@ export default function Facilities() {
             <div className='text-sm flex flex-col gap-2'>
               <div>
                 <p>
-                  Donation schedule request successfully submitted to {selectedFacility.name}
+                  Donation schedule request successfully submitted to{" "}
+                  {selectedFacility.name}
                   Hospital for{" "}
                   <span className='font-bold'>
                     {DateUtils.formatDate(createdSchedule?.preferredDate)}
-                  </span> by{" "}
+                  </span>{" "}
+                  by{" "}
                   <span className='font-bold'>
                     {DateUtils.formatTime(createdSchedule?.preferredDate)}
                   </span>
@@ -474,6 +518,7 @@ export default function Facilities() {
             <button
               onClick={() => {
                 setSubmitted(!submitted);
+                setSelectedFacility(null);
               }}
               className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
             >
