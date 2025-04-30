@@ -5,50 +5,25 @@ import { useProfileContext } from "src/shared/context/user-profile-context";
 import { FacilityDetailsApi } from "../../api/facilityDetails.api ";
 
 function FacilityApp() {
+  
   const location = useLocation();
   const navigate = useNavigate()
   const { user } = useProfileContext()
   // const facility = useFacilityContext()
   const [facility, setFacility] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-const  facilityId = user.facilityId
-
-
-// console.log("facility details...:", facility);
-// console.log("user details...:", user);
-
- 
-
-//   useEffect(() => {
-// FacilityDetailsApi.fetchFacilityDetails(facilityId)
-//   .then((data) => {
-//     setFacility(data) 
-//     console.log("facility details fetched", data);
-//   })
-//       .catch((error) => {
-//         console.error(error);
-//         // navigate("/");
-//       })
-//       .finally(() => setTimeout(() => setIsOpen(false), 100));
-//   }, []);
-
-  
-  
-  
-  // console.log("facility details fetched", facility);
-
 
   useEffect(() => {
-      if (isOpen) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "auto";
-      }
-  
-      return () => {
-        document.body.style.overflow = "auto";
-      };
-    }, [isOpen]);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
   
   // console.log("current user ",user)
   return (
@@ -76,7 +51,7 @@ const  facilityId = user.facilityId
               <div className='w-0.5 my-2 hidden md:inline bg-background-grey'></div>
 
               <div className='flex   items-center justify-self-start  gap-4 '>
-                <div classsName='flex flex-col '>
+                <div className='flex flex-col '>
                   <p className='text-xs text-right text-input-text'>
                     Welcome back,
                   </p>

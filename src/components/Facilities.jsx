@@ -1,89 +1,70 @@
-import { useEffect, useState, useMemo,  } from 'react'
-import { FacilityListApi } from '../api/facilityList';
-import { useProfileContext } from "src/shared/context/user-profile-context.jsx";
-
+import {useEffect,useState,useMemo} from 'react'
+import { FacilityApi } from '../api/facility.api';
+import { DonationApi } from '../api/donation.api';
+import { useProfileContext } from '../shared/context/user-profile-context';
+import { DateUtils } from '../shared/utils/date.utils';
+import Pagination from './common/Pagination';
+import Loader from './common/Loader';
 
 export default function Facilities() {
-  //  const rowsPerPage = 14;
-  const user = useProfileContext();
-  const [facilities, setFacilities] = useState([]);
+
+  const { user } = useProfileContext();
+
+  const [facilities, setFacilities] = useState({
+    list: [],
+    currentPage: 1,
+    totalPages: 1
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [details, setDetails] = useState(false);
-  const [totalPages, setTotalPages] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
+
+  const [selectedBloodType, setSelectedBloodType] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [scheduleError, setScheduleError] = useState('');
+  const [createdSchedule, setCreatedSchedule] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // console.log("currentpage...", currentPage
   // );
   useEffect(() => {
     setLoading(true);
-    // console.log("Fetching facilities list... current page:", currentPage);
-    FacilityListApi.fetchFacilitiesList(currentPage)
-      .then((res) => {
-        // res.json()
-        // console.log("res", res)
-        setFacilities(res.list);
-        setTotalPages(res.totalPages);
-  })
-      
-      .catch((error) => console.error("Error fetching data:", error))
-      .finally(() => {
-        setLoading(false);
-      });
+    FacilityApi.fetch(currentPage)
+    .then((data)=> {
+      setFacilities(data);
+      setLoading(false);
+    })
+    .catch((error)=> {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    });
   }, [currentPage]);
-
-  // useEffect(() => { 
-  //   // console.log("Facilities data:", facilities);
-  //   if (facilities.length > 0) {
-  //     console.log("Updated facilities data:", facilities);
-  //   } else {
-  //     console.log("Still loading or empty...");
-  //   }
-  // }, [facilities])
-  
-  useEffect(() => {
-    if (!loading) {
-      // console.log("Final facilities data:", facilities);
-    }
-    else {
-      // console.log("Loading facilities data...");
-    }
-  }, [facilities, loading]);
-
 
   const filteredList = useMemo(() => {
     if (!searchQuery) {
-      return facilities;
+      return facilities.list;
     }
 
-    return facilities.filter((facility) =>
+    return facilities.list.filter((facility) =>
       facility.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [searchQuery, facilities]);
+  }, [searchQuery, facilities.list]);
 
-  // const totalPages = Math.ceil(filteredList.length / rowsPerPage);
-  // const indexOfLastFacility = currentPage * rowsPerPage;
-  // const indexOfFirstFacility = indexOfLastFacility - rowsPerPage;
-  // const currentFacilities = filteredList.slice(
-  //   indexOfFirstFacility,
-  //   indexOfLastFacility
-  // );
+  function submitSchedule(newDonationSchedule) {
+    setScheduleError(''); 
+    DonationApi.createBloodDonationSchedule(newDonationSchedule)
+    .then((data)=> {
+      setCreatedSchedule(data);
+      setSubmitted(true);
+    })
+    .catch((error)=> { 
+      setScheduleError(error.response?.data?.message || 'Failed to schedule donation. Please try again.');
+    })
+  }
 
-  // const getPaginationNumbers = () => {
-  //   if (totalPages <= 5) {
-  //     return [...Array(totalPages)].map((_, index) => index + 1);
-  //   } else {
-  //     if (currentPage <= 3) {
-  //       return [1, 2, 3, "...", totalPages];
-  //     } else if (currentPage >= totalPages - 2) {
-  //       return [1, "...", totalPages - 2, totalPages - 1, totalPages];
-  //     } else {
-  //       return [1, "...", currentPage, "...", totalPages];
-  //     }
-  //   }
-  // };
   return (
     <div className='flex flex-col h-full   gap-4 '>
       <div className='flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between w-full'>
@@ -124,9 +105,9 @@ export default function Facilities() {
         </div>
       </div>
       <h2 className='font-bold text-xl'>All Facilities</h2>
-      <div className='max-h-[60dvh] w-full overflow-hidden overflow-y-auto '>
-        <table className=' w-full  '>
-          <thead className='bg-light-pink text-left  '>
+      <div className='max-h-[60dvh] w-full overflow-hidden overflow-y-auto'>
+        <table className='w-full'>
+          <thead className='bg-light-pink text-left'>
             <tr className='text-xs md:text-sm'>
               <th className='py-1 pl-1 pr-2 md:pl-0'>Facility Name</th>
               <th className=''>Address</th>
@@ -135,121 +116,67 @@ export default function Facilities() {
               <th className=''>Operating Hours</th>
             </tr>
           </thead>
-
-          <tbody>
-            {/* {currentFacilities.map((facility) => ( */}
-            {filteredList.map((facility) => (
-              // <tr
-              //   className='text-xs md:text-sm border-b-1  border-background-grey'
-              //   key={facility.id}
-              // >
-              //   <button
-              //     onClick={() => {
-              //       setDetails(true);
-              //       setSelectedFacility(facility);
-              //     }}
-              //     className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold'
-              //   >
-              //     {facility.name}
-              //   </button>
-              //   <td className='hidden md:table-cell'>{facility.address}</td>
-              //   <td className='pr-2 md:pl-0'>
-              //     {facility.bloodType.join(", ")}
-              //   </td>
-              //   <td className=' '>
-              //     <div className='flex items-center my-auto  gap-2'>
-              //       <i
-              //         className={` fa-solid fa-circle text-green
-              //       ${
-              //         facility.urgency === "High"
-              //           ? "text-red"
-              //           : facility.urgency === "Medium"
-              //           ? "text-yellow"
-              //           : "text-green"
-              //       }`}
-              //       ></i>
-
-              //       {facility.urgency}
-              //     </div>
-              //   </td>
-              //   <td className='hidden md:table-cell'>{facility.hours}</td>
-              // </tr>
-              <tr
-                className='text-xs md:text-sm border-b-1  border-background-grey'
-                key={facility.id}
-              >
-               <td> <button
-                  onClick={() => {
-                    setDetails(true);
-                    setSelectedFacility(facility);
-                  }}
-                  className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold'
-                >
-                  {facility.name}
-                </button></td>
-                <td className=''>{facility.address}</td>
-                {/* <td className='pr-2 md:pl-0'>
-                  {facility.bloodType.join(", ")}
-                </td> */}
-                {/* <td className=' '>
-                  <div className='flex items-center my-auto  gap-2'>
-                    <i
-                      className={` fa-solid fa-circle text-green
-                    ${
-                      facility.urgency === "High"
-                        ? "text-red"
-                        : facility.urgency === "Medium"
-                        ? "text-yellow"
-                        : "text-green"
-                    }`}
-                    ></i>
-
-                    {facility.urgency}
-                  </div>
-                </td> */}
-                <td className=''>{facility.operationalHours}</td>
+          {loading ? (
+            <tbody>
+              <tr>
+                <td colSpan={5} className="h-[200px]">
+                  <Loader />
+                </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          ) : facilities.list ? (
+            <tbody>
+              {filteredList.map((facility) => (
+                <tr
+                  className='text-xs md:text-sm border-b-1  border-background-grey'
+                  key={facility.id}
+                >
+                  <td
+                    onClick={() => {
+                      setSelectedFacility(facility);
+                    }}
+                    className='py-2 text-left pl-1 pr-2 md:pl-0 font-bold cursor-pointer'
+                  >
+                    {facility.name}
+                  </td>
+                  <td className='hidden md:table-cell'>{facility.address}</td>
+                  <td className='pr-2 md:pl-0'>
+                    {facility.bloodTypes?.join(", ")}
+                  </td>
+                  <td className=' '>
+                    <div className='flex items-center my-auto  gap-2'>
+                      <i
+                        className={` fa-solid fa-circle text-green
+                      ${facility.urgency === "high" && "text-red"}
+                      ${facility.urgency === "medium" && "text-yellow"}
+                      ${facility.urgency === "low" && "text-green"}
+                      }`}
+                      ></i>
+    
+                      {facility.urgency}
+                    </div>
+                  </td>
+                  <td className='hidden md:table-cell'>{facility.operationalHours}</td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <div>No data</div>
+          )}
         </table>
       </div>
-      <div className='flex justify-center  items-center gap-2 mt-auto ml-auto'>
-        <button
-          className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          <i className='fa-solid fa-angle-left'></i>
-        </button>
-
-        {/* {getPaginationNumbers().map((page, index) => (
-          <button
-            key={index}
-            className={`px-2 py-1 hover:bg-light-pink  ${
-              currentPage === page ? "bg-light-pink" : ""
-            }`}
-            onClick={() => typeof page === "number" && setCurrentPage(page)}
-            disabled={page === "..."}
-          >
-            {page}
-          </button>
-        ))} */}
-        <p>{currentPage}</p>
-        <button
-          className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-          onClick={
-            () => setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            // setCurrentPage((prev) => (prev + 1))
-          }
-          disabled={currentPage === totalPages}
-        >
-          <i className='fa-solid fa-angle-right'></i>
-        </button>
+      <div className='flex justify-end mt-4'>
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={facilities.totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
-      {details && (
+      {selectedFacility && (
         <div
           onClick={(e) => {
-            setDetails(!details), e.stopPropagation();
+            // setDetails(!details)
+            e.stopPropagation();
           }}
           className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
@@ -264,9 +191,9 @@ export default function Facilities() {
                   {selectedFacility.name?.charAt(0).toUpperCase() +
                     selectedFacility.name?.slice(1)}
                 </h1>
-                <button onClick={() => setDetails(!details)}>
+                <button onClick={() => setSelectedFacility(null)}>
                   {" "}
-                  <i className='fa-regular fa-circle-xmark'></i>
+                  <i className='fa-regular fa-circle-xmark hover:text-pink cursor-pointer'></i>
                 </button>
               </div>{" "}
               <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
@@ -311,8 +238,8 @@ export default function Facilities() {
                       <th className='text-left'>Urgency</th>
                     </tr>
                   </thead>
-                  {/* <tbody>
-                    {selectedFacility.stock.map((blood, index) => (
+                  <tbody>
+                    {/* {selectedFacility..map((blood, index) => (
                       <tr
                         className='text-xs border-b-1 text-center border-background-grey'
                         key={index}
@@ -338,122 +265,149 @@ export default function Facilities() {
                           </span>
                         </td>
                       </tr>
-                    ))}
-                  </tbody> */}
+                    ))} */}
+                  </tbody>
                 </table>
               </div>
             </div>
 
-            {user.role === "donor" && (
-              <div className='flex flex-col gap-4'>
-                <h2 className='font-bold text-sm text-text-dark-gray'>
-                  Donation Booking Details
-                </h2>
-                <form className=' flex flex-col gap-4'>
-                  <div className='grid max-w-[70%] grid-rows-2 gap-4 grid-cols-2'>
-                    <div className='w-full px-4  relative border-1 text-text-dark-gray'>
-                      <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
-                        Blood Type <span className='text-red-500'>*</span>
-                      </label>{" "}
-                      <select
-                        className=' focus:outline-none py-4   w-full   text-input-text '
-                        required
+            <div className='flex flex-col gap-4'>
+              <h2 className='font-bold text-sm text-text-dark-gray'>
+                Donation Booking Details
+              </h2>
+              <form className=' flex flex-col gap-4'>
+                <div className='grid max-w-[70%] grid-rows-2 gap-4 grid-cols-2'>
+                  <div className='w-full px-4  relative border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                      Blood Type <span className='text-red-500'>*</span>
+                    </label>{" "}
+                    <select
+                      className='focus:outline-none py-4 w-full text-input-text'
+                      value={selectedBloodType}
+                      onChange={(e) => setSelectedBloodType(e.target.value)}
+                      required
+                    >
+                      <option
+                        className='text-input-text focus:outline-none'
+                        value=""
+                        disabled
+                        selected={!selectedBloodType}
+                      > -- Select blood type --</option>
+
+                      {
+                        selectedFacility.bloodTypes.map((bloodType, index)=> {
+                          return <option
+                            key={index}
+                            className='text-input-text focus:outline-none'
+                            value={bloodType}
+  
+                          > { bloodType } </option>
+                        })
+                      }
+                      {/* <option
+                        className='text-input-text   focus:outline-none'
+                        disabled
+                        selected
                       >
-                        <option
-                          className='text-input-text   focus:outline-none'
-                          disabled
-                          selected
-                        >
-                          Choose...
-                        </option>
-                        <option
-                          className='text-input-text   focus:outline-none'
-                          value='A+'
-                        >
-                          A+{" "}
-                        </option>{" "}
-                        <option
-                          className='text-input-text   focus:outline-none'
-                          value='A-'
-                        >
-                          A-{" "}
-                        </option>
-                        <option
-                          className='text-input-text   focus:outline-none'
-                          value='B+'
-                        >
-                          B+{" "}
-                        </option>
-                        <option
-                          className='text-input-text   focus:outline-none'
-                          value='B-'
-                        >
-                          B-{" "}
-                        </option>{" "}
-                        <option value='B+'>O+ </option>
-                        <option
-                          className='text-input-text   focus:outline-none'
-                          value='B-'
-                        >
-                          O-{" "}
-                        </option>
-                        <option
-                          className='text-input-text   focus:outline-none'
-                          value='B+'
-                        >
-                          AB+{" "}
-                        </option>
-                        <option
-                          className='text-input-text   focus:outline-none'
-                          value='B-'
-                        >
-                          AB-{" "}
-                        </option>
-                      </select>
-                    </div>
-                    <div className='col-span-1 row-span-1'></div>
-                    <div className=' p-4 relative border-1 text-text-dark-gray'>
-                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                        Date<span className='text-red-500'>*</span>
-                      </label>
-                      <input
-                        placeholder='No., Street, Town, Zip Code, State.'
-                        className='placeholder-input-text w-full focus:outline-none'
-                        type='date'
-                        required
-                      />
-                    </div>
-                    <div className=' p-4 relative border-1 text-text-dark-gray'>
-                      <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                        Time<span className='text-red-500'>*</span>
-                      </label>
-                      <input
-                        placeholder='No., Street, Town, Zip Code, State.'
-                        className='placeholder-input-text w-full focus:outline-none'
-                        type='time'
-                        required
-                      />
-                    </div>
+                        Choose...
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='A+'
+                      >
+                        A+{" "}
+                      </option>{" "}
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='A-'
+                      >
+                        A-{" "}
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B+'
+                      >
+                        B+{" "}
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B-'
+                      >
+                        B-{" "}
+                      </option>{" "}
+                      <option value='B+'>O+ </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B-'
+                      >
+                        O-{" "}
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B+'
+                      >
+                        AB+{" "}
+                      </option>
+                      <option
+                        className='text-input-text   focus:outline-none'
+                        value='B-'
+                      >
+                        AB-{" "}
+                      </option> */}
+                    </select>
                   </div>
-                  <button
-                    onClick={() => {
-                      setDetails(!details), setSubmitted(!submitted);
-                    }}
-                    className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
-                  >
-                    Schedule
-                  </button>
-                </form>
-              </div>
-            )}
-            <button
-              onClick={() => {
-                setDetails(!details)
-              }}
-              className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6'
-            >
-              Close
-            </button>
+                  <div className='col-span-1 row-span-1'></div>
+                  <div className=' p-4 relative border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                      Date<span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      placeholder='No., Street, Town, Zip Code, State.'
+                      className='placeholder-input-text w-full focus:outline-none'
+                      type='date'
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className=' p-4 relative border-1 text-text-dark-gray'>
+                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
+                      Time<span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      placeholder='No., Street, Town, Zip Code, State.'
+                      className='placeholder-input-text w-full focus:outline-none'
+                      type='time'
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <button
+                  disabled={!selectedBloodType || !user || !selectedFacility || !selectedDate || !selectedTime}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    submitSchedule({
+                      donorId: user.id,
+                      facilityId: selectedFacility.id,
+                      bloodType: selectedBloodType ?? setSelectedBloodType(selectedFacility?.bloodTypes[0]),
+                      unitsRequested: "",
+                      additionalNotes: "",
+                      preferredDate: `${selectedDate} ${selectedTime}`
+                    })
+                  }}
+                  className={`
+                    bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6
+                    ${(!selectedBloodType || !user || !selectedFacility || !selectedDate || !selectedTime) && 'opacity-50'}
+                    `
+                  }
+                >
+                  Schedule
+                </button>
+                {scheduleError && (
+                    <p className="text-red text-sm self-end mt-2">{scheduleError}</p>
+                  )}
+              </form>
+            </div>
           </div>
         </div>
       )}{" "}
@@ -477,10 +431,14 @@ export default function Facilities() {
             <div className='text-sm flex flex-col gap-2'>
               <div>
                 <p>
-                  Donation schedule request successfully submitted to LifeBank
+                  Donation schedule request successfully submitted to {selectedFacility.name}
                   Hospital for{" "}
-                  <span className='font-bold'>14th February, 2025</span> by{" "}
-                  <span className='font-bold'>10:00AM.</span>
+                  <span className='font-bold'>
+                    {DateUtils.formatDate(createdSchedule?.preferredDate)}
+                  </span> by{" "}
+                  <span className='font-bold'>
+                    {DateUtils.formatTime(createdSchedule?.preferredDate)}
+                  </span>
                 </p>
                 <p>
                   You can monitor your Request Progress on the Notifications
