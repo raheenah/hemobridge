@@ -26,7 +26,7 @@ export default function Facilities() {
   const [selectedTime, setSelectedTime] = useState('');
   const [scheduleError, setScheduleError] = useState('');
   const [createdSchedule, setCreatedSchedule] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   // console.log("currentpage...", currentPage
   // );

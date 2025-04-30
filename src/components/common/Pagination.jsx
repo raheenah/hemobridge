@@ -32,7 +32,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   };
 
   return (
-    <div className='flex justify-center items-center gap-2'>
+    <div className='flex justify-end items-center mt-4 gap-2'>
       <button
         className='px-2 py-1 hover:bg-light-pink disabled:opacity-50'
         onClick={() => onPageChange(Math.max(currentPage - 1, 1))}

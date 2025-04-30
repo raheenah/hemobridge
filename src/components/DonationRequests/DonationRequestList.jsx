@@ -32,7 +32,7 @@ export default function DonationRequestList({
         ?   <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={onPageChange}
+            onPageChange={onPageChange}
             />
         :   null
      }
