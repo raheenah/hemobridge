@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from '../common/Modal';
 import RequestRow from './RequestRow';
 import { DonationApi } from '../../api/donation.api';
-import { DonationScheduleStatus } from '../../shared/constants/donation-schedule.constant';
+import { ApiDonationScheduleStatus } from '../../shared/constants/donation-schedule.constant';
 
 export function ViewRequestModal({ request, onClose, isOpen }) {
   const [approveState, setApproveState] = useState({
@@ -86,7 +86,7 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
           > Decline </button>
           
           {
-            request.status === DonationScheduleStatus.PENDING &&
+            request.status === ApiDonationScheduleStatus.PENDING &&
             <button
               onClick={handleApproveRequest}
               className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
