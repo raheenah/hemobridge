@@ -17,7 +17,7 @@ function Signin() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-setLoading(true)
+    setLoading(true)
     await loginUser(formData)
     .then((res)=> {
       // console.log(res.user.role)
