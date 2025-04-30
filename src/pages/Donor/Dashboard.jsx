@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PieChart, Pie, Cell } from "recharts";
 import InventoryOverview from "../../components/inventoryOverview";
-import FacilityRecentActivity from "../../components/FacilityRecentActivity";
-import DonorRecentActivity from "../../components/DonorRecentActivity";
+import { EmergencyRequestList } from "./components/EmergencyRequests/EmergencyRequestsList";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -17,7 +16,6 @@ function Dashboard() {
     { name: "Surgical Procedures", value: 10, color: "#ffb3f3" },
   ];
   const [facilities, setFacilities] = useState([]);
-  const [emergencyRequests, setEmergencyRequests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [donate, setDonate] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -32,13 +30,6 @@ function Dashboard() {
     fetch("http://localhost:8000/facilities")
       .then((res) => res.json())
       .then((data) => setFacilities(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
-
-  useEffect(() => {
-    fetch("http://localhost:8000/emergencyRequests")
-      .then((res) => res.json())
-      .then((data) => setEmergencyRequests(data))
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
@@ -66,28 +57,6 @@ function Dashboard() {
         return [1, "...", totalActivityPages - 2, totalActivityPages - 1, totalActivityPages];
       } else {
         return [1, "...", currentPage, "...", totalActivityPages];
-      }
-    }
-  };
-
-  const totalPages = Math.ceil(emergencyRequests.length / rowsPerPage);
-  const indexOfLastFacility = currentPage * rowsPerPage;
-  const indexOfFirstFacility = indexOfLastFacility - rowsPerPage;
-  const currentRequests = emergencyRequests.slice(
-    indexOfFirstFacility,
-    indexOfLastFacility
-  );
-
-  const getPaginationNumbers = () => {
-    if (totalPages <= 5) {
-      return [...Array(totalPages)].map((_, index) => index + 1);
-    } else {
-      if (currentPage <= 3) {
-        return [1, 2, 3, "...", totalPages];
-      } else if (currentPage >= totalPages - 2) {
-        return [1, "...", totalPages - 2, totalPages - 1, totalPages];
-      } else {
-        return [1, "...", currentPage, "...", totalPages];
       }
     }
   };
@@ -253,94 +222,7 @@ function Dashboard() {
         </div>
 
         <div className='flex flex-col    overflow-hidden overflow-y-auto   px-6  bg-white '>
-          <div className='sticky bg-white py-3 top-0'>
-            <div className='flex justify-between items-center'>
-              <h2 className='font-bold text-lg'>Emergency requests </h2>
-            </div>
-          </div>
-          <ul className='flex flex-col gap-2'>
-            {currentRequests.map((request) => (
-              <li
-                className=' border-1 px-2 py-1 flex items-start justify-between border-text-gray'
-                key={request.id}
-              >
-                <div className='flex flex-col'>
-                  <p className='flex items-center gap-2'>
-                    <span className='text-text-dark-gray font-bold'>
-                      Blood Type:
-                    </span>{" "}
-                    {request.blood_type}
-                  </p>
-                  <p className='flex items-start gap-2'>
-                    <span className='text-text-dark-gray font-bold'>
-                      Location:
-                    </span>{" "}
-                    {request.facility_name}, {request.address}
-                  </p>
-                  <p className='flex items-center gap-2'>
-                    <span className='text-text-dark-gray font-bold'>
-                      Urgency:
-                    </span>{" "}
-                    <div className='flex items-center my-auto  gap-1'>
-                      <i
-                        className={` fa-solid fa-circle text-green
-                    ${
-                      request.urgency_level === "Critical"
-                        ? "text-red"
-                        : request.urgency_level === "Low"
-                        ? "text-yellow"
-                        : "text-green"
-                    }`}
-                      ></i>
-
-                      {request.urgency_level}
-                    </div>
-                  </p>
-                </div>
-                <button
-                  onClick={() => {
-                    setDonate(true);
-                    setSelectedRequest(request);
-                  }}
-                  className='bg-background hover:bg-pink !important   w-fit  font-bold  text-white py-1 px-2'
-                >
-                  Donate{" "}
-                </button>
-              </li>
-            ))}
-          </ul>
-          <div className='flex  justify-end  items-center gap-2 my-4 ml-auto'>
-            <button
-              className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              <i className='fa-solid fa-angle-left'></i>
-            </button>
-
-            {getPaginationNumbers().map((page, index) => (
-              <button
-                key={index}
-                className={`px-2 py-1 hover:bg-light-pink  ${
-                  currentPage === page ? "bg-light-pink" : ""
-                }`}
-                onClick={() => typeof page === "number" && setCurrentPage(page)}
-                disabled={page === "..."}
-              >
-                {page}
-              </button>
-            ))}
-
-            <button
-              className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-            >
-              <i className='fa-solid fa-angle-right'></i>
-            </button>
-          </div>
+          <EmergencyRequestList />
         </div>
       </div>
 
