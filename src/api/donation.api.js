@@ -36,5 +36,13 @@ export const DonationApi = {
         .then((response)=> response)
         .catch((error)=> {throw error.response.data})
         return response.data;
+    },
+    
+    // a donor method
+    acceptSchedule: async (scheduleId, body)=> {
+        const response = await ApiFetch.patch(`/api/donation/schedule/${scheduleId}/assign`, body)
+        .then((response)=> response)
+        .catch((error)=> {throw error.response.data})
+        return response.data;
     }
 }
