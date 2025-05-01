@@ -4,6 +4,8 @@ import { PieChart, Pie, Cell } from "recharts";
 import InventoryOverview from "../../components/inventoryOverview";
 import FacilityRecentActivity from "../../components/FacilityRecentActivity";
 import DonorRecentActivity from "../../components/DonorRecentActivity";
+import { DonationApi } from "../../api/donation.api";
+
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -35,12 +37,27 @@ function Dashboard() {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
+  // useEffect(() => {
+  //   fetch("http://localhost:8000/emergencyRequests")
+  //     .then((res) => res.json())
+  //     .then((data) => setEmergencyRequests(data))
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // }, []);
+
   useEffect(() => {
-    fetch("http://localhost:8000/emergencyRequests")
-      .then((res) => res.json())
-      .then((data) => setEmergencyRequests(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+      loadDonationRequests(emergencyRequests.currentPage);
+    }, [emergencyRequests.currentPage]);
+  
+    const loadDonationRequests = async (page) => {
+      DonationApi.fetchFacilitySchedules(page)
+      .then((data)=> {
+        console.log("emergency requests/....", data)
+        setEmergencyRequests(data)
+      })
+      .catch((error)=> { 
+        console.error("Error loading donation requests:", error);
+      })
+    };
 
   useEffect(() => {
     fetch("http://localhost:8000/facilitiesRecentActivity")
@@ -259,7 +276,7 @@ function Dashboard() {
             </div>
           </div>
           <ul className='flex flex-col gap-2'>
-            {currentRequests.map((request) => (
+            {emergencyRequests.map((request) => (
               <li
                 className=' border-1 px-2 py-1 flex items-start justify-between border-text-gray'
                 key={request.id}

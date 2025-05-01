@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from 'src/components/common/Modal.jsx';
 import { StringUtils } from "src/shared/utils/string.utils.js"
+import { DateUtils } from "src/shared/utils/date.utils.js";
 
 export default function EmergencyRequestDetails({ onClose, request }) {
 
@@ -23,7 +24,6 @@ export default function EmergencyRequestDetails({ onClose, request }) {
     CANCELLED: 'COMPLETED',
   };
 
-  /* helpers */
   const statusToIndex = { SUBMITTED: 0, SCHEDULED: 1, COMPLETED: 2 };
 
   const uiStatus   = apiToUiStatus[request.status];
@@ -36,19 +36,26 @@ export default function EmergencyRequestDetails({ onClose, request }) {
     ? 'bg-orange-500'
     : request.urgencyLevel === 'MEDIUM'
     ? 'bg-yellow-400'
-    : 'bg-green-500';
+        : 'bg-green-500';
+  
+  console.log("request", request);
 
   return (
     <Modal onClose={onClose}>
-        {/* header */}
-        <div className="flex justify-between items-start">
-          <h2 className="font-bold text-lg text-gray-900">Emergency Request</h2>
-          <button onClick={onClose}>
-            <i className="fa-regular fa-circle-xmark text-xl"></i>
+      <div>
+        {" "}
+        <div className='flex justify-between text-xs items-start'>
+          <h2 className='font-bold text-base '>Emergency Request</h2>
+          <button
+            onClick={onClose}
+            className='text-gray-500 text-lg hover:text-gray-700'
+          >
+            <i className='fa-regular fa-circle-xmark '></i>
           </button>
         </div>
-
-        {/* CONTACT
+        <div className='w-[70%] h-0.5 top-0   bg-background-grey'></div>
+      </div>
+      {/*
         <section>
           <h3 className="font-bold text-sm text-gray-700 mb-1">Contact Information</h3>
           <hr className="mb-2" />
@@ -57,65 +64,88 @@ export default function EmergencyRequestDetails({ onClose, request }) {
           <p><span className="font-semibold">Contact Number:</span> {request.facilityPhone}</p>
         </section> */}
 
-        {/* DONOR REQUEST DETAILS */}
-        <section>
-          <h3 className="font-bold text-sm text-gray-700 mb-1">Request Information</h3>
-          <hr className="mb-2" />
-          <p><span className="font-semibold">Donor Name:</span> {StringUtils.capitalize(request.donorId.firstName)} { StringUtils.capitalize(request.donorId.firstName)}</p>
-          {/* <p><span className="font-semibold">Age:</span> {request.donorAge} years</p>
+      <section>
+        <h3 className='font-bold text-sm text-text-dark-gray mb-1'>
+          Request Information
+        </h3>
+        <p>
+          <span className='font-semibold'>Donor Name:</span>{" "}
+          {StringUtils.capitalize(request.donorId.firstName)}{" "}
+          {StringUtils.capitalize(request.donorId.lastName)}
+        </p>
+        {/* <p><span className="font-semibold">Age:</span> {request.donorAge} years</p>
           <p><span className="font-semibold">Gender:</span> {request.donorGender}</p> */}
-          <p><span className="font-semibold">Blood Type:</span> {request.bloodType}</p>
-          <p className="flex items-center gap-2">
-            <span className="font-semibold">Urgency Level:</span>
-            <span className={`inline-block w-3 h-3 rounded-full ${urgencyColor}`}></span>
-            {request.urgencyLevel}
-          </p>
-          <p><span className="font-semibold">Quantity Needed:</span> {request.unitsRequested} Units</p>
-          <p><span className="font-semibold">Additional Notes:</span> {request.notes || '-'}</p>
-        </section>
+        <p>
+          <span className='font-semibold'>Blood Type:</span> {request.bloodType}
+        </p>
+        <p className='flex items-center gap-2'>
+          <span className='font-semibold'>Urgency Level:</span>
+          <span
+            className={`inline-block w-3 h-3 rounded-full ${urgencyColor}`}
+          ></span>
+          {request.urgencyLevel}
+        </p>
+        <p>
+          <span className='font-semibold'>Quantity Needed:</span>{" "}
+          {request.unitsRequested} Units
+        </p>{" "}
+        <p>
+          <span className='font-semibold'>Scheduled Date:</span>{" "}
+          {DateUtils.formatDate(request.preferredDate)}{" "}
+          {/* {DateUtils.formatTime(request.preferredDate)} */}
+        </p>
+        <p>
+          <span className='font-semibold'>Scheduled Time:</span>{" "}
+          {/* {DateUtils.formatDate(request.preferredDate)}{" "} */}
+          {DateUtils.formatTime(request.preferredDate)}
+        </p>
+        <p>
+          <span className='font-semibold'>Additional Notes:</span>{" "}
+          {request.notes || "-"}
+        </p>
+        <p className='font-extrabold text-lg'> {request.status}</p>
+      </section>
 
-        {/* PROGRESS */}
-        <section className="mt-4">
-          <div className="flex justify-between text-sm mb-2 text-gray-700">
-            <span>Submitted</span>
-            <span>Scheduled</span>
-            <span>Completed</span>
+      <section className='mt-4'>
+        <div className='flex justify-between  text-sm mb-2 text-gray-700'>
+          <span>Submitted</span>
+          <span>Scheduled</span>
+          <span>Completed</span>
+        </div>
+
+        <div className='relative h-2 w-[95%] m-auto mt-5'>
+          <div className='absolute -top-[6px] w-full h-[15px] border-1 border-background'>
+            <div
+              className=' h-full bg-background transition-all'
+              style={{ width: `${progress}%` }}
+            />
           </div>
 
-          <div className="relative h-2 w-[95%] m-auto mt-5">
-            <div className="absolute -top-[6px] w-full h-[15px] border-1 border-purple-900">
-              <div
-                className=" h-full bg-purple-900 transition-all"
-                style={{ width: `${progress}%` }}
-              />
+          {[0, 1, 2].map((index) => (
+            <div
+              key={index}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-background flex items-center justify-center ${
+                index <= statusIndex ? "bg-background text-white" : "bg-white"
+              }`}
+              style={{ left: `${index * 50}%` }}
+            >
+              {index <= statusIndex && <i className='fa fa-check text-xs'></i>}
             </div>
+          ))}
+        </div>
+      </section>
 
-            {[0, 1, 2].map((index) => (
-              <div
-                key={index}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-purple-900 flex items-center justify-center ${
-                  index <= statusIndex ? 'bg-purple-900 text-white' : 'bg-white'
-                }`}
-                style={{ left: `${index * 50}%` }}
-              >
-                {index <= statusIndex && <i className="fa fa-check text-xs"></i>}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ACTION */}
-        <button
-          disabled={cancelLoading || request.status !== 'SUBMITTED'}
-          onClick={cancelRequest}
-          className={`self-center w-40 py-2 text-xs font-bold text-white ${
-            cancelLoading
-              ? 'bg-gray-400'
-              : 'bg-purple-900 hover:bg-purple-700 transition-colors'
-          }`}
-        >
-          {cancelLoading ? 'Cancelling…' : 'Cancel Request'}
-        </button>
+      <button
+        disabled={cancelLoading || request.status !== "SUBMITTED"}
+        onClick={cancelRequest}
+        className={`self-center w-40 py-2 text-xs font-bold text-white ${
+          cancelLoading
+            ? "bg-gray-400"
+            : "bg-background hover:bg-pink transition-colors"
+        }`}
+      >
+        {cancelLoading ? "Cancelling…" : "Cancel Request"}
+      </button>
     </Modal>
   );
 }
