@@ -69,7 +69,7 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
   }
 
   function handleCompleteRequest() {
-    console.log("Completing request", request.id);
+    // console.log("Completing request", request.id);
     setApproveState({
       error: false,
       message: "",

@@ -57,7 +57,7 @@ const [refresh, setRefresh] = useState(false);
         .then((data) => {
           setInventory(data);
           setLoadingInventory(false);
-          console.log("Inventory data:", data);
+          // console.log("Inventory data:", data);
          })
       .catch((error) => {
         console.error("Error fetching inventory:", error);
@@ -84,7 +84,7 @@ const [refresh, setRefresh] = useState(false);
   const loadDonationRequests = async (page) => {
     DonationApi.fetchFacilitySchedules(page)
     .then((data)=> {
-      console.log(data)
+      // console.log(data)
       setRequests(data)
       setLoadingRequests(false);
     })
@@ -108,7 +108,7 @@ const [refresh, setRefresh] = useState(false);
     };
   }, [modalState]);
 
- if ( loadingInventory || loadingRequests) {
+ if (loadingFacilities || loadingInventory || loadingRequests) {
     return (
      <div className="flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center">
           <Loader />

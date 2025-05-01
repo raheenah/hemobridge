@@ -13,7 +13,7 @@ export const FacilityDetailsApi = {
         const res = await ApiFetch.get(`/api/facility/${id}`)
         .then((response)=> response)
         .catch((error)=> { throw error })
-        console.log(res)
+        // console.log(res)
         
                 //   console.log("facility details fetched:", res);
 

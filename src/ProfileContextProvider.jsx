@@ -23,7 +23,7 @@ const ProfileContextProvider = ({children}) => {
 
   if (loading) return <p>Loading...</p>;
 
-console.log("user", user);
+// console.log("user", user);
 
   if (!user) {
     return <Navigate to='/' state={{ from: location }} replace />;

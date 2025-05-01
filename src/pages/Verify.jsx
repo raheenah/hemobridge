@@ -19,7 +19,7 @@ function VerifyAccount() {
 
    const handleSubmit = async () => {
       // e.preventDefault();
-      console.log("Form Data:", formData);
+      // console.log("Form Data:", formData);
       try {
         const response = await verifyEmail(formData);
         setMessage(response.message);

@@ -40,7 +40,7 @@ function Emergency_Requests({ currentPage, totalPages, onPageChange }) {
     setLoading(true);
     DonationApi.fetchFacilitySchedules(page)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setEmergencyRequests(data);
       })
       .catch((error) => {
@@ -169,7 +169,7 @@ function Emergency_Requests({ currentPage, totalPages, onPageChange }) {
                       isRequestDetailsModalVisible: true,
                     }));
                     setViewDonationRequest(true);
-                    console.log("selected request", request);
+                    // console.log("selected request", request);
                   }}
                   className='bg-background hover:bg-pink !important   w-fit  font-bold  text-white py-1 px-2'
                 >
@@ -335,7 +335,7 @@ function Emergency_Requests({ currentPage, totalPages, onPageChange }) {
                   setViewDonationRequest(false);
                   setConfirmComplete(false);
                   setConfirm(false);
-                  console.log("approved state", approveState);
+                  // console.log("approved state", approveState);
                 }}
                 className='bg-background hover:bg-pink !important mx-auto  w-full max-w-32  font-bold text-xs text-white py-2 px-4'
               >

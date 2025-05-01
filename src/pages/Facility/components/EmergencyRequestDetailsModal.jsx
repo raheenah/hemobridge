@@ -17,7 +17,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
   const { user } = useProfileContext();
 
   const cancelRequest = async () => {
-    console.log("Cancelling request cancel reactuest clicked", request.id);
+    // console.log("Cancelling request cancel reactuest clicked", request.id);
     setCancelLoading(true);
     // TODO: hit your cancel API here
     setTimeout(() => {
@@ -32,7 +32,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
         message: "",
       });
       setCancelLoading(true);
-  console.log("Declining request", request.id);
+  // console.log("Declining request", request.id);
       DonationApi.cancelSchedule(request.id)
         .then((data) => {
           setApproveState({
@@ -69,7 +69,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
   }
   
 
-  console.log("request", request);
+  // console.log("request", request);
   // console.log("user", user)
 
 
@@ -79,7 +79,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
       message: "",
     });
     // setCancelLoading(true);
-    console.log("completing request", request.id);
+    // console.log("completing request", request.id);
     DonationApi.completeSchedule(request.id)
       .then((data) => {
         setApproveState({
@@ -152,7 +152,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
       ? "bg-yellow-400"
       : "bg-green-500";
 
-  console.log("user", user);
+  // console.log("user", user);
 
   return (
     <Modal onClose={onClose}>
@@ -224,7 +224,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
             </span>{" "}
             {request.unitsRequested} Units
           </p>{" "}
-          <p className='text-lg font-bold text-green'>{request.status}</p>
+          {/* <p className='text-lg font-bold text-green'>{request.status}</p> */}
           {request.status === ApiDonationScheduleStatus.PENDING && (
             <>
               <p>

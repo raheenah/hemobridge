@@ -19,7 +19,7 @@ function Send_Code() {
 
    const handleSubmit = async () => {
       // e.preventDefault();
-      console.log("Form Data:", formData);
+      // console.log("Form Data:", formData);
       try {
         const response = await resendVerification(formData);
         setMessage(response.message);
