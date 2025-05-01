@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PieChart, Pie, Cell } from "recharts";
 import InventoryOverview from "../../components/inventoryOverview";
-import FacilityRecentActivity from "../../components/FacilityRecentActivity";
-import DonorRecentActivity from "../../components/DonorRecentActivity";
-import { DonationApi } from "../../api/donation.api";
-
+import { EmergencyRequestList } from "./components/EmergencyRequests/EmergencyRequestList/EmergencyRequestsList";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -19,7 +16,6 @@ function Dashboard() {
     { name: "Surgical Procedures", value: 10, color: "#ffb3f3" },
   ];
   const [facilities, setFacilities] = useState([]);
-  const [emergencyRequests, setEmergencyRequests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [donate, setDonate] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -36,28 +32,6 @@ function Dashboard() {
       .then((data) => setFacilities(data))
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
-
-  // useEffect(() => {
-  //   fetch("http://localhost:8000/emergencyRequests")
-  //     .then((res) => res.json())
-  //     .then((data) => setEmergencyRequests(data))
-  //     .catch((error) => console.error("Error fetching data:", error));
-  // }, []);
-
-  useEffect(() => {
-      loadDonationRequests(emergencyRequests.currentPage);
-    }, [emergencyRequests.currentPage]);
-  
-    const loadDonationRequests = async (page) => {
-      DonationApi.fetchFacilitySchedules(page)
-      .then((data)=> {
-        console.log("emergency requests/....", data)
-        setEmergencyRequests(data)
-      })
-      .catch((error)=> { 
-        console.error("Error loading donation requests:", error);
-      })
-    };
 
   useEffect(() => {
     fetch("http://localhost:8000/facilitiesRecentActivity")
@@ -83,28 +57,6 @@ function Dashboard() {
         return [1, "...", totalActivityPages - 2, totalActivityPages - 1, totalActivityPages];
       } else {
         return [1, "...", currentPage, "...", totalActivityPages];
-      }
-    }
-  };
-
-  const totalPages = Math.ceil(emergencyRequests.length / rowsPerPage);
-  const indexOfLastFacility = currentPage * rowsPerPage;
-  const indexOfFirstFacility = indexOfLastFacility - rowsPerPage;
-  const currentRequests = emergencyRequests.slice(
-    indexOfFirstFacility,
-    indexOfLastFacility
-  );
-
-  const getPaginationNumbers = () => {
-    if (totalPages <= 5) {
-      return [...Array(totalPages)].map((_, index) => index + 1);
-    } else {
-      if (currentPage <= 3) {
-        return [1, 2, 3, "...", totalPages];
-      } else if (currentPage >= totalPages - 2) {
-        return [1, "...", totalPages - 2, totalPages - 1, totalPages];
-      } else {
-        return [1, "...", currentPage, "...", totalPages];
       }
     }
   };
@@ -270,205 +222,11 @@ function Dashboard() {
         </div>
 
         <div className='flex flex-col    overflow-hidden overflow-y-auto   px-6  bg-white '>
-          <div className='sticky bg-white py-3 top-0'>
-            <div className='flex justify-between items-center'>
-              <h2 className='font-bold text-lg'>Emergency requests </h2>
-            </div>
-          </div>
-          <ul className='flex flex-col gap-2'>
-            {emergencyRequests.map((request) => (
-              <li
-                className=' border-1 px-2 py-1 flex items-start justify-between border-text-gray'
-                key={request.id}
-              >
-                <div className='flex flex-col'>
-                  <p className='flex items-center gap-2'>
-                    <span className='text-text-dark-gray font-bold'>
-                      Blood Type:
-                    </span>{" "}
-                    {request.blood_type}
-                  </p>
-                  <p className='flex items-start gap-2'>
-                    <span className='text-text-dark-gray font-bold'>
-                      Location:
-                    </span>{" "}
-                    {request.facility_name}, {request.address}
-                  </p>
-                  <p className='flex items-center gap-2'>
-                    <span className='text-text-dark-gray font-bold'>
-                      Urgency:
-                    </span>{" "}
-                    <div className='flex items-center my-auto  gap-1'>
-                      <i
-                        className={` fa-solid fa-circle text-green
-                    ${
-                      request.urgency_level === "Critical"
-                        ? "text-red"
-                        : request.urgency_level === "Low"
-                        ? "text-yellow"
-                        : "text-green"
-                    }`}
-                      ></i>
-
-                      {request.urgency_level}
-                    </div>
-                  </p>
-                </div>
-                <button
-                  onClick={() => {
-                    setDonate(true);
-                    setSelectedRequest(request);
-                  }}
-                  className='bg-background hover:bg-pink !important   w-fit  font-bold  text-white py-1 px-2'
-                >
-                  Donate{" "}
-                </button>
-              </li>
-            ))}
-          </ul>
-          <div className='flex  justify-end  items-center gap-2 my-4 ml-auto'>
-            <button
-              className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              <i className='fa-solid fa-angle-left'></i>
-            </button>
-
-            {getPaginationNumbers().map((page, index) => (
-              <button
-                key={index}
-                className={`px-2 py-1 hover:bg-light-pink  ${
-                  currentPage === page ? "bg-light-pink" : ""
-                }`}
-                onClick={() => typeof page === "number" && setCurrentPage(page)}
-                disabled={page === "..."}
-              >
-                {page}
-              </button>
-            ))}
-
-            <button
-              className='px-2 py-1   hover:bg-light-pink disabled:opacity-50'
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-            >
-              <i className='fa-solid fa-angle-right'></i>
-            </button>
-          </div>
+          <EmergencyRequestList />
         </div>
       </div>
 
-      {donate && (
-        <div
-          onClick={(e) => {
-            setDonate(!donate), e.stopPropagation();
-          }}
-          className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className=' w-[85%] md:w-[40%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-2'
-          >
-            <div className='flex justify-between items-center'>
-              <h1 className='font-extrabold text-base'> Emergency Request </h1>
-              <button onClick={() => setDonate(!donate)}>
-                {" "}
-                <i className='fa-regular fa-circle-xmark'></i>
-              </button>
-            </div>{" "}
-            <div className='flex flex-col text-base gap-2'>
-              <div className='flex flex-col gap-2'>
-                <h2 className='font-bold text-base text-text-dark-gray'>
-                  Contact Information
-                </h2>
-                <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
-              </div>
-              <div>
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Facility:</span>{" "}
-                  {selectedRequest.facility_name}
-                </p>
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Address:</span>{" "}
-                  {selectedRequest.address}
-                </p>
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Contact Number:</span>{" "}
-                  {selectedRequest.contact_number}
-                </p>
 
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Urgency Level:</span>{" "}
-                  <div className='flex items-center my-auto  gap-1'>
-                    <i
-                      className={` fa-solid fa-circle text-green
-                    ${
-                      selectedRequest.urgency_level === "Critical"
-                        ? "text-red"
-                        : selectedRequest.urgency_level === "Low"
-                        ? "text-yellow"
-                        : "text-green"
-                    }`}
-                    ></i>
-
-                    {selectedRequest.urgency_level}
-                  </div>{" "}
-                </p>
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Blood Type:</span>{" "}
-                  {selectedRequest.blood_type}
-                </p>
-              </div>
-              <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
-            </div>
-            <div className='flex flex-col text-base gap-2'>
-              <div className='flex flex-col gap-2'>
-                <h2 className='font-bold text-base text-text-dark-gray'>
-                  Scheduling Details{" "}
-                </h2>
-                <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
-              </div>
-              <form className=' flex flex-col gap-4 md:gap-2'>
-                <div className='grid  gap-2 grid-cols-2'>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Date<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='date'
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Time<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='time'
-                      required
-                    />
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    setDonate(!donate), setSubmitted(!submitted);
-                  }}
-                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-base text-white py-3 px-6'
-                >
-                  Schedule
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
       {submitted && (
         <div
           onClick={(e) => {

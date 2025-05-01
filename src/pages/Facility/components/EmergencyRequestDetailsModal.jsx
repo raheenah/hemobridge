@@ -53,16 +53,18 @@ export default function EmergencyRequestDetails({ onClose, request }) {
             <i className='fa-regular fa-circle-xmark '></i>
           </button>
         </div>
-        <div className='w-[70%] h-0.5 top-0   bg-background-grey'></div>
-      </div>
-      {/*
-        <section>
-          <h3 className="font-bold text-sm text-gray-700 mb-1">Contact Information</h3>
-          <hr className="mb-2" />
-          <p><span className="font-semibold">Name:</span> {request.facilityName}</p>
-          <p><span className="font-semibold">Address:</span> {request.facilityAddress}</p>
-          <p><span className="font-semibold">Contact Number:</span> {request.facilityPhone}</p>
-        </section> */}
+
+        {/* CONTACT */}
+        {
+          request.facilityId &&
+          <section>
+            <h3 className="font-bold text-sm text-gray-700 mb-1">Contact Information</h3>
+            <hr className="mb-2" />
+            <p><span className="font-semibold">Name:</span> {request.facilityId?.name}</p>
+            <p><span className="font-semibold">Address:</span> {request.facilityId?.address}</p>
+            <p><span className="font-semibold">Contact Number:</span> {request.facilityId.phoneNumber}</p>
+          </section>
+        }
 
       <section>
         <h3 className='font-bold text-sm text-text-dark-gray mb-1'>

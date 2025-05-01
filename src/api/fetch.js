@@ -9,6 +9,11 @@ export const ApiFetch = {
     post: async (url, body)=> {
         return await fetch(url, "POST", body)
         .catch((error)=> { throw error })
+    },
+
+    patch: async (url, body)=> {
+        return await fetch(url, "PATCH", body)
+        .catch((error)=> { throw error })
     }
 }
 
