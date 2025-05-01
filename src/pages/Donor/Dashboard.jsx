@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { PieChart, Pie, Cell } from "recharts";
 import InventoryOverview from "../../components/inventoryOverview";
 import { EmergencyRequestList } from "./components/EmergencyRequests/EmergencyRequestList/EmergencyRequestsList";
-
+import { facilitiesRecentActivity } from "../../data/facility-recent-activities";
+  
 function Dashboard() {
   const navigate = useNavigate();
   const rowsPerPage = 9;
@@ -21,24 +22,27 @@ function Dashboard() {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [viewhistory, setViewHistory] = useState(false);
-  const [recentActivities, setRecentActivities] = useState([]);
+  // const [recentActivities, setRecentActivities] = useState([]);
+  const recentActivities = facilitiesRecentActivity;
   const [currentHistoryPage, setCurrentHistoryPage] = useState(1);
    const [selectedActivity, setSelectedActivity] = useState(null);
    const [activityDetails, setActivityDetails] = useState(false);
+// console.log("recent activities", recentActivities);
+  // useEffect(() => {
+  //   fetch("http://localhost:8000/facilities")
+  //     .then((res) => res.json())
+  //     .then((data) => setFacilities(data))
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // }, []);
 
-  useEffect(() => {
-    fetch("http://localhost:8000/facilities")
-      .then((res) => res.json())
-      .then((data) => setFacilities(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://localhost:8000/facilitiesRecentActivity")
+  //     .then((res) => res.json())
+  //     .then((data) => setRecentActivities(data))
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // }, []);
 
-  useEffect(() => {
-    fetch("http://localhost:8000/facilitiesRecentActivity")
-      .then((res) => res.json())
-      .then((data) => setRecentActivities(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  const totalPages = Math.ceil(facilities.length / rowsPerPage);
    const totalActivityPages = Math.ceil(recentActivities.length / rowsPerPage);
    const indexOfLastActivity = currentHistoryPage * rowsPerPage;
    const indexOfFirstActivity = indexOfLastActivity - rowsPerPage;

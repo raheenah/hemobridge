@@ -1,20 +1,22 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { facilitiesRecentActivity } from "../data/facility-recent-activities";
 
 export default function FacilityRecentActivity() {
   const navigate = useNavigate();
-  const [recentActivities, setRecentActivities] = useState([]);
+  const recentActivities = facilitiesRecentActivity
+  // const [recentActivities, setRecentActivities] = useState([]);
   const [viewList, setViewList] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [activityDetails, setActivityDetails] = useState(false);
 
-  useEffect(() => {
-    fetch("http://localhost:8000/facilitiesRecentActivity")
-      .then((res) => res.json())
-      .then((data) => setRecentActivities(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://localhost:8000/facilitiesRecentActivity")
+  //     .then((res) => res.json())
+  //     .then((data) => setRecentActivities(data))
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // }, []);
 
   const rowsPerPage = 9;
 

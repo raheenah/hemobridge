@@ -1,79 +1,80 @@
-import React, { useState } from 'react';
-import Modal from '../common/Modal';
-import RequestRow from './RequestRow';
-import { DonationApi } from '../../api/donation.api';
-import { ApiDonationScheduleStatus } from '../../shared/constants/donation-schedule.constant';
+import React, { useState } from "react";
+import Modal from "../common/Modal";
+import RequestRow from "./RequestRow";
+import { DonationApi } from "../../api/donation.api";
+import { ApiDonationScheduleStatus } from "../../shared/constants/donation-schedule.constant";
 
 export function ViewRequestModal({ request, onClose, isOpen }) {
   const [approveState, setApproveState] = useState({
     error: false,
-    message: ""
+    message: "",
   });
+
+  // console.log("Request details", request);
 
   function handleApproveRequest() {
     setApproveState({
       error: false,
-      message: ""
-    })
+      message: "",
+    });
     DonationApi.approveSchedule(request.id)
-    .then((data)=> { 
-      setApproveState({
-        error: false,
-        message: data.message
+      .then((data) => {
+        setApproveState({
+          error: false,
+          message: data.message,
+        });
       })
-    })
-    .catch((error)=> {
-      setApproveState({
-        error: true,
-        message: error.message
-      })
-    })
+      .catch((error) => {
+        setApproveState({
+          error: true,
+          message: error.message,
+        });
+      });
   }
 
   function handleDeclineRequest() {
     setApproveState({
       error: false,
-      message: ""
-    })
+      message: "",
+    });
 
     DonationApi.declineSchedule(request.id)
-    .then((data)=> { 
-      setApproveState({
-        error: false,
-        message: data.message
-      })
-    })
-    .catch((error)=> {
-      setApproveState({
-        error: true,
-        message: error.message
-      })
-    })
-  }
-
-    function handleCompleteRequest() {
-      setApproveState({
-        error: false,
-        message: "",
-      });
-
-      DonationApi.completeSchedule(request.id)
-        .then((data) => {
-          setApproveState({
-            error: false,
-            message: data.message,
-          });
-        })
-        .catch((error) => {
-          setApproveState({
-            error: true,
-            message: error.message,
-          });
+      .then((data) => {
+        setApproveState({
+          error: false,
+          message: data.message,
         });
+      })
+      .catch((error) => {
+        setApproveState({
+          error: true,
+          message: error.message,
+        });
+      });
   }
-  
-   
-  
+
+  function handleCompleteRequest() {
+    console.log("Completing request", request.id);
+    setApproveState({
+      error: false,
+      message: "",
+    });
+
+    DonationApi.completeSchedule(request.id)
+      .then((data) => {
+        setApproveState({
+          error: false,
+          message: data.message,
+        });
+      })
+      .catch((error) => {
+        setApproveState({
+          error: true,
+          message: error.message,
+        });
+      });
+  }
+
   if (!isOpen || !request) return null;
   return (
     <>
@@ -84,7 +85,15 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
               <h2 className='font-bold text-base'>Request Details</h2>
               <div className='w-full h-0.5 top-0 bg-background-grey'></div>
             </div>
-            <button onClick={onClose}>
+            <button
+              onClick={() => {
+                onClose();
+                setApproveState({
+                  error: false,
+                  message: "",
+                });
+              }}
+            >
               <i className='fa-regular fa-circle-xmark'></i>
             </button>
           </div>
@@ -108,17 +117,18 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
               onClick={handleDeclineRequest}
               className='text-background hover:bg-pink w-24 font-bold border border-background py-1 px-2'
             >
-              {" "}
-              Decline{" "}
+              {request.status === ApiDonationScheduleStatus.PENDING
+                ? "Decline"
+                : "Cancel"}
             </button>
             {request.status === ApiDonationScheduleStatus.PENDING && (
-              <button
-                onClick={handleApproveRequest}
-                className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
-              >
-                {" "}
-                Accept{" "}
-              </button>
+                <button
+                  onClick={handleApproveRequest}
+                  className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
+                >
+                  {" "}
+                  Accept{" "}
+                </button>
             )}{" "}
             {request.status === ApiDonationScheduleStatus.APPROVED && (
               <button
@@ -129,7 +139,9 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
                 Complete{" "}
               </button>
             )}
-            {request.status === ApiDonationScheduleStatus.COMPLETED && (
+            {(request.status === ApiDonationScheduleStatus.CANCELLED ||
+              request.status === ApiDonationScheduleStatus.COMPLETED ||
+              request.status === ApiDonationScheduleStatus.REJECTED) && (
               <button
                 onClick={onClose}
                 className='bg-background hover:bg-pink w-24 font-bold text-white py-1 px-2'
@@ -153,12 +165,12 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
   );
 }
 
-export function ConfirmationModal({ 
+export function ConfirmationModal({
   isOpen,
   title,
   message,
   onConfirm,
-  onCancel 
+  onCancel,
 }) {
   if (!isOpen) return null;
 

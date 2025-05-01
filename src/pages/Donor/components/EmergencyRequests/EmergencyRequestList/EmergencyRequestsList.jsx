@@ -40,8 +40,8 @@ function StatusTabs({ value, onChange }) {
 
   const isActive = (tab) =>
     tab === value
-      ? 'border-b-2 border-purple-700 text-purple-700'
-      : 'text-gray-500 hover:text-purple-700';
+      ? 'border-b-2 border-background text-background'
+      : 'text-text-dark-gray hover:text-background';
 
   return (
     <div className="flex border-b border-gray-300">

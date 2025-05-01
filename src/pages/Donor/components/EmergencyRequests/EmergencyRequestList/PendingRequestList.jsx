@@ -21,7 +21,11 @@ export function PendingRequestList() {
     useEffect(()=> {
         setPendingRequests(state => ({ ...state, state: "loading", error: false, message: "" }));
         DonationApi.fetchDonorSchedules(pendingRequests.currentPage, ApiDonationScheduleStatus.PENDING)
-        .then((data)=> setPendingRequests(data))
+            .then((data) => {
+                setPendingRequests(data)
+                // console.log("Pending requests data:", data);
+            
+            })
         .catch((error)=> {
             setPendingRequests(state => ({ ...state, error: true, message: error.message }));
         })
@@ -31,40 +35,54 @@ export function PendingRequestList() {
 
     }, [pendingRequests.currentPage])
 
-    return  (
-        <>
-            <div>
-                {
-                    pendingRequests.state === "loading"
-                    ?   <Loader />
-                    :   <div className='flex flex-col gap-2'>
-                            { !pendingRequests.list.length && <div>No item</div> }
-                            {
-                                pendingRequests.list.map((request, index)=> {
-                                    return  <EmergencyRequestRow
-                                                key={index}
-                                                request={request}
-                                                onView={(selectedRequest)=> setPendingRequests(state=> ({ ...state, selected: selectedRequest }))}
-                                            />
-                                })
-                            }
-                        </div>
-                }
-
-                <Pagination 
-                    currentPage={pendingRequests.currentPage}
-                    totalPages={pendingRequests.totalPages}
-                    onPageChange={(page)=> setPendingRequests(state => ({ ...state, currentPage: page }))}
-                />
+    return (
+      <>
+        <div>
+          {pendingRequests.state === "loading" ? (
+            <Loader />
+          ) : (
+            <div className='flex flex-col min-h-128 gap-2'>
+              {!pendingRequests.list.length && (
+                <div className='flex items-center justify-center min-h-[50%] h-full  text-center'>
+                  <p className='text-background font-extrabold text-lg'>
+There are no pending emergency requests                  </p>
+                </div>
+              )}
+              
+              {pendingRequests.list.map((request, index) => {
+                return (
+                  <EmergencyRequestRow
+                    key={index}
+                    request={request}
+                    onView={(selectedRequest) =>
+                      setPendingRequests((state) => ({
+                        ...state,
+                        selected: selectedRequest,
+                      }))
+                    }
+                  />
+                );
+              })}
             </div>
+          )}
 
-            {
-                pendingRequests.selected
-                &&  <EmergencyRequestDetails 
-                        requestDetails={pendingRequests.selected}
-                        onClose={()=> setPendingRequests(state=> ({ ...state, selected: undefined }))}
-                    />
+          <Pagination
+            currentPage={pendingRequests.currentPage}
+            totalPages={pendingRequests.totalPages}
+            onPageChange={(page) =>
+              setPendingRequests((state) => ({ ...state, currentPage: page }))
             }
-        </>
+          />
+        </div>
+
+        {pendingRequests.selected && (
+          <EmergencyRequestDetails
+            requestDetails={pendingRequests.selected}
+            onClose={() =>
+              setPendingRequests((state) => ({ ...state, selected: undefined }))
+            }
+          />
+        )}
+      </>
     );
 }

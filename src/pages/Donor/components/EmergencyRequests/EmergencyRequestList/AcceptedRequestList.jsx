@@ -21,7 +21,8 @@ export function AcceptedRequestList() {
     useEffect(()=> {
         setAcceptedRequests(state => ({ ...state, state: "loading", error: false, message: "" }));
         DonationApi.fetchDonorSchedules(setAcceptedRequests.currentPage, ApiDonationScheduleStatus.APPROVED)
-        .then((data)=> {console.log(data)
+            .then((data) => {
+                // console.log("Scheduled requests lis",data)
             setAcceptedRequests(state => ({
                 ...state,
                 ...data
@@ -42,15 +43,16 @@ export function AcceptedRequestList() {
                 {
                     acceptedRequests.state === "loading"
                     ?   <Loader />
-                    :   <div className='flex flex-col gap-2'>
-                            { !acceptedRequests.list.length && <div>No item</div> }
+                    :   <div className='flex flex-col min-h-128  gap-2'>
+                            {!acceptedRequests.list.length &&
+                                <div className="flex items-center justify-center min-h-[50%] h-full  text-center"><p className="text-background font-extrabold text-lg">You do not have any scheduled donations</p></div>}
                             {
                                 acceptedRequests.list.map((request, index)=> {
                                     return  <EmergencyRequestRow 
                                                 key={index}
                                                 request={request}
                                                 onView={(selectedRequest)=> {
-                                                    console.log(selectedRequest)
+                                                    // console.log(selectedRequest)
                                                     setAcceptedRequests(state => ({
                                                     ...state, 
                                                     selected: selectedRequest
