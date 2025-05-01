@@ -10,7 +10,7 @@ export default function EmergencyRequestRow({ request, onView, isExpandable = tr
           request.status !== ApiDonationScheduleStatus.PENDING
           &&  <p className='flex items-center gap-2'>
                 <span className='text-text-dark-gray font-bold'>Name: </span>
-                {`${StringUtils.capitalize(request.donorId.firstName)} ${StringUtils.capitalize(request.donorId.lastName)}`}
+                {`${StringUtils.capitalize(request.donorId?.firstName)} ${StringUtils.capitalize(request.donorId?.lastName)}`}
               </p>
         }
         
@@ -33,10 +33,10 @@ export default function EmergencyRequestRow({ request, onView, isExpandable = tr
       </div>
       {isExpandable && (
         <button
-          onClick={onView}
+          onClick={()=> onView(request)}
           className='bg-background hover:bg-pink w-fit font-bold text-white py-1 px-2'
         >
-          Donate now
+          View
         </button>
       )}
     </li>

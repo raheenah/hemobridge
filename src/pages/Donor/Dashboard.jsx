@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PieChart, Pie, Cell } from "recharts";
 import InventoryOverview from "../../components/inventoryOverview";
-import { EmergencyRequestList } from "./components/EmergencyRequests/EmergencyRequestsList";
+import { EmergencyRequestList } from "./components/EmergencyRequests/EmergencyRequestList/EmergencyRequestsList";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -226,114 +226,7 @@ function Dashboard() {
         </div>
       </div>
 
-      {donate && (
-        <div
-          onClick={(e) => {
-            setDonate(!donate), e.stopPropagation();
-          }}
-          className=' fixed bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className=' w-[85%] md:w-[40%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-2'
-          >
-            <div className='flex justify-between items-center'>
-              <h1 className='font-extrabold text-base'> Emergency Request </h1>
-              <button onClick={() => setDonate(!donate)}>
-                {" "}
-                <i className='fa-regular fa-circle-xmark'></i>
-              </button>
-            </div>{" "}
-            <div className='flex flex-col text-base gap-2'>
-              <div className='flex flex-col gap-2'>
-                <h2 className='font-bold text-base text-text-dark-gray'>
-                  Contact Information
-                </h2>
-                <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
-              </div>
-              <div>
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Facility:</span>{" "}
-                  {selectedRequest.facility_name}
-                </p>
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Address:</span>{" "}
-                  {selectedRequest.address}
-                </p>
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Contact Number:</span>{" "}
-                  {selectedRequest.contact_number}
-                </p>
 
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Urgency Level:</span>{" "}
-                  <div className='flex items-center my-auto  gap-1'>
-                    <i
-                      className={` fa-solid fa-circle text-green
-                    ${
-                      selectedRequest.urgency_level === "Critical"
-                        ? "text-red"
-                        : selectedRequest.urgency_level === "Low"
-                        ? "text-yellow"
-                        : "text-green"
-                    }`}
-                    ></i>
-
-                    {selectedRequest.urgency_level}
-                  </div>{" "}
-                </p>
-                <p className='flex items-center gap-2'>
-                  <span className='text-text-dark-gray'>Blood Type:</span>{" "}
-                  {selectedRequest.blood_type}
-                </p>
-              </div>
-              <div className='w-[50%] h-0.5 top-0   bg-background-grey'></div>
-            </div>
-            <div className='flex flex-col text-base gap-2'>
-              <div className='flex flex-col gap-2'>
-                <h2 className='font-bold text-base text-text-dark-gray'>
-                  Scheduling Details{" "}
-                </h2>
-                <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
-              </div>
-              <form className=' flex flex-col gap-4 md:gap-2'>
-                <div className='grid  gap-2 grid-cols-2'>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Date<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='date'
-                      required
-                    />
-                  </div>
-                  <div className=' p-4 relative border-1 text-text-dark-gray'>
-                    <label className='absolute font-[700]  px-1 top-[-10px] bg-white left-[10px]'>
-                      Time<span className='text-red-500'>*</span>
-                    </label>
-                    <input
-                      placeholder='No., Street, Town, Zip Code, State.'
-                      className='placeholder-input-text w-full focus:outline-none'
-                      type='time'
-                      required
-                    />
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    setDonate(!donate), setSubmitted(!submitted);
-                  }}
-                  className='bg-background hover:bg-pink !important self-end  w-fit  font-bold text-base text-white py-3 px-6'
-                >
-                  Schedule
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
       {submitted && (
         <div
           onClick={(e) => {
