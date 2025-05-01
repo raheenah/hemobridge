@@ -17,6 +17,7 @@ export function AcceptedRequestList() {
         totalPages: 1,
         selected: undefined
     })
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(()=> {
         setAcceptedRequests(state => ({ ...state, state: "loading", error: false, message: "" }));
@@ -35,7 +36,7 @@ export function AcceptedRequestList() {
             setAcceptedRequests(state => ({ ...state, state: "idle" }));
         })
 
-    }, [acceptedRequests.currentPage])
+    }, [acceptedRequests.currentPage, refresh])
 
     return (
         <>
@@ -74,7 +75,10 @@ export function AcceptedRequestList() {
                 acceptedRequests.selected && 
                 <EmergencyRequestDetails
                     request={acceptedRequests.selected}
-                    onClose={()=> setAcceptedRequests(state => ({ ...state, selected: undefined }))}
+                    onClose={() => {
+                        setAcceptedRequests(state => ({ ...state, selected: undefined }))
+                    setRefresh(!refresh) 
+                    }}
                 />
             }
         </>

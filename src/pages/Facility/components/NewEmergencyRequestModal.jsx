@@ -11,6 +11,7 @@ export function NewEmergencyRequestModal({close}) {
     preferredDate: ''
   });
 
+  const [message, setMessage] = useState('')
   const [formResult, setFormResult] = useState({
     error: false,
     message: ""
@@ -31,6 +32,19 @@ export function NewEmergencyRequestModal({close}) {
     .catch((error)=> {
       console.error(error)
       setFormResult({ error: true, message: error.message });
+    })
+    .finally(()=> {
+      setFormData({
+        bloodType: '',
+        unitsNeeded: '',
+        urgency: '',
+        notes: '',
+        preferredDate: ''
+      })
+      setMessage("Emergency request has been submitted successfully")
+      setTimeout(() => {
+        close()
+      }, 800)
     })
   };
 
@@ -56,8 +70,7 @@ export function NewEmergencyRequestModal({close}) {
           <div className='w-full h-0.5 top-0 bg-background-grey'></div>
 
           <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-            <div className="flex flex-row w-full items-center justify-between gap-3">
-              {/* Blood Type */}
+            <div className='flex flex-row w-full items-center justify-between gap-3'>
               <div className='w-full px-4 relative border-1 text-text-dark-gray'>
                 <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
                   Blood Type <span className='text-red-500'>*</span>
@@ -66,16 +79,21 @@ export function NewEmergencyRequestModal({close}) {
                   className='focus:outline-none py-4 w-full text-input-text'
                   required
                   value={formData.bloodType}
-                  onChange={handleChange('bloodType')}
+                  onChange={handleChange("bloodType")}
                 >
-                  <option value="" disabled>Choose...</option>
-                  {['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
+                  <option value='' disabled>
+                    Choose...
+                  </option>
+                  {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(
+                    (type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
 
-              {/* Units Needed */}
               <div className='w-full p-4 relative border-1 text-text-dark-gray'>
                 <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
                   Units Needed <span className='text-red-500'>*</span>
@@ -85,70 +103,74 @@ export function NewEmergencyRequestModal({close}) {
                   type='number'
                   name='units-needed'
                   value={formData.unitsNeeded}
-                  onChange={handleChange('unitsNeeded')}
+                  onChange={handleChange("unitsNeeded")}
                   required
                 />
               </div>
             </div>
 
-            <div className="flex flex-row w-full items-center justify-between gap-3">
-              {/* Urgency Level */}
-              <div className="w-full px-4 relative border-1 text-text-dark-gray">
-                <label className="absolute font-[700] px-1 top-[-10px] bg-white left-[10px]">
-                  Urgency Level <span className="text-red-500">*</span>
+            <div className='flex flex-row w-full items-center justify-between gap-3'>
+              <div className='w-full px-4 relative border-1 text-text-dark-gray'>
+                <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                  Urgency Level <span className='text-red-500'>*</span>
                 </label>
                 <select
-                  className="focus:outline-none py-4 w-full text-input-text"
+                  className='focus:outline-none py-4 w-full text-input-text'
                   required
                   value={formData.urgency}
-                  onChange={handleChange('urgency')}
+                  onChange={handleChange("urgency")}
                 >
-                  <option value="" disabled>Choose...</option>
-                  <option value="HIGH">High</option>
-                  <option value="MEDIUM">Medium</option>
-                  <option value="LOW">Low</option>
+                  <option value='' disabled>
+                    Choose...
+                  </option>
+                  <option value='HIGH'>High</option>
+                  <option value='MEDIUM'>Medium</option>
+                  <option value='LOW'>Low</option>
                 </select>
               </div>
 
-                {/* Preferred Date */}
-                <div className="w-full px-4 relative border-1 text-text-dark-gray">
-                  <label className="absolute font-[700] px-1 top-[-10px] bg-white left-[10px]">
-                    Preferred Date <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    className="focus:outline-none py-4 w-full text-input-text"
-                    type="date"
-                    value={formData.preferredDate}
-                    onChange={handleChange('preferredDate')}
-                    required
-                  />
-                </div>
+              <div className='w-full px-4 relative border-1 text-text-dark-gray'>
+                <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
+                  Preferred Date <span className='text-red-500'>*</span>
+                </label>
+                <input
+                  className='focus:outline-none py-4 w-full text-input-text'
+                  type='date'
+                  value={formData.preferredDate}
+                  onChange={handleChange("preferredDate")}
+                  required
+                />
+              </div>
             </div>
 
-            {/* Additional Notes */}
-            <div className="w-full mt-6">
-              <label className="block font-[700] mb-2 text-text-dark-gray">
+
+            <div className='w-full px-4 relative border-1 text-text-dark-gray'>
+              <label className='absolute font-[700] px-1 top-[-10px] bg-white left-[10px]'>
                 Additional Notes
               </label>
               <textarea
-                className="w-full border rounded-md p-3 text-input-text focus:outline-none"
+                className='focus:outline-none py-4 w-full text-input-text'
                 rows={4}
-                placeholder="Write any special notes or context here..."
+                placeholder='Write any special notes or context here...'
                 value={formData.notes}
-                onChange={handleChange('notes')}
+                onChange={handleChange("notes")}
               />
             </div>
 
-            {/* Submit Button */}
+
             <button
-              type="submit"
+              type='submit'
               className='bg-background hover:bg-pink !important self-end w-full max-w-32 font-bold text-xs text-white py-2 px-4'
             >
               Schedule
             </button>
           </form>
 
-          <div className={`text-center mt-4 font-medium ${formResult.error ? 'text-red-500' : 'text-green-500'}`}>
+          <div
+            className={`text-center mt-4 font-medium ${
+              formResult.error ? "text-red-500" : "text-green-500"
+            }`}
+          >
             {formResult.message}
           </div>
         </div>

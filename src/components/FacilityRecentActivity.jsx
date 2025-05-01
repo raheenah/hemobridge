@@ -18,7 +18,7 @@ export default function FacilityRecentActivity() {
   //     .catch((error) => console.error("Error fetching data:", error));
   // }, []);
 
-  const rowsPerPage = 9;
+  const rowsPerPage = 12;
 
   const totalPages = Math.ceil(recentActivities.length / rowsPerPage);
   const indexOfLastFacility = currentPage * rowsPerPage;

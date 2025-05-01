@@ -1,21 +1,22 @@
 import { useState, useEffect } from "react";
 import { NewEmergencyRequestModal } from "./components/NewEmergencyRequestModal";
 import { DonationApi } from "../../api/donation.api";
-import { DateUtils } from "src/shared/utils/date.utils"
+import Loader from "../../components/common/Loader";
+import { DateUtils } from "src/shared/utils/date.utils";
+import Pagination from "src/components/common/Pagination";
 import EmergencyRequestDetails from "./components/EmergencyRequestDetailsModal";
 import { ApiDonationScheduleStatus } from "../../shared/constants/donation-schedule.constant";
 
-function Emergency_Requests() {
-
+function Emergency_Requests({ currentPage, totalPages, onPageChange }) {
   const [modalsVisibility, setModalsVisibility] = useState({
     isNewRequestModalVisible: false,
     isRequestDetailsModalVisible: false,
-  })
-  
+  });
+
   const [emergencyRequests, setEmergencyRequests] = useState({
     list: [],
     currentPage: 1,
-    totalPages: 1
+    totalPages: 1,
   });
   const [selectedDonationRequest, setSelectedDonationRequest] = useState(null);
   const [viewDonationRequest, setViewDonationRequest] = useState(false);
@@ -23,103 +24,122 @@ function Emergency_Requests() {
   const [confirm, setConfirm] = useState(false);
   const [confirmComplete, setConfirmComplete] = useState(false);
   const [message, setMessage] = useState("");
-const [approveState, setApproveState] = useState({
+  const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [approveState, setApproveState] = useState({
     error: false,
-    message: ""
-});
-  
-  
+    message: "",
+  });
+
   useEffect(() => {
+    // console.log("Fetching donation requests for page:", emergencyRequests.currentPage);
     loadDonationRequests(emergencyRequests.currentPage);
-  }, [emergencyRequests.currentPage]);
+  }, [emergencyRequests.currentPage, refresh]);
 
   const loadDonationRequests = async (page) => {
+    setLoading(true);
     DonationApi.fetchFacilitySchedules(page)
-    .then((data)=> {
-      console.log(data)
-      setEmergencyRequests(data)
-    })
-    .catch((error)=> { 
-      console.error("Error loading donation requests:", error);
-    })
+      .then((data) => {
+        console.log(data);
+        setEmergencyRequests(data);
+      })
+      .catch((error) => {
+        console.error("Error loading donation requests:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-      function handleCompleteRequest() {
+  function handleCompleteRequest() {
+    setApproveState({
+      error: false,
+      message: "",
+    });
+
+    DonationApi.completeSchedule(selectedDonationRequest.id)
+      .then((data) => {
         setApproveState({
           error: false,
-          message: "",
+          message: data.message,
         });
-  
-        DonationApi.completeSchedule(selectedDonationRequest.id)
-          .then((data) => {
-            setApproveState({
-              error: false,
-              message: data.message,
-            });
-          })
-          .catch((error) => {
-            setApproveState({
-              error: true,
-              message: error.message,
-            });
-          });
-    }
+      })
+      .catch((error) => {
+        setApproveState({
+          error: true,
+          message: error.message,
+        });
+      });
+  }
 
-  useEffect(() => {
-    if (
-      viewDonationRequest ||
-      confirm ||
-      confirmComplete ||
-      success
-    ) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+  // useEffect(() => {
+  //   if (
+  //     viewDonationRequest ||
+  //     confirm ||
+  //     confirmComplete ||
+  //     success
+  //   ) {
+  //     document.body.style.overflow = "hidden";
+  //   } else {
+  //     document.body.style.overflow = "auto";
+  //   }
 
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [viewDonationRequest, confirm, confirmComplete, success]);
+  //   return () => {
+  //     document.body.style.overflow = "auto";
+  //   };
+  // }, [viewDonationRequest, confirm, confirmComplete, success]);
+
+   if (loading) {
+      return (
+       <div className="flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center">
+            <Loader />
+            <p className="font-bold text-background  ">Fetching requests...</p>
+        </div>
+      )
+    }
 
   return (
     <div className=' flex  h-full bg-white flex-col text-xs gap-4 py-3  px-6   w-full'>
       <button
-        onClick={() =>
+        onClick={() => {
           setModalsVisibility((state) => ({
             ...state,
             isNewRequestModalVisible: true,
-          }))
-        }
+          }));
+
+          // setRefresh(!refresh);
+        }}
         className='bg-background hover:bg-pink  w-fit  font-bold  text-white py-1 px-2'
       >
         {" "}
         New Request{" "}
       </button>
 
-      <ul className='flex flex-col gap-2 w-full'>
-        {emergencyRequests.list.map((request) => (
-          <li
-            className=' border-1 px-2 py-1 flex items-start justify-between border-text-gray'
-            key={request.id}
-          >
-            <div className='flex flex-col gap-1'>
-              <p className='flex items-start gap-2'>
-                <span className='text-text-dark-gray  font-bold'>
-                  Blood Type:
-                </span>{" "}
-                {request.bloodType}
-              </p>
-              <p className='flex items-start gap-2'>
-                <span className='text-text-dark-gray font-bold'>Date:</span>{" "}
-                {DateUtils.formatDate(request.preferredDate)}
-              </p>
-              <p className='flex items-start gap-2'>
-                <span className='text-text-dark-gray font-bold'>Date:</span>{" "}
-                {DateUtils.formatTime(request.preferredDate)}
-              </p>
-              <p
-                className={` flex items-start gap-2 font-bold
+      {emergencyRequests.list?.length ? (
+        <div className=" h-full flex flex-col justify-between gap-2">
+          <ul className='flex flex-col gap-2 w-full overflow-auto'>
+            {emergencyRequests.list.map((request) => (
+              <li
+                className=' border-1 px-2 py-1 flex items-start justify-between border-text-gray'
+                key={request.id}
+              >
+                <div className='flex flex-col gap-1'>
+                  <p className='flex items-start gap-2'>
+                    <span className='text-text-dark-gray  font-bold'>
+                      Blood Type:
+                    </span>{" "}
+                    {request.bloodType}
+                  </p>
+                  <p className='flex items-start gap-2'>
+                    <span className='text-text-dark-gray font-bold'>Date:</span>{" "}
+                    {DateUtils.formatDate(request.preferredDate)}
+                  </p>
+                  <p className='flex items-start gap-2'>
+                    <span className='text-text-dark-gray font-bold'>Date:</span>{" "}
+                    {DateUtils.formatTime(request.preferredDate)}
+                  </p>
+                  <p
+                    className={` flex items-start gap-2 font-bold
                   ${
                     request.status === ApiDonationScheduleStatus.COMPLETED
                       ? "text-green "
@@ -128,47 +148,60 @@ const [approveState, setApproveState] = useState({
                       ? "text-yellow"
                       : "text-red"
                   } `}
-              >
-                <span
-                  className=" text-text-dark-gray font-bold flex items-start gap-2"
+                  >
+                    <span className=' text-text-dark-gray font-bold flex items-start gap-2'>
+                      Status:
+                    </span>{" "}
+                    {request.status === ApiDonationScheduleStatus.COMPLETED
+                      ? " Completed"
+                      : request.status === ApiDonationScheduleStatus.APPROVED
+                      ? " Scheduled"
+                      : request.status === ApiDonationScheduleStatus.PENDING
+                      ? " Submitted"
+                      : "Cancelled"}
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setSelectedDonationRequest(request);
+                    setModalsVisibility((state) => ({
+                      ...state,
+                      isRequestDetailsModalVisible: true,
+                    }));
+                    setViewDonationRequest(true);
+                    console.log("selected request", request);
+                  }}
+                  className='bg-background hover:bg-pink !important   w-fit  font-bold  text-white py-1 px-2'
                 >
-                  Status:
-                </span>{" "}
-                {request.status === ApiDonationScheduleStatus.COMPLETED
-                  ? " Completed"
-                  : request.status === ApiDonationScheduleStatus.APPROVED
-                  ? " Scheduled"
-                  : request.status === ApiDonationScheduleStatus.PENDING
-                  ? " Submitted"
-                  : "Cancelled"}
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                setSelectedDonationRequest(request);
-                setModalsVisibility((state) => ({
-                  ...state,
-                  isRequestDetailsModalVisible: true,
-                }));
-                setViewDonationRequest(true);
-                console.log("selected request", request);
-              }}
-              className='bg-background hover:bg-pink !important   w-fit  font-bold  text-white py-1 px-2'
-            >
-              View{" "}
-            </button>
-          </li>
-        ))}
-      </ul>
+                  View{" "}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <Pagination
+            currentPage={emergencyRequests.currentPage}
+            totalPages={emergencyRequests.totalPages}
+            onPageChange={onPageChange}
+          />
+        </div>
+      ) : (
+        <div className=' h-full flex flex-col items-center justify-center'>
+          <p className='font-extrabold text-lg text-background h-fit'>
+            {" "}
+            Create your first emergency request
+          </p>
+        </div>
+      )}
 
       {modalsVisibility.isRequestDetailsModalVisible ? (
         <EmergencyRequestDetails
-          onClose={() =>
+          onClose={() => {
             setModalsVisibility((state) => ({
               ...state,
               isRequestDetailsModalVisible: false,
-            }))
-          }
+            }));
+            setRefresh(!refresh);
+          }}
           request={selectedDonationRequest}
         />
       ) : null}
@@ -315,12 +348,13 @@ const [approveState, setApproveState] = useState({
 
       {modalsVisibility.isNewRequestModalVisible ? (
         <NewEmergencyRequestModal
-          close={() =>
+          close={() => {
             setModalsVisibility((state) => ({
               ...state,
               isNewRequestModalVisible: false,
-            }))
-          }
+            }));
+            setRefresh(!refresh);
+          }}
         />
       ) : null}
     </div>

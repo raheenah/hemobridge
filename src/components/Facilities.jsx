@@ -5,6 +5,7 @@ import { useProfileContext } from '../shared/context/user-profile-context';
 import { DateUtils } from '../shared/utils/date.utils';
 import Pagination from './common/Pagination';
 import Loader from './common/Loader';
+import { StringUtils } from '../shared/utils/string.utils';
 
 export default function Facilities() {
 
@@ -65,6 +66,8 @@ export default function Facilities() {
       setScheduleError(error.response?.data?.message || 'Failed to schedule donation. Please try again.');
     })
   }
+
+  // console.log("selectedFacility", selectedFacility);
 
   return (
     <div className='flex flex-col h-full gap-4 '>
@@ -154,7 +157,7 @@ export default function Facilities() {
                       }`}
                       ></i>
 
-                      {facility.urgency}
+                      {StringUtils.capitalize(facility.urgency)}
                     </div>
                   </td>
                   {/* <td className='hidden md:table-cell'>{facility.operationalHours}</td> */}
@@ -240,39 +243,50 @@ export default function Facilities() {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {selectedFacility..map((blood, index) => (
-                      <tr
-                        className='text-xs border-b-1 text-center border-background-grey'
-                        key={index}
-                      >
-                        <td className='py-0.5'>{blood.type}</td>
-                        <td>{blood.stock}</td>
-                        <td className='text-left'>
-                          <i
-                            className={`fa-solid fa-circle ${
-                              blood.stock < 3
-                                ? "text-red"
-                                : blood.stock < 7
-                                ? "text-yellow"
-                                : "text-green"
-                            }`}
-                          ></i>{" "}
-                          <span>
-                            {blood.stock < 3
-                              ? "Critical"
-                              : blood.stock < 7
-                              ? "Low"
-                              : "Normal"}
-                          </span>
-                        </td>
-                      </tr>
-                    ))} */}
+                    {Object.entries(selectedFacility.bloodStock).map(
+                      ([type, info], index) => (
+                        <tr
+                          className='text-xs border-b-1 text-center border-background-grey'
+                          key={index}
+                        >
+                          <td className='py-0.5'>{type}</td>
+                          <td>{info.units}</td>
+                          <td className='text-left'>
+                            <i
+                              className={`fa-solid fa-circle ${
+                                info.status === "critical"
+                                  ? "text-red"
+                                  : info.status === "low"
+                                  ? "text-yellow"
+                                  : "text-green"
+                              }`}
+                            ></i>{" "}
+                            <span className='capitalize'>
+                              {info.status === "critical"
+                                ? "High"
+                                : info.status === "low"
+                                ? "Low"
+                                : "Medium"}
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
 
-            {user.role === "donor" && (
+            {user.facilityId ? (
+              <button
+                className=' bg-background hover:bg-pink !important self-end mt-4  w-fit  font-bold text-sm text-white py-3 px-6
+'
+                onClick={() => setSelectedFacility(null)}
+              >
+                Close
+              </button>
+            ):
+             (
               <div className='flex flex-col gap-4'>
                 <h2 className='font-bold text-sm text-text-dark-gray'>
                   Donation Booking Details
@@ -440,15 +454,6 @@ export default function Facilities() {
                   )}
                 </form>
               </div>
-            )}
-            {user.role !== "donor" && (
-              <button
-                className=' bg-background hover:bg-pink !important self-end  w-fit  font-bold text-sm text-white py-3 px-6
-'
-                onClick={()=>setSelectedFacility(null)}
-              >
-                Close
-              </button>
             )}
           </div>
         </div>

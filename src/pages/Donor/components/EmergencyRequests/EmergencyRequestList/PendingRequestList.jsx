@@ -17,6 +17,7 @@ export function PendingRequestList() {
         totalPages: 1,
         selected: undefined
     })
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(()=> {
         setPendingRequests(state => ({ ...state, state: "loading", error: false, message: "" }));
@@ -33,7 +34,7 @@ export function PendingRequestList() {
             setPendingRequests(state => ({ ...state, state: "idle" }));
         })
 
-    }, [pendingRequests.currentPage])
+    }, [pendingRequests.currentPage, refresh])
 
     return (
       <>
@@ -41,7 +42,7 @@ export function PendingRequestList() {
           {pendingRequests.state === "loading" ? (
             <Loader />
           ) : (
-            <div className='flex flex-col min-h-128 gap-2'>
+            <div className='flex flex-col min-h-128 h-full gap-2'>
               {!pendingRequests.list.length && (
                 <div className='flex items-center justify-center min-h-[50%] h-full  text-center'>
                   <p className='text-background font-extrabold text-lg'>
@@ -75,12 +76,13 @@ There are no pending emergency requests                  </p>
           />
         </div>
 
-        {pendingRequests.selected && (
-          <EmergencyRequestDetails
-            requestDetails={pendingRequests.selected}
-            onClose={() =>
+            {pendingRequests.selected && (
+                <EmergencyRequestDetails
+                    requestDetails={pendingRequests.selected}
+                    onClose={() => { 
               setPendingRequests((state) => ({ ...state, selected: undefined }))
-            }
+            setRefresh(!refresh)
+            }}
           />
         )}
       </>

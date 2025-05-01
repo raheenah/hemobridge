@@ -9,6 +9,7 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
     error: false,
     message: "",
   });
+  const [message, setMessage] = useState("");
 
   // console.log("Request details", request);
 
@@ -29,6 +30,12 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
           error: true,
           message: error.message,
         });
+      })
+      .finally(() => {
+        setTimeout(() => {
+          onClose();
+        });
+        setMessage("Request has been accepted successfully");
       });
   }
 
@@ -50,6 +57,14 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
           error: true,
           message: error.message,
         });
+      })
+      .finally(() => {
+     
+        setMessage("Request has been declined successfully");
+           setTimeout(() => {
+             onClose();
+             setMessage("");
+           }, 800);
       });
   }
 
@@ -72,7 +87,17 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
           error: true,
           message: error.message,
         });
-      });
+      })
+      .finally(() => {
+        setTimeout(() => {
+          onClose();
+
+        }
+        )
+        setMessage("Request has been completed successfully")
+      }
+    
+      )
   }
 
   if (!isOpen || !request) return null;
@@ -113,14 +138,17 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
           </div>
 
           <div className='flex gap-4 mx-auto mt-8'>
-            <button
+            {(request.status === ApiDonationScheduleStatus.PENDING
+              || request.status === ApiDonationScheduleStatus.APPROVED) && (
+              <button
               onClick={handleDeclineRequest}
-              className='text-background hover:bg-pink w-24 font-bold border border-background py-1 px-2'
+              className='text-background  hover:bg-pink w-24 font-bold border border-background py-1 px-2'
             >
               {request.status === ApiDonationScheduleStatus.PENDING
                 ? "Decline"
                 : "Cancel"}
             </button>
+           ) }
             {request.status === ApiDonationScheduleStatus.PENDING && (
                 <button
                   onClick={handleApproveRequest}
@@ -157,7 +185,7 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
               approveState.error ? "text-red-500" : "text-green-500"
             }`}
           >
-            {approveState.message}
+            {message}
           </div>
         </div>
       </Modal>

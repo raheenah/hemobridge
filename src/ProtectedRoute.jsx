@@ -13,7 +13,10 @@ const ProtectedRoute = ({children}) => {
 
   useEffect(() => {
     ProfileApi.fetchMyProfile()
-    .then((data) => setUser(data))
+      .then((data) => {
+        setUser(data) 
+        // console.log("user", data);
+      })
     .catch((error) => {
       console.error(error);
       navigate("/");

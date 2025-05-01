@@ -59,10 +59,10 @@ export default function EmergencyRequestDetails({ onClose, request }) {
           ) {
             setSuccessMessage("Request cancelled successfully");
             // setSuccess(true);
-            // setTimeout(() => {
-            //   setCancelLoading(false);
-            //   onClose();
-            // }, 800);
+            setTimeout(() => {
+              setCancelLoading(false);
+              onClose();
+            }, 800);
           }
         });
     
@@ -70,7 +70,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
   
 
   console.log("request", request);
-  console.log("user", user)
+  // console.log("user", user)
 
 
   function handleCompleteRequest() {
@@ -94,10 +94,10 @@ export default function EmergencyRequestDetails({ onClose, request }) {
         });
       })
       .finally(() => {
-        // setTimeout(() => {
-        //   setCancelLoading(false);
-        //   onClose();
-        // }, 800);
+        setTimeout(() => {
+          setCancelLoading(false);
+          onClose();
+        }, 800);
         setSuccessMessage("Request completed successfully");
       });
   }
@@ -152,7 +152,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
       ? "bg-yellow-400"
       : "bg-green-500";
 
-  // console.log("request", request);
+  console.log("user", user);
 
   return (
     <Modal onClose={onClose}>
@@ -201,7 +201,6 @@ export default function EmergencyRequestDetails({ onClose, request }) {
             </h3>
             <div className='w-[50%] h-0.5 top-0  bg-background-grey'></div>
           </div>
-        
           {/* <p><span className="font-semibold">Age:</span> {request.donorAge} years</p>
           <p><span className="font-semibold">Gender:</span> {request.donorGender}</p> */}
           <p>
@@ -225,23 +224,25 @@ export default function EmergencyRequestDetails({ onClose, request }) {
             </span>{" "}
             {request.unitsRequested} Units
           </p>{" "}
-          {request.status === ApiDonationScheduleStatus.PENDING && <>
-            <p>
-              <span className='font-semibold text-text-dark-gray'>
-                Scheduled Date:
-              </span>{" "}
-              {DateUtils.formatDate(request.preferredDate)}{" "}
-              {/* {DateUtils.formatTime(request.preferredDate)} */}
-            </p>
-            <p>
-              <span className='font-semibold text-text-dark-gray'>
-                Scheduled Time:
-              </span>{" "}
-              {/* {DateUtils.formatDate(request.preferredDate)}{" "} */}
-              {DateUtils.formatTime(request.preferredDate)}
-            </p>
-          </>
-          }
+          <p className='text-lg font-bold text-green'>{request.status}</p>
+          {request.status === ApiDonationScheduleStatus.PENDING && (
+            <>
+              <p>
+                <span className='font-semibold text-text-dark-gray'>
+                  Scheduled Date:
+                </span>{" "}
+                {DateUtils.formatDate(request.preferredDate)}{" "}
+                {/* {DateUtils.formatTime(request.preferredDate)} */}
+              </p>
+              <p>
+                <span className='font-semibold text-text-dark-gray'>
+                  Scheduled Time:
+                </span>{" "}
+                {/* {DateUtils.formatDate(request.preferredDate)}{" "} */}
+                {DateUtils.formatTime(request.preferredDate)}
+              </p>
+            </>
+          )}
           <p>
             <span className='font-semibold text-text-dark-gray'>
               Additional Notes:
@@ -314,22 +315,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
             ))}
           </div>
         </section>
-        {user.role === "donor" ? (
-          <button
-            disabled={cancelLoading === true}
-            onClick={() => {
-              handleDeclineRequest();
-              // cancelRequest();
-            }}
-            className={`  font-bold text-xs text-white py-2 px-4 mt-8 self-center w-40  mx-auto   ${
-              cancelLoading
-                ? "bg-pink"
-                : "bg-background hover:bg-pink transition-colors"
-            }`}
-          >
-            {cancelLoading ? "Cancelling…" : "Cancel Request"}
-          </button>
-        ) : (
+        {user.facilityId ? (
           <div className='flex items-center justify-center mt-8'>
             {(request.status === "COMPLETED" ||
               request.status === "REJECTED") && (
@@ -351,8 +337,8 @@ export default function EmergencyRequestDetails({ onClose, request }) {
 
                 <button
                   onClick={() => {
-                      // setConfirm(!confirm);
-                      handleDeclineRequest()
+                    // setConfirm(!confirm);
+                    handleDeclineRequest();
                   }}
                   className='bg-background hover:bg-pink  w-40  font-bold  text-white py-1 px-2'
                 >
@@ -364,7 +350,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
               <div className='flex gap-2  mx-auto'>
                 <button
                   onClick={() => {
-                      // setConfirm(!confirm);
+                    // setConfirm(!confirm);
                     handleDeclineRequest();
                   }}
                   className='text-background hover:bg-pink w-40 font-bold  border border-background py-1 px-2'
@@ -384,12 +370,23 @@ export default function EmergencyRequestDetails({ onClose, request }) {
               </div>
             )}
           </div>
+        ) : (
+          <button
+            disabled={cancelLoading === true}
+            onClick={() => {
+              handleDeclineRequest();
+              // cancelRequest();
+            }}
+            className={`  font-bold text-xs text-white py-2 px-4 mt-8 self-center w-40  mx-auto   ${
+              cancelLoading
+                ? "bg-pink"
+                : "bg-background hover:bg-pink transition-colors"
+            }`}
+          >
+            {cancelLoading ? "Cancelling…" : "Cancel Request"}
+          </button>
         )}
-        <div
-          className={`text-center mt-4 font-medium `}
-        >
-          {successMessage}
-        </div>
+        <div className={`text-center mt-4 font-medium `}>{successMessage}</div>
       </div>
     </Modal>
   );

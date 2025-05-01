@@ -74,7 +74,7 @@ export default function InventoryOverview() {
         </thead>
 
         <tbody>
-          {facilities.slice(0, 9).map((facility) => (
+          {facilities.slice(0, 12).map((facility) => (
             <tr
               className=' border-b-1  border-background-grey'
               key={facility.id}

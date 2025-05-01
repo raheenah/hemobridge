@@ -118,7 +118,7 @@ function Account() {
             </div>
           )} */}
           <div className='grid grid-cols-[auto_auto] gap-8'>
-            <div className='flex flex-col gap-1'>
+            <div className='flex flex-col text-text-dark-gray font-bold gap-1'>
               { (user?.firstName || user?.lastName) && (<p>Full Name</p>)}
               {user?.facilityId && <p>Facility ID</p>}
               <p>User ID</p>
@@ -275,7 +275,7 @@ function Account() {
         <div className='pl-6 flex flex-col bg-white py-3  px-6 md:py-0  md:pl-4 gap-4'>
           <h1 className='text-xs font-bold '>Notification Preferences </h1>
           <div className='grid grid-cols-[auto_auto] gap-8'>
-            <div className='flex flex-col gap-1'>
+            <div className='flex text-text-dark-gray font-bold flex-col gap-1'>
               <p>Notification Channels</p>
               <p>Notification Types</p>
             </div>

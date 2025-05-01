@@ -2,6 +2,7 @@ import { useState , useEffect } from "react";
 import Logo from "../../assets/Vector.svg";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useProfileContext } from "../../shared/context/user-profile-context";
+import { StringUtils } from "../../shared/utils/string.utils";
 
 
 function UserApp() {
@@ -54,7 +55,7 @@ function UserApp() {
                     Welcome back,
                   </p>
                   <p className='font-semibold text-right text-sm'>
-                    {user.user.firstName}{" "}
+                    {StringUtils.capitalize(user.user.firstName)}{" "}
                   </p>
                 </div>
                 <img src={Logo} className='rounded-full' />{" "}

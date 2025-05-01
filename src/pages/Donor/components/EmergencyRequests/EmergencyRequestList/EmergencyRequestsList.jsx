@@ -15,7 +15,7 @@ export function EmergencyRequestList() {
               </div>
           </div>
 
-          <div>
+          <div className=" mb-2">
               <StatusTabs 
                   value={activeStatus}
                   onChange={setActiveStatus}
@@ -40,11 +40,11 @@ function StatusTabs({ value, onChange }) {
 
   const isActive = (tab) =>
     tab === value
-      ? 'border-b-2 border-background text-background'
-      : 'text-text-dark-gray hover:text-background';
+      ? "border-b-2 border-background text-background"
+      : "text-text-dark-gray border-b border-text-dark-gray hover:text-background";
 
   return (
-    <div className="flex border-b border-gray-300">
+    <div className="flex  w-fit">
       {tabs.map((tab) => (
         <button
           key={tab}

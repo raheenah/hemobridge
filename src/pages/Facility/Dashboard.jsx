@@ -5,11 +5,11 @@ import { DonationApi } from "../../api/donation.api";
 import FacilityRecentActivity from "../../components/FacilityRecentActivity";
 import InventoryOverview from "../../components/inventoryOverview";
 import { FacilityApi } from "../../api/facility.api";
+import Loader from "../../components/common/Loader";
 import { useProfileContext } from "../../shared/context/user-profile-context";
 
 function FacilityDashboard() {
 
-  // Add these new states
   const [requests, setRequests] = useState({
     list: [],
     currentPage: 1,
@@ -23,8 +23,11 @@ function FacilityDashboard() {
     message: ''
   });
   const [inventory, setInventory] = useState([]);
-
+const [refresh, setRefresh] = useState(false);
   const { user } = useProfileContext();
+  const [loadingInventory, setLoadingInventory] = useState(true);
+  const [loadingFacilities, setLoadingFacilities] = useState(true);
+  const [loadingRequests, setLoadingRequests] = useState(true);
 
 //   const [facilityData] = useState({
 //     id: 1,
@@ -53,11 +56,13 @@ function FacilityDashboard() {
       FacilityApi.fetchBloodInventory(user.facilityId)
         .then((data) => {
           setInventory(data);
-          // console.log("Inventory data:", data);
+          setLoadingInventory(false);
+          console.log("Inventory data:", data);
          })
       .catch((error) => {
         console.error("Error fetching inventory:", error);
       })
+      .finally(() => setLoadingInventory(false));
       
   }, [user]);
   
@@ -74,17 +79,21 @@ function FacilityDashboard() {
 
   useEffect(() => {
     loadDonationRequests(requests.currentPage);
-  }, [requests.currentPage]);
+  }, [requests.currentPage, refresh]);
 
   const loadDonationRequests = async (page) => {
     DonationApi.fetchFacilitySchedules(page)
     .then((data)=> {
-      // console.log(data)
+      console.log(data)
       setRequests(data)
+      setLoadingRequests(false);
     })
     .catch((error)=> { 
       console.error("Error loading donation requests:", error);
     })
+      .finally(() => {
+        setLoadingRequests(false) 
+      })
   };
 
   useEffect(() => {
@@ -99,7 +108,14 @@ function FacilityDashboard() {
     };
   }, [modalState]);
 
-
+ if ( loadingInventory || loadingRequests) {
+    return (
+     <div className="flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center">
+          <Loader />
+          <p className="font-bold text-background  ">Fetching data...</p>
+      </div>
+    )
+  }
   return (
     <div className='flex flex-col md:grid grid-cols-2 text-xs gap-4 py-2 px-4 w-full'>
       <div className='flex flex-col gap-4'>
@@ -159,7 +175,11 @@ function FacilityDashboard() {
 
       <ViewRequestModal
         request={selectedRequest}
-        onClose={() => setModalState(prev => ({ ...prev, view: false }))}
+        onClose={() => {
+          setModalState(prev => ({ ...prev, view: false }))
+          setRefresh(!refresh)
+        }
+        }
         isOpen={modalState.view}
       />
 

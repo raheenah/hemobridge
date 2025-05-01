@@ -33,6 +33,9 @@ export default function EmergencyRequestDetails({requestDetails, onClose}) {
         })
         .finally(()=> {
             setFormData(state => ({ ...state, state: "idle" }))
+            setTimeout(() => {
+                onClose()
+            }, 800)
         })
     }
 
