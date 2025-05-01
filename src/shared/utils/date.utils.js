@@ -33,5 +33,13 @@ export const DateUtils = {
             console.error('Error formatting time:', error);
             return 'Invalid time';
         }
-    }
+    },
+
+    combineDateAndTime: ({ preferredDate, preferredTime })=> {
+        if (!preferredDate) throw new Error('preferredDate is required');
+      
+        const time = preferredTime || '00:00';
+        const date = new Date(`${preferredDate}T${time}:00`);
+        return date;
+      }
 };
