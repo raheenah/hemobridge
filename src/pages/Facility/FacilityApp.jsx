@@ -27,7 +27,7 @@ function FacilityApp() {
   
   // console.log("current user ",user)
   return (
-    <div className='flex  min-h-screen h-screen '>
+    <div className='flex   '>
       <div className='w-full flex flex-col '>
         <section className='w-full  pr-8 my-2  flex  gap- '>
           <div className='flex   w-full  items-center justify-between  '>
