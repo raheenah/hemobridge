@@ -51,7 +51,7 @@ setFormData((prev) => ({
   };
 
   const handleChangeFacility = (e) => {
-    setFacilityData({ ...facilityData, [e.target.name]: e.target.value.toLowerCase() });
+    setFacilityData({ ...facilityData, [e.target.name]: e.target.value });
   };
   
   const handleSubmitDonor = async (e) => {
@@ -68,7 +68,7 @@ setFormData((prev) => ({
     await DonorApi.register({
       firstName: formData.name.split(" ")[0],
       lastName: formData.name.split(" ")[1] ?? "null",
-      email: formData.email,
+      email: formData.email.toLowerCase(),
       password: formData.password,
       phoneNumber: formData.phone,
       bloodType: formData.bloodType,
@@ -99,12 +99,15 @@ setHealthLoading(true)
       facilityName: facilityData.facilityName,
       operationalHours: facilityData.operationalHours,
       address: facilityData.address,
-      personnelEmail: facilityData.personnelEmail,
+      personnelEmail: facilityData.personnelEmail.toLowerCase(),
       personnelPhoneNumber: facilityData.personnelPhoneNumber,
       personnelFirstname: facilityData.personnelFullname.split(" ")[0],
       personnelLastname: facilityData.personnelFullname.split(" ")[1] ?? "null",
-      personnelPassword: facilityData.personnelPassword
+      personnelPassword: facilityData.personnelPassword,
+      personnelRole: "facility-staff"
     }
+
+    // console.log("Facility Payload:", payload);
 
     await FacilityApi.register(payload)
     .then((response)=> {

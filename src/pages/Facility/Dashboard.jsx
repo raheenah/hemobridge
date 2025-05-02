@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import DonationRequestList from "../../components/DonationRequests/DonationRequestList";
 import { ViewRequestModal, ConfirmationModal } from "../../components/DonationRequests/RequestModals";
 import { DonationApi } from "../../api/donation.api";
@@ -25,31 +25,13 @@ function FacilityDashboard() {
   const [inventory, setInventory] = useState([]);
 const [refresh, setRefresh] = useState(false);
   const { user } = useProfileContext();
+  const [lowestStock, setLowestStock] = useState([]);
   const [loadingInventory, setLoadingInventory] = useState(true);
   const [loadingFacilities, setLoadingFacilities] = useState(true);
   const [loadingRequests, setLoadingRequests] = useState(true);
+  const [highestStockUnit, setHighestStockUnit] = useState(0);
 
-//   const [facilityData] = useState({
-//     id: 1,
-//     name: "Lagos General Hospital",
-//     address: "12 Broad Street, Lagos",
-//     bloodType: ["A+", "B-", "O+"],
-//     urgency: "High",
-//     stock: [
-//       { type: "A+", stock: 15, expiry: "2025-12-31" },
-//       { type: "A-", stock: 5, expiry: "2025-12-31" },
-//       { type: "O+", stock: 9, expiry: "2025-12-31" },
-//       { type: "O-", stock: 12, expiry: "2025-12-31" },
-//       { type: "AB+", stock: 50, expiry: "2025-12-31" },
-//       { type: "AB-", stock: 50, expiry: "2025-12-31" },
-//       { type: "B+", stock: 20, expiry: "2025-12-31" },
-//       { type: "B-", stock: 50, expiry: "2025-12-31" },
-//     ],
-//     hours: "24/7",
-//   });
-
-// console.log("Facility data:", facilityData);
-  // console.log("User data:", user);
+  
   useEffect(() => {
       //  console.log("Fetching inventory for facility:", user.facilityId);
 
@@ -71,11 +53,31 @@ const [refresh, setRefresh] = useState(false);
 
   const chartColors = ["#8B0075", "#D003B0", "#FF71E9", "#FFB3F3"];
 
-  const lowestStock = [...inventory]
-    .sort((a, b) => a.unitsAvailable - b.unitsAvailable)
-    .slice(0, 4);
+  // const lowestStock = [...inventory]
+  //   .sort((a, b) => a.unitsAvailable - b.unitsAvailable)
+  //   .slice(0, 4);
   
-  // console.log("lowest Stock", lowestStock)
+  
+  useEffect(() => {
+  
+    if (inventory?.length) {
+
+       const lowestStock = [...inventory]
+         .sort((a, b) => a.unitsAvailable - b.unitsAvailable)
+        .slice(0, 4);
+      setLowestStock(lowestStock);
+      
+      
+      const highestStockItem = [...inventory].sort(
+        (a, b) => b.unitsAvailable - a.unitsAvailable
+      )[0];
+
+      setHighestStockUnit(highestStockItem.unitsAvailable);
+
+    }
+
+  }, [inventory]);
+
 
   useEffect(() => {
     loadDonationRequests(requests.currentPage);
@@ -108,7 +110,7 @@ const [refresh, setRefresh] = useState(false);
     };
   }, [modalState]);
 
- if (loadingFacilities || loadingInventory || loadingRequests) {
+ if (loadingInventory || loadingRequests) {
     return (
      <div className="flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center">
           <Loader />
@@ -139,7 +141,7 @@ const [refresh, setRefresh] = useState(false);
                       style={{
                         backgroundColor:
                           chartColors[index % chartColors.length], 
-                        width: `${(stock.unitsAvailable / 20) * 100}%`, 
+                        width: `${(stock.unitsAvailable / highestStockUnit) * 100}%`, 
                       }}
                     ></div>
                   </div>

@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { FacilityApi } from "../../api/facility.api";
-import { useProfileContext  } from "src/shared/context/user-profile-context";
+import { useProfileContext } from "src/shared/context/user-profile-context";
 import Loader from "../../components/common/Loader";
 
 function Inventory() {
-
   const { user } = useProfileContext();
 
   const [loading, setLoading] = useState(true);
@@ -13,48 +12,86 @@ function Inventory() {
   const [editing, setEditing] = useState(false);
   const [editingBloodType, setEditingBloodType] = useState(null);
   const [success, setSuccess] = useState(false);
-  
+  const [message, setMessage] = useState(null);
+  const [unit, setUnit] = useState(null);
+
+  console.log("selected", editingBloodType);
+
+  const updateInventory = async (e) => {
+    e.preventDefault();
+    setMessage(null);
+    const payload = {
+      bloodType: editingBloodType.bloodType,
+      unitsAvailable: unit,
+    };
+    console.log(payload);
+
+    await FacilityApi.updateInventory(
+      editingBloodType.facilityId,
+      editingBloodType.id,
+      payload
+    )
+      .then((res) => {
+        console.log("response", res);
+        setMessage("Inventory updated successfully");
+      })
+      .catch((error) => {
+        setMessage(error.message);
+      })
+      .finally(() => {
+
+        if (!error) {
+
+          setSuccess(true);
+          setEditing(false);
+          setEditingBloodType(null);
+          setUnit(null);
+        }
+      });
+  };
+
   useEffect(() => {
     setLoading(true);
     setError(null);
     FacilityApi.fetchBloodInventory(user.facilityId)
-    .then((data) => setInventory(data))
-    .catch((error) => {
-      console.error("Error fetching inventory:", error);
-      setError(error.response?.data?.message || "Failed to fetch inventory data");
-    })
-    .finally(()=> setLoading(false))
-    
+      .then((data) => setInventory(data))
+      .catch((error) => {
+        console.error("Error fetching inventory:", error);
+        setError(
+          error.response?.data?.message || "Failed to fetch inventory data"
+        );
+      })
+      .finally(() => setLoading(false));
   }, [user.facilityId]);
 
   useEffect(() => {
     if (editing || success) {
-      document.body.style.overflow = "hidden"; 
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; 
+      document.body.style.overflow = "auto";
     }
 
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [editing, success]);
-  
+
   if (loading) {
     return (
-     <div className="flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center">
-          <Loader />
-          <p className="font-bold text-background  ">Fetching inventory...</p>
+      <div className='flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center'>
+        <Loader />
+        <p className='font-bold text-background  '>Fetching inventory...</p>
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4">
-        <p className="text-red-500">{error}</p>
-        <button 
+      <div className='flex flex-col items-center justify-center h-full gap-4'>
+        <p className='text-red-500'>{error}</p>
+        <button
           onClick={() => window.location.reload()}
-          className="bg-background hover:bg-pink font-bold text-xs text-white py-2 px-4"
+          className='bg-background hover:bg-pink font-bold text-xs text-white py-2 px-4'
         >
           Retry
         </button>
@@ -78,9 +115,9 @@ function Inventory() {
                   setEditing(true);
                   setEditingBloodType(bloodType);
                 }}
-                className='bg-background hover:bg-pink self-start w-full max-w-32 font-bold text-xs text-white py-2 px-4'
+                className='bg-background hover:bg-pink self-start w-[50%] max-w-32 font-bold text-xs text-white py-2 px-4'
               >
-                Edit
+                Update
               </button>
             </div>
             <p className='text-xl font-bold'>
@@ -100,7 +137,7 @@ function Inventory() {
           </div>
         ))}
       </div>
-      
+
       {editing && (
         <div
           onClick={(e) => {
@@ -108,14 +145,15 @@ function Inventory() {
           }}
           className=' fixed overflow-hidden bg-gray-100/50  inset-0  z-50 flex items-center justify-center'
         >
-          <div
+          <form
             onClick={(e) => e.stopPropagation()}
+            onSubmit={updateInventory}
             className=' w-[85%] md:w-[50%] max-h-[80dvh]  shadow-pink-glow mx-auto bg-white p-8 flex items-center flex-col gap-4'
           >
             <div className='flex flex-col gap-2'>
               {" "}
               <h2 className='text-xl font-bold text-center'>
-                Update Stock Level for Type {editingBloodType.type}
+                Update Stock Level for Type {editingBloodType.bloodType}
               </h2>
               <div className='w-[85%] h-0.5 top-0 mx-auto  bg-background-grey'></div>
             </div>
@@ -125,7 +163,10 @@ function Inventory() {
               </button>
               <input
                 type='number'
-                value={editingBloodType.stock}
+                value={unit}
+                required
+                onChange={(e) => setUnit(e.target.value)}
+                placeholder={editingBloodType.unitsAvailable}
                 onInput={() => {
                   // e.target.style.width = `${e.target.value.length * 10 + 20}px`;
                 }}
@@ -136,15 +177,16 @@ function Inventory() {
               </button>
             </div>
             <button
-              onClick={() => {
-                setEditing(!editing);
-                setSuccess(!success);
-              }}
+              // onClick={() => {
+              //   setEditing(!editing);
+              //   setSuccess(!success);
+              // }}
+              type='submit'
               className='bg-background hover:bg-pink      font-bold text-xs text-white py-1 px-2'
             >
               Update
             </button>
-          </div>
+          </form>
         </div>
       )}
 
@@ -162,12 +204,12 @@ function Inventory() {
             <div className='flex flex-col gap-2'>
               {" "}
               <h2 className='text-xl font-bold text-center'>
-Inventory Updated              </h2>
+                Inventory Updated{" "}
+              </h2>
               <div className='w-[85%] h-0.5 top-0 mx-auto  bg-background-grey'></div>
             </div>
             <p className='flex gap-2'>
-             Your inventory has been updated successfully
-            </p>
+{message}            </p>
             <button
               onClick={() => {
                 setSuccess(!success);

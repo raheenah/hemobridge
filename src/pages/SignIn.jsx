@@ -19,7 +19,12 @@ function Signin() {
     e.preventDefault();
     setLoading(true)
     setMessage(null)
-    await loginUser(formData)
+    const payload = {
+      email: formData.email.toLocaleLowerCase(),
+      password: formData.password
+    }
+
+    await loginUser(payload)
     .then((res)=> {
       // console.log(res.user.role)
       setMessage(res.message);
@@ -31,9 +36,10 @@ function Signin() {
     .finally(()=> setLoading(false))
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const handleChange = (e) => {
+  setFormData({ ...formData, [e.target.name]: e.target.value });
+};
+
 
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
