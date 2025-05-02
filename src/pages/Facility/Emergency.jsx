@@ -116,7 +116,7 @@ function Emergency_Requests({ currentPage, totalPages, onPageChange }) {
       </button>
 
       {emergencyRequests.list?.length ? (
-        <div className=" h-full flex flex-col justify-between gap-2">
+        <div className=' h-full flex flex-col justify-between gap-2'>
           <ul className='flex flex-col gap-2 w-full overflow-auto'>
             {emergencyRequests.list.map((request) => (
               <li
@@ -131,12 +131,14 @@ function Emergency_Requests({ currentPage, totalPages, onPageChange }) {
                     {request.bloodType}
                   </p>
                   <p className='flex items-start gap-2'>
-                    <span className='text-text-dark-gray font-bold'>Date:</span>{" "}
+                    <span className='text-text-dark-gray font-bold'>Preferred Donation Date:</span>{" "}
                     {DateUtils.formatDate(request.preferredDate)}
                   </p>
                   <p className='flex items-start gap-2'>
-                    <span className='text-text-dark-gray font-bold'>Date:</span>{" "}
-                    {DateUtils.formatTime(request.preferredDate)}
+                    <span className='text-text-dark-gray font-bold'>
+                      Created On:
+                    </span>{" "}
+                    {DateUtils.formatDate(request.createdAt)} {DateUtils.formatTime(request.createdAt)}
                   </p>
                   <p
                     className={` flex items-start gap-2 font-bold

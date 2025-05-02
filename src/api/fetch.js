@@ -20,7 +20,8 @@ export const ApiFetch = {
   },
 
   put: async (url, body) => {
-    return await fetch(url, "PUT", body).catch((error) => {
+      return await fetch(url, "PUT", body)
+          .catch((error) => {
       throw error;
     });
   },

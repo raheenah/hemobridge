@@ -39,7 +39,7 @@ function Inventory() {
         setMessage("Inventory updated successfully");
       })
       .catch((error) => {
-        console.log(error.message);
+        // console.log(error.message);
       })
       .finally(() => {
         if (!error) {
@@ -47,7 +47,9 @@ function Inventory() {
           setEditing(false);
           setEditingBloodType(null);
           setUnit(null);
-setRefresh(!refresh);
+          setRefresh(!refresh);
+                  setMessage("Inventory updated successfully");
+
         }
       });
   };
