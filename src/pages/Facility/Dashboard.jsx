@@ -4,6 +4,7 @@ import { ViewRequestModal, ConfirmationModal } from "../../components/DonationRe
 import { DonationApi } from "../../api/donation.api";
 import FacilityRecentActivity from "../../components/FacilityRecentActivity";
 import InventoryOverview from "../../components/inventoryOverview";
+import { USER_ROLE } from "../../shared/constants/user-role.constant";
 
 function FacilityDashboard() {
 
@@ -51,14 +52,9 @@ function FacilityDashboard() {
   }, [requests.currentPage]);
 
   const loadDonationRequests = async (page) => {
-    DonationApi.fetchFacilitySchedules(page)
-    .then((data)=> {
-      console.log(data)
-      setRequests(data)
-    })
-    .catch((error)=> { 
-      console.error("Error loading donation requests:", error);
-    })
+    DonationApi.fetchSchedules({ page, creator: USER_ROLE.DONOR })
+    .then((data)=> setRequests(data))
+    .catch((error)=> console.error("Error loading donation requests:", error))
   };
 
   useEffect(() => {

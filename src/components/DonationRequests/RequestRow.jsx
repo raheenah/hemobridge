@@ -5,10 +5,13 @@ export default function EmergencyRequestRow({ request, onView, isExpandable = tr
   return (
     <li className={`px-2 py-1 flex items-start justify-between ${isExpandable ? 'border-1 border-text-gray' : ''}`}>
       <div className='flex flex-col gap-1'>
-        <p className='flex items-center gap-2'>
-          <span className='text-text-dark-gray font-bold'>Name: </span>
-          {`${StringUtils.capitalize(request.donorId.firstName)} ${StringUtils.capitalize(request.donorId.lastName)}`}
-        </p>
+        {
+          typeof request.donorId === "object" &&
+          <p className='flex items-center gap-2'>
+            <span className='text-text-dark-gray font-bold'>Name: </span>
+            {`${StringUtils.capitalize(request.donorId?.firstName)} ${StringUtils.capitalize(request.donorId.lastName)}`}
+          </p>
+        }
         <p className='flex items-start gap-2'>
           <span className='text-text-dark-gray font-bold'>Blood Type:</span>
           {request.bloodType}

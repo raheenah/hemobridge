@@ -9,15 +9,22 @@ export const DonationApi = {
         return res
     },
 
-    fetchDonorSchedules: async (page = 1, status=undefined) => {
-        const response = await ApiFetch.get(`/api/donation/schedule/donor?page=${page}&status=${status}`)
+    fetchSchedules: async ({page = 1, status=undefined, creator=false}) => {
+        const response = await ApiFetch.get(`/api/donation/schedule?page=${page}&status=${status}&creator=${creator}`)
         .then((response)=> response.data)
         .catch((error)=> { throw error })
         return response.data;
     },
 
-    fetchFacilitySchedules: async (page = 1, status=undefined) => {
-        const response = await ApiFetch.get(`/api/donation/schedule/facility?page=${page}&status=${status}`)
+    fetchDonorSchedules: async (page = 1, status=undefined, creator=false) => {
+        const response = await ApiFetch.get(`/api/donation/schedule/donor?page=${page}&status=${status}&creator=${creator}`)
+        .then((response)=> response.data)
+        .catch((error)=> { throw error })
+        return response.data;
+    },
+
+    fetchFacilitySchedules: async (page = 1, status=undefined, creator=false) => {
+        const response = await ApiFetch.get(`/api/donation/schedule/facility?page=${page}&status=${status}&creator=${creator}`)
         .then((response)=> response.data)
         .catch((error)=> { throw error })
 
