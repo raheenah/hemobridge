@@ -28,19 +28,7 @@ function Dashboard() {
    const [selectedActivity, setSelectedActivity] = useState(null);
    const [activityDetails, setActivityDetails] = useState(false);
 // console.log("recent activities", recentActivities);
-  // useEffect(() => {
-  //   fetch("http://localhost:8000/facilities")
-  //     .then((res) => res.json())
-  //     .then((data) => setFacilities(data))
-  //     .catch((error) => console.error("Error fetching data:", error));
-  // }, []);
 
-  // useEffect(() => {
-  //   fetch("http://localhost:8000/facilitiesRecentActivity")
-  //     .then((res) => res.json())
-  //     .then((data) => setRecentActivities(data))
-  //     .catch((error) => console.error("Error fetching data:", error));
-  // }, []);
 
   const totalPages = Math.ceil(facilities.length / rowsPerPage);
    const totalActivityPages = Math.ceil(recentActivities.length / rowsPerPage);

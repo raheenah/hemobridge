@@ -27,7 +27,7 @@ function Inventory() {
       unitsAvailable: unit,
 
     };
-    console.log(payload);
+    // console.log(payload);
 
     await FacilityApi.updateInventory(
       editingBloodType.facilityId,
@@ -35,7 +35,7 @@ function Inventory() {
       payload
     )
       .then((res) => {
-        console.log("response", res);
+        // console.log("response", res);
         setMessage("Inventory updated successfully");
       })
       .catch((error) => {

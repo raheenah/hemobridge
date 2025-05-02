@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import Icon from "../../assets/book-open-02.png";
 
 
-function Help() {
+function Notifications() {
   return (
     <div className='bg-background-grey text-text-gray flex flex-col gap-4 justify-center items-center h-[100dvh] w-full'>
       <i className='fa-solid fa-bell text-9xl'></i>{" "}
@@ -14,4 +14,4 @@ function Help() {
   );
 }
 
-export default Help;
+export default Notifications;
