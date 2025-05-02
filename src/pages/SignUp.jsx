@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { DonorApi } from "../api/donor.api";
 import { useRoleNavigation } from "src/shared/hooks/use-role-navigation";
+import { USER_ROLE } from "src/shared/constants/user-role.constant";
 import { FacilityApi } from "../api/facility.api";
 
 function SignUp() {
@@ -112,7 +113,7 @@ setHealthLoading(true)
     await FacilityApi.register(payload)
     .then((response)=> {
       setMessage(response.message);
-      setTimeout(()=> navigateByRole("facility-staff"), 1000);
+      setTimeout(()=> navigateByRole(USER_ROLE.FACILITY_STAFF), 1000);
       
     }).catch((error)=> { 
       setMessage(error.response.data?.message ?? error.message);

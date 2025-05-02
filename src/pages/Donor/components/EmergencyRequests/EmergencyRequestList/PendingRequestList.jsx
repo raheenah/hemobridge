@@ -21,12 +21,8 @@ export function PendingRequestList() {
 
     useEffect(()=> {
         setPendingRequests(state => ({ ...state, state: "loading", error: false, message: "" }));
-        DonationApi.fetchDonorSchedules(pendingRequests.currentPage, ApiDonationScheduleStatus.PENDING)
-            .then((data) => {
-                setPendingRequests(data)
-                // console.log("Pending requests data:", data);
-            
-            })
+        DonationApi.fetchDonorSchedules(pendingRequests.currentPage, ApiDonationScheduleStatus.PENDING, true)
+        .then((data)=> setPendingRequests(data))
         .catch((error)=> {
             setPendingRequests(state => ({ ...state, error: true, message: error.message }));
         })

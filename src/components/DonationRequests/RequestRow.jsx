@@ -13,15 +13,13 @@ export default function EmergencyRequestRow({ request, onView, isExpandable = tr
       }`}
     >
       <div className='flex flex-col gap-1'>
-        {request.donorId?.firstName && request.donorId?.lastName ? (
+        {
+          typeof request.donorId === "object" &&
           <p className='flex items-center gap-2'>
-            <span className='text-text-dark-gray font-bold'>Donor ID: </span>
-            {`${StringUtils.capitalize(
-              request.donorId.firstName
-            )} ${StringUtils.capitalize(request.donorId.lastName)}`}
+            <span className='text-text-dark-gray font-bold'>Name: </span>
+            {`${StringUtils.capitalize(request.donorId?.firstName)} ${StringUtils.capitalize(request.donorId.lastName)}`}
           </p>
-        ) : null}
-
+        }
         <p className='flex items-start gap-2'>
           <span className='text-text-dark-gray font-bold'>Blood Type:</span>
           {request.bloodType}

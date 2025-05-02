@@ -7,6 +7,7 @@ import InventoryOverview from "../../components/inventoryOverview";
 import { FacilityApi } from "../../api/facility.api";
 import Loader from "../../components/common/Loader";
 import { useProfileContext } from "../../shared/context/user-profile-context";
+import { USER_ROLE } from "../../shared/constants/user-role.constant";
 
 function FacilityDashboard() {
 
@@ -84,18 +85,17 @@ const [refresh, setRefresh] = useState(false);
   }, [requests.currentPage, refresh]);
 
   const loadDonationRequests = async (page) => {
-    DonationApi.fetchFacilitySchedules(page)
-    .then((data)=> {
-      // console.log(data)
-      setRequests(data)
-      setLoadingRequests(false);
-    })
-    .catch((error)=> { 
-      console.error("Error loading donation requests:", error);
-    })
-      .finally(() => {
-        setLoadingRequests(false) 
+    DonationApi.fetchSchedules({ page, creator: USER_ROLE.DONOR })
+      .then((data) => {
+        setRequests(data);
+        setLoadingRequests(false);
       })
+      .catch((error) =>
+        console.error("Error loading donation requests:", error)
+      )
+      .finally(() => {
+        setLoadingRequests(false);
+      });
   };
 
   useEffect(() => {

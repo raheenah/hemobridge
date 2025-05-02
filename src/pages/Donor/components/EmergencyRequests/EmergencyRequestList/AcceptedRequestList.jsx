@@ -21,9 +21,8 @@ export function AcceptedRequestList() {
 
     useEffect(()=> {
         setAcceptedRequests(state => ({ ...state, state: "loading", error: false, message: "" }));
-        DonationApi.fetchDonorSchedules(setAcceptedRequests.currentPage, ApiDonationScheduleStatus.APPROVED)
-            .then((data) => {
-                // console.log("Scheduled requests lis",data)
+        DonationApi.fetchDonorSchedules(setAcceptedRequests.currentPage, ApiDonationScheduleStatus.APPROVED, true)
+        .then((data)=> {console.log(data)
             setAcceptedRequests(state => ({
                 ...state,
                 ...data
