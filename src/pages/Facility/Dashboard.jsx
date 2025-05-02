@@ -123,9 +123,7 @@ const [refresh, setRefresh] = useState(false);
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col md:grid grid-cols-2 gap-4'>
           <div className='w-full flex flex-col gap-2  py-3  px-6 bg-white '>
-            <h2 className='text-sm font-semibold '>
-              Lowest Blood Stock Levels
-            </h2>
+            <h2 className='font-bold text-base'>Lowest Blood Stock Levels</h2>
             <div className='flex text-xs flex-col w-full gap-2'>
               {lowestStock.map((stock, index) => (
                 <div
@@ -140,20 +138,25 @@ const [refresh, setRefresh] = useState(false);
                       className='h-full rounded-full transition-all duration-500'
                       style={{
                         backgroundColor:
-                          chartColors[index % chartColors.length], 
-                        width: `${(stock.unitsAvailable / highestStockUnit) * 100}%`, 
+                          chartColors[index % chartColors.length],
+                        width: `${
+                          (stock.unitsAvailable / highestStockUnit) * 100
+                        }%`,
                       }}
                     ></div>
                   </div>
                   <div className='w-6  text-right'>
-                    <p className='text-text-dark-gray '> {stock.unitsAvailable}</p>
+                    <p className='text-text-dark-gray '>
+                      {" "}
+                      {stock.unitsAvailable}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           <div className='w-full flex flex-col gap-2 justify-between py-3  px-6 bg-white '>
-            <h2 className='text-sm font-semibold '>Total Donors Registered </h2>
+            <h2 className='font-bold text-base'>Total Donors Registered </h2>
             <div className='flex flex-col mb-2  w-full gap-2'>
               <h3 className='text-lg font-extrabold'>1,542 Active Donors</h3>
               <p className='text-text-dark-gray'>+12% increase this month</p>
@@ -168,37 +171,38 @@ const [refresh, setRefresh] = useState(false);
         requests={requests.list}
         currentPage={requests.currentPage}
         totalPages={requests.totalPages}
-        onPageChange={page => setRequests(prev => ({ ...prev, currentPage: page }))}
-        onViewRequest={request => {
+        onPageChange={(page) =>
+          setRequests((prev) => ({ ...prev, currentPage: page }))
+        }
+        onViewRequest={(request) => {
           setSelectedRequest(request);
-          setModalState(prev => ({ ...prev, view: true }));
+          setModalState((prev) => ({ ...prev, view: true }));
         }}
       />
 
       <ViewRequestModal
         request={selectedRequest}
         onClose={() => {
-          setModalState(prev => ({ ...prev, view: false }))
-          setRefresh(!refresh)
-        }
-        }
+          setModalState((prev) => ({ ...prev, view: false }));
+          setRefresh(!refresh);
+        }}
         isOpen={modalState.view}
       />
 
       <ConfirmationModal
         isOpen={modalState.confirm}
-        title="Confirm Decline"
-        message="Are you sure you want to decline this donation request?"
+        title='Confirm Decline'
+        message='Are you sure you want to decline this donation request?'
         onConfirm={() => {}}
-        onCancel={() => setModalState(prev => ({ ...prev, confirm: false }))}
+        onCancel={() => setModalState((prev) => ({ ...prev, confirm: false }))}
       />
 
       <ConfirmationModal
-        isOpen={modalState.success} 
-        title="Success"
+        isOpen={modalState.success}
+        title='Success'
         message={modalState.message}
-        onConfirm={() => setModalState(prev => ({ ...prev, success: false }))}
-        onCancel={() => setModalState(prev => ({ ...prev, success: false }))}
+        onConfirm={() => setModalState((prev) => ({ ...prev, success: false }))}
+        onCancel={() => setModalState((prev) => ({ ...prev, success: false }))}
       />
     </div>
   );

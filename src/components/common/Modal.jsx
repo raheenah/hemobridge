@@ -11,7 +11,7 @@ export default function Modal({ children, onClose }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[90%] md:w-[45%] h-fit max-h-[95dvh] overflow-auto text-xs shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-4"
+        className="w-[90%] md:w-[65%] h-fit max-h-[95dvh] overflow-auto text-xs shadow-pink-glow mx-auto bg-white p-8 flex flex-col gap-4"
       >
         {children}
       </div>

@@ -17,7 +17,7 @@ export const FacilityApi = {
   async updateInventory(facilityId, inventoryId, formData) {
     // console.log("formData", formData)
     const res = await ApiFetch.put(
-      `/facility/${facilityId}/inventory/${inventoryId}`,
+      `/api/facility/${facilityId}/inventory/${inventoryId}`,
       formData
     )
       .then((response) => response)

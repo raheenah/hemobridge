@@ -56,7 +56,7 @@ export function NewEmergencyRequestModal({close}) {
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className='w-[40%] max-h-[80dvh] overflow-auto shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
+          className=' max-h-[80dvh] overflow-auto shadow-pink-glow mx-auto bg-white px-8 py-4 flex flex-col gap-4'
         >
           <div className='flex justify-between'>
             <h2 className='font-bold text-base text-text-dark-gray'>

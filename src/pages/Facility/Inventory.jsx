@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { FacilityApi } from "../../api/facility.api";
 import { useProfileContext } from "src/shared/context/user-profile-context";
 import Loader from "../../components/common/Loader";
@@ -14,15 +14,18 @@ function Inventory() {
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState(null);
   const [unit, setUnit] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
-  console.log("selected", editingBloodType);
+  // console.log("selected", editingBloodType);
 
   const updateInventory = async (e) => {
     e.preventDefault();
     setMessage(null);
     const payload = {
+      facilityId: editingBloodType.facilityId,
       bloodType: editingBloodType.bloodType,
       unitsAvailable: unit,
+
     };
     console.log(payload);
 
@@ -36,19 +39,22 @@ function Inventory() {
         setMessage("Inventory updated successfully");
       })
       .catch((error) => {
-        setMessage(error.message);
+        console.log(error.message);
       })
       .finally(() => {
-
         if (!error) {
-
           setSuccess(true);
           setEditing(false);
           setEditingBloodType(null);
           setUnit(null);
+setRefresh(!refresh);
         }
       });
   };
+
+  useEffect(() => {
+setUnit(editingBloodType?.unitsAvailable);
+  },editingBloodType)
 
   useEffect(() => {
     setLoading(true);
@@ -62,7 +68,7 @@ function Inventory() {
         );
       })
       .finally(() => setLoading(false));
-  }, [user.facilityId]);
+  }, [user.facilityId, refresh]);
 
   useEffect(() => {
     if (editing || success) {
@@ -101,7 +107,7 @@ function Inventory() {
 
   return (
     <div className='flex h-full bg-white flex-col text-xs gap-4 py-3 px-6 w-full'>
-      <h1 className='text-lg md:text-xs font-bold'>Blood Stock Levels</h1>
+      <h1 className='text-lg md:text-lg md:font-extrabold font-bold'>Blood Stock Levels</h1>
       <div className='flex flex-col md:grid grid-cols-3 gap-4'>
         {inventory.map((bloodType, index) => (
           <div
@@ -158,7 +164,13 @@ function Inventory() {
               <div className='w-[85%] h-0.5 top-0 mx-auto  bg-background-grey'></div>
             </div>
             <div className='flex gap-2'>
-              <button className='bg-background hover:bg-pink       font-bold text-xs text-white py-1 px-2'>
+              <button
+                type='button'
+                onClick={() => {
+                  setUnit(unit - 1);
+                }}
+                className='bg-background hover:bg-pink       font-bold text-xs text-white py-1 px-2'
+              >
                 -
               </button>
               <input
@@ -166,13 +178,19 @@ function Inventory() {
                 value={unit}
                 required
                 onChange={(e) => setUnit(e.target.value)}
-                placeholder={editingBloodType.unitsAvailable}
+                placeholder={unit}
                 onInput={() => {
                   // e.target.style.width = `${e.target.value.length * 10 + 20}px`;
                 }}
                 className='number-input w-8 text-center appearance-none focus:outline-none border border-background'
               />
-              <button className='bg-background hover:bg-pink      font-bold text-xs text-white py-1 px-2'>
+              <button
+                type='button'
+                onClick={() => {
+                  setUnit(unit + 1);
+                }}
+                className='bg-background hover:bg-pink      font-bold text-xs text-white py-1 px-2'
+              >
                 +
               </button>
             </div>
@@ -208,8 +226,7 @@ function Inventory() {
               </h2>
               <div className='w-[85%] h-0.5 top-0 mx-auto  bg-background-grey'></div>
             </div>
-            <p className='flex gap-2'>
-{message}            </p>
+            <p className='flex gap-2'>{message} </p>
             <button
               onClick={() => {
                 setSuccess(!success);

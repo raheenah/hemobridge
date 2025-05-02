@@ -5,6 +5,7 @@ import { facilitiesRecentActivity } from "../data/facility-recent-activities";
 export default function FacilityRecentActivity() {
   const navigate = useNavigate();
   const recentActivities = facilitiesRecentActivity
+
   // const [recentActivities, setRecentActivities] = useState([]);
   const [viewList, setViewList] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,43 +70,51 @@ export default function FacilityRecentActivity() {
             </button>
           </div>
         </div>
-        <table className=' w-full h-full '>
-          <thead className='bg-light-pink text-center  '>
-            <tr className=''>
-              <th className='py-0.5 pl-1'>Donor ID</th>
-              <th className='text-center'>Blood Type</th>
-              <th>Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {currentActivities.map((activity) => (
-              <tr
-                className=' border-b-1  text-center border-background-grey'
-                key={activity.donorId}
-                onClick={() => {
-                  setSelectedActivity(activity);
-                  setActivityDetails(!activityDetails);
-                  // setViewList(false);
-                }}
-              >
-                <td className='py-0.5 pl-1 font-bold'>{activity.donorId}</td>
-                <td className='text-center'>{activity.bloodType}</td>
-                <td>{activity.date}</td>
-                <td
-                  className={`${
-                    activity.status == "Completed"
-                      ? "text-background"
-                      : "text-black"
-                  }`}
-                >
-                  {activity.status}
-                </td>
+     
+        {recentActivities.length ? (
+          <table className=' w-full h-full '>
+            <thead className='bg-light-pink text-center  '>
+              <tr className=''>
+                <th className='py-0.5 pl-1'>Donor ID</th>
+                <th className='text-center'>Blood Type</th>
+                <th>Date</th>
+                <th>Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {currentActivities.map((activity) => (
+                <tr
+                  className=' border-b-1  text-center border-background-grey'
+                  key={activity.donorId}
+                  onClick={() => {
+                    setSelectedActivity(activity);
+                    setActivityDetails(!activityDetails);
+                    // setViewList(false);
+                  }}
+                >
+                  <td className='py-0.5 pl-1 font-bold'>{activity.donorId}</td>
+                  <td className='text-center'>{activity.bloodType}</td>
+                  <td>{activity.date}</td>
+                  <td
+                    className={`${activity.status == "Completed"
+                        ? "text-background"
+                        : "text-black"
+                      }`}
+                  >
+                    {activity.status}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>)
+          : (<div className="flex flex-col items-center justify-center ">
+            <p className="text-base font-bold text-background">This Facility has no History</p>
+          </div>
+            
+          )
+        }
+      
       </div>
       {viewList && (
         <div

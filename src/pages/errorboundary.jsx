@@ -31,24 +31,24 @@ class ErrorBoundary extends React.Component {
           <div className='flex gap-8'>
             {" "}
             <button
-              className='mt-4 px-4 py-2 bg-background text-white font-bold'
+              className='mt-4 px-4 py-2 bg-background hover:bg-background-grey hover:border hover:border-background hover:text-background text-white font-bold'
               onClick={() => window.location.reload()}
             >
               Refresh Page
             </button>
             <button
-              className='mt-4 px-4 py-2 bg-background-grey border border-background text-background font-bold'
-                      onClick={() => {
-                          window.history.back()
-                          setTimeout(() => window.location.reload(), 50);
-                      } }
+              className='mt-4 px-4 py-2 bg-background-grey border hover:bg-background hover:border-0  hover:text-white border-background text-background font-bold'
+              onClick={() => {
+                window.history.back();
+                setTimeout(() => window.location.reload(), 50);
+              }}
             >
               Go Back{" "}
             </button>
           </div>
           <a
             href='/'
-            className='text-primary-blue text-text-dark-gray mt-4 font-medium'
+            className='text-primary-blue text-text-dark-gray mt-4 font-bold hover:underline hover:text-background'
           >
             Sign In?
           </a>
