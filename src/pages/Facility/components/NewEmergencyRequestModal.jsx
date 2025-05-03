@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal from "src/components/common/Modal.jsx";
 import { DonationApi } from '../../../api/donation.api';
 
-export function NewEmergencyRequestModal({close}) {
+export function NewEmergencyRequestModal({close, refresh}) {
   const [formData, setFormData] = useState({
     bloodType: '',
     unitsNeeded: '',
@@ -44,6 +44,7 @@ export function NewEmergencyRequestModal({close}) {
       setMessage("Emergency request has been submitted successfully")
       setTimeout(() => {
         close()
+        refresh()
       }, 800)
     })
   };

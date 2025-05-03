@@ -56,6 +56,8 @@ export default function Facilities() {
   }, [searchQuery, facilities.list]);
 
   function submitSchedule(newDonationSchedule) {
+    // console.log("newDonationSchedule", newDonationSchedule);
+    // console.log("selected time and date", selectedTime, selectedDate);
     setScheduleError(''); 
     DonationApi.createBloodDonationSchedule(newDonationSchedule)
     .then((data)=> {
@@ -480,13 +482,13 @@ export default function Facilities() {
                 <p>
                   Donation schedule request successfully submitted to{" "}
                   {selectedFacility.name}
-                  Hospital for{" "}
+                   for{" "}
                   <span className='font-bold'>
-                    {DateUtils.formatDate(createdSchedule?.preferredDate)}
+                    {DateUtils.formatDate(selectedDate)}
                   </span>{" "}
                   by{" "}
                   <span className='font-bold'>
-                    {DateUtils.formatTime(createdSchedule?.preferredDate)}
+                    {selectedTime}
                   </span>
                 </p>
                 <p>

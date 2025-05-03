@@ -22,12 +22,12 @@ export function AcceptedRequestList() {
     useEffect(()=> {
         setAcceptedRequests(state => ({ ...state, state: "loading", error: false, message: "" }));
         DonationApi.fetchDonorSchedules(setAcceptedRequests.currentPage, ApiDonationScheduleStatus.APPROVED, true)
-        .then((data)=> {console.log(data)
+            .then((data) => 
             setAcceptedRequests(state => ({
                 ...state,
                 ...data
             }))
-        })
+        )
         .catch((error)=> {
             setAcceptedRequests(state => ({ ...state, error: true, message: error.message }));
         })
@@ -74,10 +74,10 @@ export function AcceptedRequestList() {
                 acceptedRequests.selected && 
                 <EmergencyRequestDetails
                     request={acceptedRequests.selected}
-                    onClose={() => {
+                    onClose={() => 
                         setAcceptedRequests(state => ({ ...state, selected: undefined }))
-                    setRefresh(!refresh) 
-                    }}
+                   }
+                    refresh={() => setRefresh(!refresh)}
                 />
             }
         </>

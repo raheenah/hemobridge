@@ -6,7 +6,7 @@ import { DonationApi } from "../../../api/donation.api";
 import { useProfileContext } from "../../../shared/context/user-profile-context";
 import { ApiDonationScheduleStatus } from "../../../shared/constants/donation-schedule.constant";
 
-export default function EmergencyRequestDetails({ onClose, request }) {
+export default function EmergencyRequestDetails({ onClose, request , refresh}) {
   const [cancelLoading, setCancelLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [success, setSuccess] = useState(false);
@@ -23,8 +23,10 @@ export default function EmergencyRequestDetails({ onClose, request }) {
     setTimeout(() => {
       setCancelLoading(false);
       onClose();
+      refresh();
     }, 800);
   };
+  // console.log("request", request);
 
   function handleDeclineRequest() {
       setApproveState({
@@ -33,7 +35,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
       });
       setCancelLoading(true);
   // console.log("Declining request", request.id);
-      DonationApi.cancelSchedule(request.id)
+      DonationApi.declineSchedule(request.id)
         .then((data) => {
           setApproveState({
             error: false,
@@ -62,6 +64,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
             setTimeout(() => {
               setCancelLoading(false);
               onClose();
+              refresh();
             }, 800);
           }
         });
@@ -97,6 +100,7 @@ export default function EmergencyRequestDetails({ onClose, request }) {
         setTimeout(() => {
           setCancelLoading(false);
           onClose();
+          refresh();
         }, 800);
         setSuccessMessage("Request completed successfully");
       });

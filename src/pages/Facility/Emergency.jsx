@@ -197,13 +197,13 @@ function Emergency_Requests({ currentPage, totalPages, onPageChange }) {
 
       {modalsVisibility.isRequestDetailsModalVisible ? (
         <EmergencyRequestDetails
-          onClose={() => {
+          onClose={() => 
             setModalsVisibility((state) => ({
               ...state,
               isRequestDetailsModalVisible: false,
-            }));
-            setRefresh(!refresh);
-          }}
+            }))
+          }
+          refresh={() => setRefresh(!refresh)}
           request={selectedDonationRequest}
         />
       ) : null}
@@ -350,13 +350,13 @@ function Emergency_Requests({ currentPage, totalPages, onPageChange }) {
 
       {modalsVisibility.isNewRequestModalVisible ? (
         <NewEmergencyRequestModal
-          close={() => {
+          close={() => 
             setModalsVisibility((state) => ({
               ...state,
               isNewRequestModalVisible: false,
-            }));
-            setRefresh(!refresh);
-          }}
+            }))
+          }
+          refresh={() => setRefresh(!refresh)}
         />
       ) : null}
     </div>

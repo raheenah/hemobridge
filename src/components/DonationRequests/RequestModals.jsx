@@ -12,6 +12,10 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
   const [message, setMessage] = useState("");
 
   // console.log("Request details", request);
+  
+  if (message.length) {
+    setMessage("");
+  }
 
   function handleApproveRequest() {
     setApproveState({
@@ -181,7 +185,7 @@ export function ViewRequestModal({ request, onClose, isOpen }) {
           </div>
 
           <div
-            className={`text-center mt-4 font-medium ${
+            className={`text-center mt-4 font-medium bg-red ${
               approveState.error ? "text-red-500" : "text-green-500"
             }`}
           >

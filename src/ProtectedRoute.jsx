@@ -25,6 +25,7 @@ const ProtectedRoute = ({children}) => {
 
   }, [navigate]);
 
+  // console.log("user", user);
   if (loading) return (
     <div className="flex flex-col gap-4 min-h-screen animate-bounce items-center justify-center">
       <Loader />

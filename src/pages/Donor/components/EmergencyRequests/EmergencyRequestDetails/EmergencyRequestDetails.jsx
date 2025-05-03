@@ -4,7 +4,7 @@ import { DonationApi } from "../../../../../api/donation.api";
 import { DateUtils } from "../../../../../shared/utils/date.utils";
 import { StringUtils } from "../../../../../shared/utils/string.utils";
 
-export default function EmergencyRequestDetails({requestDetails, onClose}) {
+export default function EmergencyRequestDetails({requestDetails, onClose, refresh}) {
 
     const [formData, setFormData] = useState({
         state: "idle" | "loading",
@@ -21,6 +21,7 @@ export default function EmergencyRequestDetails({requestDetails, onClose}) {
             preferredDate: DateUtils.combineDateAndTime(formData)
         }
 
+        // console.log("Payload", payload)
         setFormData(state => ({ ...state, state: "loading", error: false, message: "" }))
 
         DonationApi.acceptSchedule(requestDetails.id, payload)
@@ -35,6 +36,7 @@ export default function EmergencyRequestDetails({requestDetails, onClose}) {
             setFormData(state => ({ ...state, state: "idle" }))
             setTimeout(() => {
                 onClose()
+                refresh()
             }, 800)
         })
     }
