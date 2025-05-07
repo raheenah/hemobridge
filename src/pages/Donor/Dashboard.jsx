@@ -99,7 +99,7 @@ function Dashboard() {
                 <span className='text-text-dark-gray font-bold'>
                   Latest Donation:
                 </span>{" "}
-                Jan 5, 2025 - City Hospital
+                Apr 5, 2025 - Enugu Teaching Hospital
               </p>
               <p>
                 <span className='text-text-dark-gray font-bold'>
@@ -111,7 +111,7 @@ function Dashboard() {
                 <span className='text-text-dark-gray font-bold'>
                   Next Eligible on:
                 </span>{" "}
-                Feb 20,2025
+                May 20,2025
               </p>
             </div>
           </div>

@@ -14,7 +14,7 @@ export default function EmergencyRequestDetails({requestDetails, onClose, refres
         preferredTime: ""
     })
 
-    console.log("Request details", requestDetails)
+    // console.log("Request details", requestDetails)
 
     function acceptDonationScheduleRequest() {
         const payload = {

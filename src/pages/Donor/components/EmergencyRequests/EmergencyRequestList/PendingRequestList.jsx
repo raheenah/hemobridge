@@ -5,6 +5,7 @@ import { DonationApi } from "../../../../../api/donation.api";
 import { ApiDonationScheduleStatus } from "src/shared/constants/donation-schedule.constant.js"
 import Loader from "../../../../../components/common/Loader";
 import EmergencyRequestDetails from "../EmergencyRequestDetails/EmergencyRequestDetails";
+import { USER_ROLE } from "src/shared/constants/user-role.constant.js";
 
 export function PendingRequestList() {
    
@@ -21,11 +22,12 @@ export function PendingRequestList() {
 
     useEffect(()=> {
         setPendingRequests(state => ({ ...state, state: "loading", error: false, message: "" }));
-        DonationApi.fetchDonorSchedules(pendingRequests.currentPage, ApiDonationScheduleStatus.PENDING, true)
-            .then((data) => {
-                setPendingRequests(data)
-            // console.log("Pending requests", data)
-            })
+        DonationApi.fetchSchedules({
+            page: pendingRequests.currentPage, 
+            status: ApiDonationScheduleStatus.PENDING, 
+            creator: USER_ROLE.FACILITY_STAFF
+        })
+        .then((data)=> setPendingRequests(data))
         .catch((error)=> {
             setPendingRequests(state => ({ ...state, error: true, message: error.message }));
         })
