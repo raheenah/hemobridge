@@ -7,8 +7,8 @@ export const ApiDonationScheduleStatus = {
 };
 
 export const UiDonationScheduleStatus = {
-    PENDING: "PENDING",
-    ACCEPTED: "ACCEPTED",
+    PENDING: "REQUESTS",
+    ACCEPTED: "SCHEDULED",
     REJECTED: "REJECTED",
     COMPLETED: "COMPLETED",
     CANCELLED: "CANCELLED"
